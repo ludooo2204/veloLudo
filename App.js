@@ -31,7 +31,7 @@ import LineChartScreen from './components/LineChartScreen';
 import styles from './components/styles';
 
 const App = () => {
-  console.log(listPosition)
+  // console.log(listPosition)
   const [listBpm, setListBpm] = useState([]);
   const [listPosition, setListPosition] = useState([]);
 
