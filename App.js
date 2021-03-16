@@ -30,7 +30,7 @@ import styles from './components/styles';
 
 const App = () => {
   console.log(listPosition)
-  console.log("test git")
+  console.log("test git2")
   const [listBpm, setListBpm] = useState([]);
   const [listPosition, setListPosition] = useState([]);
 
