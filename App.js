@@ -22,6 +22,7 @@ import {
   View,
   Text,
   StatusBar,
+  Button
 } from 'react-native';
 
 import Location from './components/location';
@@ -40,13 +41,24 @@ const App = () => {
   const handlePosition = (lastPosition) => {
     console.log('lastPosition from app')
     console.log(lastPosition)
+   
     setListPosition((listPosition) => [...listPosition, lastPosition]);
   };
-
+  const test =()=>{
+    console.log("msdmk,zs")
+    console.log(listPosition)
+  }
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" hidden/>
+     
+        
       <Text> nbr de position = {listPosition.length}</Text>
+      <Button
+        title="Press me"
+        color="#f194ff"
+        onPress={() => console.log(listPosition)}
+      />
       <Location remonterData={(e) => handlePosition(e)}/>
       {/* <Chart dataBpm={listBpm}/> */}
       <View style={{flex: 3}}>

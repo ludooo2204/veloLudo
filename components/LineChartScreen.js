@@ -85,7 +85,7 @@ class LineChartScreen extends React.Component {
   }
 
   onPressLearnMore() {
-    console.log('nbr de BPM ='+ this.props.data.length);
+    // console.log('nbr de BPM ='+ this.props.data.length);
     let dernieresValues = this.props.data.map((e) => {
       return {y: e};
     });

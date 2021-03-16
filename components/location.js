@@ -1,22 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import {Text} from 'react-native';
+import {Button, Text,View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import styles from './styles';
 const Location = ({remonterData}) => {
   const [position, setPosition] = useState(null);
   const [errors, setErrors] = useState(null);
   const [time, setTime] = useState(null);
+  const [gpsRunning, setGpsRunning] = useState(false);
 
 
 
-  useEffect(() => {
-
+  const startGps =()=>{
+    console.log("lancement du GPS");
+    setGpsRunning(true)
     Geolocation.watchPosition(
       (positionI) => {
+        
         console.log('positionI');
         console.log(positionI);
-        console.log('positionI.coords');
-        console.log(positionI.coords);
+        // console.log('positionI.coords');
+        // console.log(positionI.coords);
         let time = new Date(positionI.timestamp).toLocaleTimeString('FR-fr');
         setTime(time)
         setPosition(positionI)
@@ -29,15 +32,16 @@ const Location = ({remonterData}) => {
       },
       {
         enableHighAccuracy: true,
-        distanceFilter: 10,
-        interval: 2000,
-        fastestInterval: 2000,
+        distanceFilter: 5,
+        interval: 10000,
+        fastestInterval: 5000,
       }, // timeout: 15000, maximumAge: 10000 }
-    ),
-      [];
-  });
+    )}
+     
+
 
   return (
+    <View>
     <Text>
       time
       {time?time:"nada time"}
@@ -48,6 +52,8 @@ const Location = ({remonterData}) => {
         Error 
      {errors?errors:null}
     </Text>
+    <Button title={gpsRunning?"touche pas a ca !":"lancer le GPS"} onPress={startGps}/>
+    </View>
   );
 };
 export default Location;
