@@ -40,14 +40,12 @@ const App = () => {
   };
   const handlePosition = (lastPosition) => {
     console.log('lastPosition from app')
-    console.log(lastPosition)
-   
+    console.log("coords", lastPosition.coords)
+    console.log("timestamp", lastPosition.timestamp)
+    console.log("test");
     setListPosition((listPosition) => [...listPosition, lastPosition]);
   };
-  const test =()=>{
-    console.log("msdmk,zs")
-    console.log(listPosition)
-  }
+
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" hidden/>

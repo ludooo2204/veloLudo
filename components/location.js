@@ -15,11 +15,7 @@ const Location = ({remonterData}) => {
     setGpsRunning(true)
     Geolocation.watchPosition(
       (positionI) => {
-        
-        console.log('positionI');
-        console.log(positionI);
-        // console.log('positionI.coords');
-        // console.log(positionI.coords);
+      
         let time = new Date(positionI.timestamp).toLocaleTimeString('FR-fr');
         setTime(time)
         setPosition(positionI)
@@ -27,6 +23,7 @@ const Location = ({remonterData}) => {
       },
       (error) => {
         // See error code charts below.
+        console.log("errors");
         console.log(error.code, error.message);
         setErrors(error.message)
       },
