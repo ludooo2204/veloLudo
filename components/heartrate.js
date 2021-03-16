@@ -285,9 +285,9 @@ const Bpm = ({remonterData}) => {
               title={'Scan Bluetooth (' + (isScanning ? 'on' : 'off') + ')'}
               onPress={() => startScan()}
             />
-            {console.log(list?"yes":"no")}
-            {console.log(list.lenght)}
-            {list.length?<Text>LA list = {JSON.stringify(list)}</Text>:null}
+            {/* {console.log(list?"yes":"no")}
+            {console.log(list.length)} */}
+            {/* {list.length?<Text>LA list = {JSON.stringify(list)}</Text>:null} */}
           </View>
 
           <View style={{margin: 10}}>

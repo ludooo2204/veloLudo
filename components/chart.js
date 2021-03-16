@@ -3,8 +3,8 @@ import {View} from 'react-native';
 import { LineChart } from 'react-native-charts-wrapper';
 export const Chart = ({dataBpm})=>{
 //    const [datas,setDatas] = useState()
-    console.log('dataBpmFromParent');
-    console.log(dataBpm);
+    // console.log('dataBpmFromParent');
+    // console.log(dataBpm);
     if (dataBpm){
     let valuesFromParent = dataBpm.map((e)=>{return {y:e}})
     console.log('valuesFromParent');

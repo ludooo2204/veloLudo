@@ -79,20 +79,19 @@ class LineChartScreen extends React.Component {
     // );
   }
   componentDidUpdate() {
-    console.log('test update');
+    // console.log('test update');
     
     this.onPressLearnMore();
   }
 
   onPressLearnMore() {
-    console.log('this.props.data');
-    console.log(this.props.data);
+    console.log('nbr de BPM ='+ this.props.data.length);
     let dernieresValues = this.props.data.map((e) => {
       return {y: e};
     });
     // console.log('dernieresValues');
     // console.log(dernieresValues);
-    console.log('update');
+    // console.log('update');
 
     this.refs.chart.setDataAndLockIndex({
       dataSets: [
@@ -141,14 +140,13 @@ class LineChartScreen extends React.Component {
   render() {
     // console.log('this.props');
     // console.log(this.props);
-    console.log('this.state');
-    console.log(this.state);
+    // console.log('this.state');
+    // console.log(this.state);
     return (
       <View style={{flex: 1}}>
-        <Button
-          onPress={this.onPressLearnMore.bind(this)}
-          title="Press to load more"
-        />
+        <Text>
+        'nbr de BPM =' {this.props.data.length}
+        </Text>
 
         <View style={{height: 80}}>
           <Text> selected entry</Text>

@@ -2,39 +2,36 @@ import React, {useState, useEffect} from 'react';
 import {Text} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import styles from './styles';
-const Location = () => {
+const Location = ({remonterData}) => {
   const [position, setPosition] = useState(null);
+  const [errors, setErrors] = useState(null);
   const [time, setTime] = useState(null);
-  const [listPosition, setListPosition] = useState(null);
-  const [positionsLength, setPositionLength] = useState(0);
-  const [listAltitude, setListAltitude] = useState(null);
+
+
 
   useEffect(() => {
-    let positions = [];
-    let altitudes = [];
+
     Geolocation.watchPosition(
       (positionI) => {
-        // console.log('position');
-        // console.log(positionI.coords);
+        console.log('positionI');
+        console.log(positionI);
+        console.log('positionI.coords');
+        console.log(positionI.coords);
         let time = new Date(positionI.timestamp).toLocaleTimeString('FR-fr');
-
-        positions.push(positionI);
-        setPosition(JSON.stringify(positionI));
-        setPositionLength(positions.length);
-        setTime(time);
-        setListAltitude(altitudes);
-        // console.log('positionff');
-        // console.log(position);
+        setTime(time)
+        setPosition(positionI)
+        remonterData(positionI)
       },
       (error) => {
         // See error code charts below.
         console.log(error.code, error.message);
+        setErrors(error.message)
       },
       {
         enableHighAccuracy: true,
-        distanceFilter: 2,
-        interval: 1000,
-        fastestInterval: 100,
+        distanceFilter: 10,
+        interval: 2000,
+        fastestInterval: 2000,
       }, // timeout: 15000, maximumAge: 10000 }
     ),
       [];
@@ -42,9 +39,14 @@ const Location = () => {
 
   return (
     <Text>
-      {time}
-      {/* {position.coords.altitude} */}
-      {/* {console.log(position)} */}
+      time
+      {time?time:"nada time"}
+      {"\n"}
+      latitude
+      {position?position.coords.latitude:"nada"}
+      {"\n"}
+        Error 
+     {errors?errors:null}
     </Text>
   );
 };
