@@ -11,6 +11,7 @@
 -gerer la deconnexion bluetooth lors de l'arret de l'app (sinon redemarrage du tel)
  -ecran de veille a desactiver npm keepScreenawake
  -revoir la connexion a ma montre
+ -toto
 */
 
 import React, {useState, useEffect} from 'react';
