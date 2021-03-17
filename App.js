@@ -11,6 +11,7 @@
 -gerer la deconnexion bluetooth lors de l'arret de l'app (sinon redemarrage du tel)
  -ecran de veille a desactiver npm keepScreenawake
  -revoir la connexion a ma montre
+ -lolo
 */
 
 import React, {useState, useEffect} from 'react';
@@ -21,6 +22,7 @@ import {
   View,
   Text,
   StatusBar,
+  Button
 } from 'react-native';
 
 import Location from './components/location';
@@ -29,8 +31,11 @@ import LineChartScreen from './components/LineChartScreen';
 import styles from './components/styles';
 
 const App = () => {
+
   console.log(listPosition)
   console.log("test git2")
+
+
   const [listBpm, setListBpm] = useState([]);
   const [listPosition, setListPosition] = useState([]);
 
@@ -39,14 +44,23 @@ const App = () => {
   };
   const handlePosition = (lastPosition) => {
     console.log('lastPosition from app')
-    console.log(lastPosition)
+    console.log("coords", lastPosition.coords)
+    console.log("timestamp", lastPosition.timestamp)
+    console.log("test");
     setListPosition((listPosition) => [...listPosition, lastPosition]);
   };
 
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" hidden/>
+     
+        
       <Text> nbr de position = {listPosition.length}</Text>
+      <Button
+        title="Press me"
+        color="#f194ff"
+        onPress={() => console.log(listPosition)}
+      />
       <Location remonterData={(e) => handlePosition(e)}/>
       {/* <Chart dataBpm={listBpm}/> */}
       <View style={{flex: 3}}>

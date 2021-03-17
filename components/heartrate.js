@@ -94,7 +94,9 @@ const Bpm = ({remonterData}) => {
       }
     });
   };
-
+  const collapse =()=>{
+    setConnected(true)
+  }
   const handleDiscoverPeripheral = (peripheral) => {
    if (peripheral.advertising.isConnectable&&peripheral.name!=="BRC1H D4:E2:14"&&peripheral.name!==null) console.log('Got ble peripheral', peripheral);
     if (peripheral.name && peripheral.name.includes('Amazfit')) {
@@ -297,7 +299,7 @@ const Bpm = ({remonterData}) => {
             />
           </View>
           <View style={{margin: 10}}>
-            <Button title="GPS ??" onPress={() => lancerGPS()} />
+            <Button title="fermer objet" onPress={() => collapse()} />
           </View>
 
           {list.length == 0 && (
