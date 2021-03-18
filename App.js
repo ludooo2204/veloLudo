@@ -38,17 +38,35 @@ const App = () => {
   const [listPosition, setListPosition] = useState([]);
 
   const handleBpm = (lastBpm) => {
-    setListBpm((listBpm) => [...listBpm, lastBpm]);
+    // console.log(lastBpm);
+    const timestamp = new Date().toLocaleTimeString('fr-FR')
+    let bpm = []
+    bpm[0]=timestamp
+    bpm[1]=lastBpm
+    console.log(bpm);
+    setListBpm((listBpm) => [...listBpm, bpm]);
   };
   const handlePosition = (lastPosition) => {
     console.log('lastPosition from app')
     console.log("coords", lastPosition.coords)
-    const {altitude,longitude,speed,latitude} = lastPosition.coords
+    let {altitude,speed} =lastPosition.coords
+    altitude = Math.round(altitude * 100) / 100
+    speed = Math.round(speed * 10) / 10
+    
+      const {longitude,latitude} = lastPosition.coords
     console.log("timestamp", lastPosition.timestamp)
-    console.log("timestamp", new Date(lastPosition.timestamp).toLocaleTimeString('fr-FR'))
-    console.log(altitude,longitude,speed,latitude);
-    console.log(new Date().toLocaleTimeString('fr-FR'));
-    setListPosition((listPosition) => [...listPosition, lastPosition]);
+    const timestamp = new Date(lastPosition.timestamp).toLocaleTimeString('fr-FR');
+    // console.log(altitude,longitude,speed,latitude,timestamp);
+    let position=[];
+    position[0]=timestamp;
+     position[1]=altitude
+     position[2]=longitude
+     position[3]=latitude
+     position[4]=speed
+    console.log(position);
+    // console.log(altitude);
+    // console.log(new Date().toLocaleTimeString('fr-FR'));
+    setListPosition((listPosition) => [...listPosition, position]);
   };
 
   return (

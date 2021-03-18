@@ -35,48 +35,7 @@ class LineChartScreen extends React.Component {
 
   componentDidMount() {
     console.log('mount');
-    // let dernieresValues = this.props.data.map((e) => {
-    //   return {y: e};
-    // });
-    // this.setState(
-    //   update(this.state, {
-    //     data: {
-    //       $set: {
-    //         dataSets: [
-    //           {
-    //             values: dernieresValues,
-    //             label: 'A',
-    //       // [
-    //       //         {x: 4, y: 135},
-    //       //         {x: 5, y: 0.88},
-    //       //         {x: 6, y: 0.77},
-    //       //         {x: 7, y: 105},
-    //       //       ],
-    //       //       label: 'A',
-    //       //     },
-    //       //     {
-    //       //       values: [
-    //       //         {x: 4, y: 105},
-    //       //         {x: 5, y: 90},
-    //       //         {x: 6, y: 130},
-    //       //         {x: 7, y: 100},
-    //       //       ],
-    //       //       label: 'B',
-    //       //     },
-    //       //     {
-    //       //       values: [
-    //       //         {x: 4, y: 110},
-    //       //         {x: 5, y: 110},
-    //       //         {x: 6, y: 105},
-    //       //         {x: 7, y: 115},
-    //       //       ],
-    //       //       label: 'C',
-    //           },
-    //         ],
-    //       },
-    //     },
-    //   }),
-    // );
+
   }
   componentDidUpdate() {
     // console.log('test update');
@@ -87,7 +46,7 @@ class LineChartScreen extends React.Component {
   onPressLearnMore() {
     // console.log('nbr de BPM ='+ this.props.data.length);
     let dernieresValues = this.props.data.map((e) => {
-      return {y: e};
+      return {y: e[1]};
     });
     // console.log('dernieresValues');
     // console.log(dernieresValues);
