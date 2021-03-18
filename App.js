@@ -32,8 +32,6 @@ import styles from './components/styles';
 
 const App = () => {
 
-  console.log(listPosition)
-  console.log("test git2")
 
 
   const [listBpm, setListBpm] = useState([]);
@@ -45,9 +43,11 @@ const App = () => {
   const handlePosition = (lastPosition) => {
     console.log('lastPosition from app')
     console.log("coords", lastPosition.coords)
+    const {altitude,longitude,speed,latitude} = lastPosition.coords
     console.log("timestamp", lastPosition.timestamp)
     console.log("timestamp", new Date(lastPosition.timestamp).toLocaleTimeString('fr-FR'))
-    console.log("test");
+    console.log(altitude,longitude,speed,latitude);
+    console.log(new Date().toLocaleTimeString('fr-FR'));
     setListPosition((listPosition) => [...listPosition, lastPosition]);
   };
 
