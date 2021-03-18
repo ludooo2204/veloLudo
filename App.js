@@ -46,6 +46,7 @@ const App = () => {
     console.log('lastPosition from app')
     console.log("coords", lastPosition.coords)
     console.log("timestamp", lastPosition.timestamp)
+    console.log("timestamp", new Date(lastPosition.timestamp).toLocaleTimeString('fr-FR'))
     console.log("test");
     setListPosition((listPosition) => [...listPosition, lastPosition]);
   };
