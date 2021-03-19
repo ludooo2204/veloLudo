@@ -285,9 +285,7 @@ const Bpm = ({remonterData}) => {
         )}
         <View>
           <View style={{margin: 10}}>
-            <Text style={{fontSize: 40, color: 'white'}}>{bpm}</Text>
-
-            <Text style={{fontSize: 20, color: 'white'}}>altitude</Text>
+        
 
             <Button
               title={'Scan Bluetooth (' + (isScanning ? 'on' : 'off') + ')'}

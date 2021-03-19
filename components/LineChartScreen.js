@@ -102,14 +102,14 @@ class LineChartScreen extends React.Component {
     // console.log(this.state);
     return (
       <View style={{flex: 1}}>
-        <Text style={{color: 'white'}}>
+        {/* <Text style={{color: 'white'}}>
           'nbr de BPM =' {this.props.data.length}
-        </Text>
+        </Text> */}
 
-        <View style={{height: 80}}>
+        {/* <View style={{height: 80}}>
           <Text style={{color: 'white'}}> selected entry</Text>
           <Text style={{color: 'white'}}> {this.state.selectedEntry}</Text>
-        </View>
+        </View> */}
 
         <View style={styles.container}>
           <LineChart

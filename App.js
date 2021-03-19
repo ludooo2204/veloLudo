@@ -6,6 +6,8 @@
  */
 
 /**TODO
+ * 
+ * - revoir listPosition avec la vitesse en plus. il faut creer un state position et y ajouter la vitesse
  - BUG kan montre + deplacement !!
 -gerer la deconnexion bluetooth lors de l'arret de l'app (sinon redemarrage du tel)
  -ecran de veille a desactiver npm keepScreenawake
@@ -34,10 +36,51 @@ import styles from './components/styles';
 const App = () => {
   const [listBpm, setListBpm] = useState([]);
   const [listPosition, setListPosition] = useState([]);
-  
+  const [positionTemporaire, setPositionTemporaire] = useState(null);
+  const [lastPositionLatLong, setLastPositionLatLong] = useState([]);
+  const [distance, setDistance] = useState(0);
+  // let listPosition=[]
+  useEffect(() => {
+    console.log(
+      '##############################################################',
+    );
+    let positionTemporaire2 = positionTemporaire;
+    // positionTemporaire2.push()
+    // console.log('positionTemporaire2');
+    // console.log(positionTemporaire2);
+    if (listPosition.length > 2) {
+      console.log('distance a venir');
+      console.log('listPosition[listPosition.length-1]');
+      console.log(listPosition[listPosition.length - 1]);
+      console.log('listPosition');
+      console.log(listPosition);
+      const actualLat = listPosition[listPosition.length - 1][3];
+      const actualLong = listPosition[listPosition.length - 1][2];
+      const lastLat = listPosition[listPosition.length - 2][3];
+      const lastLong = listPosition[listPosition.length - 2][2];
+      // console.log(lastLat,lastLong,actualLat,actualLong);
+      const distanceFromlastPosition = getDistanceFromLatLonInMeter(
+        lastLat,
+        lastLong,
+        actualLat,
+        actualLong,
+      );
+      console.log('distanceFromlastPosition');
+      console.log(distanceFromlastPosition);
+      setDistance(distance + Math.round(distanceFromlastPosition));
+      console.log('distance en m =', distance);
+      // console.log(positionTemporaire2);
+      positionTemporaire2.push(distance);
+      console.log(positionTemporaire2);
+      setPositionTemporaire(positionTemporaire2);
+    }
+
+    setListPosition((listPosition) => [...listPosition, positionTemporaire2]);
+    //  console.log('listPosition nono');
+    //  console.log(listPosition);
+  }, [positionTemporaire]);
 
   const handleBpm = (lastBpm) => {
-    // console.log(lastBpm);
     const timestamp = new Date();
     let bpm = [];
     bpm[0] = timestamp;
@@ -60,38 +103,31 @@ const App = () => {
     position[1] = altitude;
     position[2] = longitude;
     position[3] = latitude;
-    position[4] = speed;
-   
-    if(listPosition.length>1){
-      const lastLat = listPosition[listPosition.length - 1][3];
-      const lastLong = listPosition[listPosition.length - 1][2];
+    position[4] = speed*3.6;
 
-      const distanceFromlastPosition = getDistanceFromLatLonInMeter(
-        lastLat,
-        lastLong,
-        latitude,
-        longitude,
-      );
-      position[5] = distanceFromlastPosition;
-    }
-    console.log('position');
-    console.log(position);
-
-    setListPosition((listPosition) => [...listPosition, position]);
+    setPositionTemporaire(position);
+    // setLastPositionLatLong([latitude, longitude]);
   };
 
   return (
     <View style={{flex: 1, backgroundColor: 'black', color: 'white'}}>
       <StatusBar barStyle="dark-content" hidden />
-      <Text style={{color: 'white',fontSize:40}}>Revoir la fin de parcours avec deplacement sur map pour le calul de la distance!</Text>
-      <Text style={{color: 'white'}}>
+
+      <Text style={{color: 'white', fontSize: 20}}>
         {'\n'}
+        {/* {console.log('listPosition')} */}
         nbr de position = {listPosition.length}
         {'\n '}
-        derniere poosition = {JSON.stringify(listPosition[listPosition.length-1])}
+        {}
+        derniere position ={'\n '} {listPosition.length>2?(new Date(positionTemporaire[0]).toLocaleTimeString('fr-FR')):null}
+        {'\n '}
+        {listPosition.length>2?JSON.stringify(positionTemporaire[4]):null} km/h
+        {'\n '}
+        {listPosition.length>2?JSON.stringify(positionTemporaire[5]):null} en metre
+        {/* lastPositionLatLong = {JSON.stringify(lastPositionLatLong)} */}
       </Text>
       <Save listBpm={listBpm} listPosition={listPosition} />
-
+      {/* <Button title="testDistance" onPress={() => testDistance()} /> */}
       <Location remonterData={(e) => handlePosition(e)} />
 
       <View style={{flex: 3}}>
@@ -120,7 +156,7 @@ function getDistanceFromLatLonInMeter(lat1, lon1, lat2, lon2) {
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c*1000; // Distance in m
+  var d = R * c * 1000; // Distance in m
   return d;
 }
 

@@ -26,25 +26,16 @@ const Location = ({remonterData}) => {
       },
       {
         enableHighAccuracy: true,
-        distanceFilter: 5,
-        interval: 5000,
-        fastestInterval: 4000,
+        distanceFilter: 10,
+        // interval: 5000,
+        // fastestInterval: 4000,
       }, // timeout: 15000, maximumAge: 10000 }
     );
   };
 
   return (
     <View>
-      <Text style={{color: 'white'}}>
-        time
-        {time ? time : 'nada time'}
-        {'\n'}
-        latitude
-        {position ? position.coords.latitude : 'nada'}
-        {'\n'}
-        Error
-        {errors ? errors : null}
-      </Text>
+    
       <Button
         title={gpsRunning ? 'touche pas a ca !' : 'lancer le GPS'}
         onPress={startGps}
