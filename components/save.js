@@ -3,6 +3,7 @@ import {Button, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Save = ({listBpm, listPosition}) => {
+  
   const effacerKeys = async () => {
     let keys = [];
     try {
@@ -28,7 +29,20 @@ const Save = ({listBpm, listPosition}) => {
     }
     console.log('keys');
     console.log(keys);
+  
   };
+  const getParcoursTest = async () => {
+    let data 
+    try {
+      data = await AsyncStorage.getItem("position-Fri Mar 19 2021 14:01:39 GMT+0100 (CET)");
+    } catch (e) {
+      console.log('error', e);
+    }
+    console.log('datas');
+    console.log(data);
+  
+  };
+ 
   const finParcours = async (listBpm, listPosition) => {
     console.log('fin du parcours et sauvegarde en local');
     console.log('list BPM', listBpm);
@@ -39,21 +53,15 @@ const Save = ({listBpm, listPosition}) => {
 
     try {
       const dateDuParcours = new Date();
-      let test = dateDuParcours.toLocaleString('fr-FR', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+    
 
       console.log('dateDuParcours');
       console.log(dateDuParcours);
-      console.log(test);
+    
       const valueBpm = JSON.stringify(listBpm);
-      await AsyncStorage.setItem(`bpm-${test}`, valueBpm);
+      await AsyncStorage.setItem(`bpm-${dateDuParcours}`, valueBpm);
       const valuePosition = JSON.stringify(listPosition);
-      await AsyncStorage.setItem(`position-${test}`, valuePosition);
+      await AsyncStorage.setItem(`position-${dateDuParcours}`, valuePosition);
     } catch (e) {
       console.log('error', e);
     }
@@ -70,6 +78,10 @@ const Save = ({listBpm, listPosition}) => {
       <Button title="clear keys" onPress={() => effacerKeys()} />
       <Text>{'\n'}</Text>
       <Button title="get parcours" onPress={() => getParcours()} />
+      <Text>{'\n'}</Text>
+      <Button title="get parcoursTest" onPress={() => getParcoursTest()} />
+      <Text>{'\n'}</Text>
+      
     </>
   );
 };
