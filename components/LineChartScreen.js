@@ -35,11 +35,10 @@ class LineChartScreen extends React.Component {
 
   componentDidMount() {
     console.log('mount');
-
   }
   componentDidUpdate() {
     // console.log('test update');
-    
+
     this.onPressLearnMore();
   }
 
@@ -103,13 +102,13 @@ class LineChartScreen extends React.Component {
     // console.log(this.state);
     return (
       <View style={{flex: 1}}>
-        <Text>
-        'nbr de BPM =' {this.props.data.length}
+        <Text style={{color: 'white'}}>
+          'nbr de BPM =' {this.props.data.length}
         </Text>
 
         <View style={{height: 80}}>
-          <Text> selected entry</Text>
-          <Text> {this.state.selectedEntry}</Text>
+          <Text style={{color: 'white'}}> selected entry</Text>
+          <Text style={{color: 'white'}}> {this.state.selectedEntry}</Text>
         </View>
 
         <View style={styles.container}>

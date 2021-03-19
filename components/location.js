@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Text,View} from 'react-native';
+import {Button, Text, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import styles from './styles';
 const Location = ({remonterData}) => {
@@ -8,24 +8,21 @@ const Location = ({remonterData}) => {
   const [time, setTime] = useState(null);
   const [gpsRunning, setGpsRunning] = useState(false);
 
-
-
-  const startGps =()=>{
-    console.log("lancement du GPS");
-    setGpsRunning(true)
+  const startGps = () => {
+    console.log('lancement du GPS');
+    setGpsRunning(true);
     Geolocation.watchPosition(
       (positionI) => {
-      
         let time = new Date(positionI.timestamp).toLocaleTimeString('FR-fr');
-        setTime(time)
-        setPosition(positionI)
-        remonterData(positionI)
+        setTime(time);
+        setPosition(positionI);
+        remonterData(positionI);
       },
       (error) => {
         // See error code charts below.
-        console.log("errors");
+        console.log('errors');
         console.log(error.code, error.message);
-        setErrors(error.message)
+        setErrors(error.message);
       },
       {
         enableHighAccuracy: true,
@@ -33,23 +30,25 @@ const Location = ({remonterData}) => {
         interval: 10000,
         fastestInterval: 5000,
       }, // timeout: 15000, maximumAge: 10000 }
-    )}
-     
-
+    );
+  };
 
   return (
     <View>
-    <Text>
-      time
-      {time?time:"nada time"}
-      {"\n"}
-      latitude
-      {position?position.coords.latitude:"nada"}
-      {"\n"}
-        Error 
-     {errors?errors:null}
-    </Text>
-    <Button title={gpsRunning?"touche pas a ca !":"lancer le GPS"} onPress={startGps}/>
+      <Text style={{color: 'white'}}>
+        time
+        {time ? time : 'nada time'}
+        {'\n'}
+        latitude
+        {position ? position.coords.latitude : 'nada'}
+        {'\n'}
+        Error
+        {errors ? errors : null}
+      </Text>
+      <Button
+        title={gpsRunning ? 'touche pas a ca !' : 'lancer le GPS'}
+        onPress={startGps}
+      />
     </View>
   );
 };

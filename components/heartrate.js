@@ -94,17 +94,22 @@ const Bpm = ({remonterData}) => {
       }
     });
   };
-  const collapse =()=>{
-    setConnected(true)
-  }
+  const collapse = () => {
+    setConnected(true);
+  };
   const handleDiscoverPeripheral = (peripheral) => {
-   if (peripheral.advertising.isConnectable&&peripheral.name!=="BRC1H D4:E2:14"&&peripheral.name!==null) console.log('Got ble peripheral', peripheral);
+    if (
+      peripheral.advertising.isConnectable &&
+      peripheral.name !== 'BRC1H D4:E2:14' &&
+      peripheral.name !== null
+    )
+      console.log('Got ble peripheral', peripheral);
     if (peripheral.name && peripheral.name.includes('Amazfit')) {
       peripherals.set(peripheral.id, peripheral);
       setList(Array.from(peripherals.values()));
       //a revoir le testperi...
       // testPeripheral(peripheral)
-    } 
+    }
     // if (!peripheral.name) {
     //   peripheral.name = 'NO NAME';
     // }
@@ -215,7 +220,7 @@ const Bpm = ({remonterData}) => {
   }, []);
 
   const renderItem = (item) => {
-    const color = item.connected ? 'green' : '#fff';
+    const color = item.connected ? 'green' : 'black';
     return (
       <View>
         <TouchableHighlight onPress={() => testPeripheral(item)}>
@@ -224,7 +229,7 @@ const Bpm = ({remonterData}) => {
               style={{
                 fontSize: 12,
                 textAlign: 'center',
-                color: '#333333',
+                color: 'white',
                 padding: 10,
               }}>
               {item.name}
@@ -233,7 +238,7 @@ const Bpm = ({remonterData}) => {
               style={{
                 fontSize: 10,
                 textAlign: 'center',
-                color: '#333333',
+                color: 'white',
                 padding: 2,
               }}>
               RSSI: {item.rssi}
@@ -242,7 +247,7 @@ const Bpm = ({remonterData}) => {
               style={{
                 fontSize: 8,
                 textAlign: 'center',
-                color: '#333333',
+                color: 'white',
                 padding: 2,
                 paddingBottom: 20,
               }}>
@@ -258,6 +263,7 @@ const Bpm = ({remonterData}) => {
                 textAlign: 'center',
                 color: '#333333',
                 padding: 10,
+                color: 'white',
               }}>
               Deconnexion ???
             </Text>
@@ -277,11 +283,11 @@ const Bpm = ({remonterData}) => {
             <Text style={styles.footer}>Engine: Hermes</Text>
           </View>
         )}
-        <View style={styles.body}>
+        <View>
           <View style={{margin: 10}}>
-            <Text style={{fontSize: 40}}>{bpm}</Text>
+            <Text style={{fontSize: 40, color: 'white'}}>{bpm}</Text>
 
-            <Text style={{fontSize: 20}}>altitude</Text>
+            <Text style={{fontSize: 20, color: 'white'}}>altitude</Text>
 
             <Button
               title={'Scan Bluetooth (' + (isScanning ? 'on' : 'off') + ')'}
@@ -304,7 +310,9 @@ const Bpm = ({remonterData}) => {
 
           {list.length == 0 && (
             <View style={{flex: 1, margin: 20}}>
-              <Text style={{textAlign: 'center'}}>No peripherals</Text>
+              <Text style={{textAlign: 'center', color: 'white'}}>
+                No peripherals
+              </Text>
             </View>
           )}
         </View>
