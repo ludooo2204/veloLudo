@@ -25,6 +25,7 @@ import {
   StatusBar,
   Button,
 } from 'react-native';
+import Orientation from 'react-native-orientation';
 import KeepAwake from 'react-native-keep-awake';
 import Location from './components/location';
 import Bpm from './components/heartrate';
@@ -33,13 +34,14 @@ import Save from './components/save';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './components/styles';
 
+
 const App = () => {
   const [listBpm, setListBpm] = useState([]);
   const [listPosition, setListPosition] = useState([]);
   const [positionTemporaire, setPositionTemporaire] = useState(null);
   const [lastPositionLatLong, setLastPositionLatLong] = useState([]);
   const [distance, setDistance] = useState(0);
-  useEffect(() => { KeepAwake.activate(); console.log("ne fait pas dodo!"); }, [])
+  useEffect(() => { KeepAwake.activate(); console.log("ne fait pas dodo!");Orientation.lockToLandscape(); }, [])
   // let listPosition=[]
   useEffect(() => {
     console.log(

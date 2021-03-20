@@ -138,7 +138,7 @@ class LineChartScreen extends React.Component {
             dragDecelerationFrictionCoef={0.99}
             ref="chart"
             // animation={{durationX:2000}}
-            keepPositionOnRotation={false}
+            keepPositionOnRotation={true}
             onSelect={this.handleSelect.bind(this)}
             onChange={(event) => console.log('touché !')}
             // onChange={(event) => console.log(event.nativeEvent)}
