@@ -16,7 +16,8 @@
     "react-native": "0.63.4",
     "react-native-ble-manager": "^7.4.2",
     "react-native-charts-wrapper": "^0.5.7",
-    "react-native-geolocation-service": "^5.2.0"
+    "react-native-geolocation-service": "^5.2.0",
+    "react-native-keep-awake": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
