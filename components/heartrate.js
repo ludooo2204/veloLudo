@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,7 +19,7 @@ import styles from './styles';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-const Bpm = ({remonterData}) => {
+const Bpm = ({ remonterData }) => {
   const [isScanning, setIsScanning] = useState(false);
   const peripherals = new Map();
   const [list, setList] = useState([]);
@@ -165,7 +165,7 @@ const Bpm = ({remonterData}) => {
     }
   };
   useEffect(() => {
-    BleManager.start({showAlert: false});
+    BleManager.start({ showAlert: false });
     console.log('useEffect addlistener');
     bleManagerEmitter.addListener(
       'BleManagerDiscoverPeripheral',
@@ -224,7 +224,7 @@ const Bpm = ({remonterData}) => {
     return (
       <View>
         <TouchableHighlight onPress={() => testPeripheral(item)}>
-          <View style={[styles.row, {backgroundColor: color}]}>
+          <View style={[styles.row, { backgroundColor: color }]}>
             <Text
               style={{
                 fontSize: 12,
@@ -256,7 +256,7 @@ const Bpm = ({remonterData}) => {
           </View>
         </TouchableHighlight>
         <TouchableHighlight onPress={() => BleManager.disconnect(item.id)}>
-          <View style={[styles.row, {backgroundColor: color}]}>
+          <View style={[styles.row, { backgroundColor: color }]}>
             <Text
               style={{
                 fontSize: 12,
@@ -275,6 +275,7 @@ const Bpm = ({remonterData}) => {
 
   return (
     <>
+    
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.scrollView}>
@@ -283,9 +284,9 @@ const Bpm = ({remonterData}) => {
             <Text style={styles.footer}>Engine: Hermes</Text>
           </View>
         )}
-        <View>
-          <View style={{margin: 10}}>
-        
+        {isConnected ? null : (<View>
+          <View style={{ margin: 10 }}>
+
 
             <Button
               title={'Scan Bluetooth (' + (isScanning ? 'on' : 'off') + ')'}
@@ -296,29 +297,30 @@ const Bpm = ({remonterData}) => {
             {/* {list.length?<Text>LA list = {JSON.stringify(list)}</Text>:null} */}
           </View>
 
-          <View style={{margin: 10}}>
+          <View style={{ margin: 10 }}>
             <Button
               title="Retrieve connected peripherals"
               onPress={() => retrieveConnected()}
             />
           </View>
-          <View style={{margin: 10}}>
+          <View style={{ margin: 10 }}>
             <Button title="fermer objet" onPress={() => collapse()} />
           </View>
 
           {list.length == 0 && (
-            <View style={{flex: 1, margin: 20}}>
-              <Text style={{textAlign: 'center', color: 'white'}}>
+            <View style={{ flex: 1, margin: 20 }}>
+              <Text style={{ textAlign: 'center', color: 'white' }}>
                 No peripherals
               </Text>
             </View>
           )}
-        </View>
+        </View>)}
       </ScrollView>
+      <Text style={{ textAlign: 'center', color: 'white',fontSize:30 }}>bpm = {bpm}</Text>
       {isConnected ? null : (
         <FlatList
           data={list}
-          renderItem={({item}) => renderItem(item)}
+          renderItem={({ item }) => renderItem(item)}
           keyExtractor={(item) => item.id}
         />
       )}

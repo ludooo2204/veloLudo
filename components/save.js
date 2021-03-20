@@ -69,20 +69,20 @@ const Save = ({listBpm, listPosition}) => {
   };
 
   return (
-    <>
+    <View style={{flex:1,flexDirection:"column"}}>
       <Button
         title="Fin du parcours"
         onPress={() => finParcours(listBpm, listPosition)}
       />
       <Text>{'\n'}</Text>
-      <Button title="clear keys" onPress={() => effacerKeys()} />
-      <Text>{'\n'}</Text>
+      {/* <Button title="clear keys" onPress={() => effacerKeys()} />
+      <Text>{'\n'}</Text> */}
       <Button title="get parcours" onPress={() => getParcours()} />
-      <Text>{'\n'}</Text>
+      {/* <Text>{'\n'}</Text>
       <Button title="get parcoursTest" onPress={() => getParcoursTest()} />
-      <Text>{'\n'}</Text>
+      <Text>{'\n'}</Text> */}
       
-    </>
+    </View>
   );
 };
 export default Save;
