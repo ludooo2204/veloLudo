@@ -6,9 +6,12 @@ const Save = ({route, navigation}) => {
   const [listParcours, setListParcours] = useState('');
   const [choisingParcours, setChoisingParcours] = useState(false);
   const {listBpm, listPosition} = route.params;
-
+  useEffect(()=>{getParcours();console.log("useEffect")  },[])
   const renderItem = ({item}) => (
-    <ParcoursItem title={item.title} onPress={() => console.log(item.id)} />
+    <ParcoursItem title={item.title} onPress={() => {console.log(item.id)
+    console.log('listParcours');console.log(listParcours.filter(e=>e.id==item.id)[0].key);
+    getValeurParcours(listParcours.filter(e=>e.id==item.id)[0].key)
+    }} />
   );
 
   const effacerKeys = async () => {
@@ -39,27 +42,35 @@ const Save = ({route, navigation}) => {
     setChoisingParcours(true);
     let parcoursKeys = [];
     for (const iterator of keys) {
+      if (iterator.includes('position')) {
+        let dateParcours = new Date (iterator.split("position-")[1]).toLocaleString('fr-FR');
       parcoursKeys.push({
-        title: iterator,
+        title:dateParcours ,
         id: keys.indexOf(iterator).toString(),
+        key:iterator
       });
     }
+    }
 
-    console.log('parcoursKeys', parcoursKeys);
+    // console.log('parcoursKeys', parcoursKeys);
     setListParcours(parcoursKeys);
   };
-  const getParcoursTest = async () => {
+  const getValeurParcours = async (key) => {
     let data;
     try {
-      data = await AsyncStorage.getItem(
-        'bpm-Sat Mar 20 2021 18:13:29 GMT+0100 (CET)',
-      );
+      data = await AsyncStorage.getItem(key);
     } catch (e) {
       console.log('error', e);
     }
+    if (data.length>1) {
     console.log('datas');
-    console.log(JSON.parse(data));
+    data=(JSON.parse(data));
     console.log(data);
+
+    console.log('data.length');
+    console.log(data.length);
+    console.log("distance de ", data[data.length-1][5]/1000," km");
+    }
   };
 
   const finParcours = async (listBpm, listPosition) => {
@@ -97,8 +108,7 @@ const Save = ({route, navigation}) => {
       <Text>{'\n'}</Text> */}
       <Button title="get parcours" onPress={() => getParcours()} />
       <Text>{'\n'}</Text>
-      <Button title="get parcoursTest" onPress={() => getParcoursTest()} />
-      <Text>{'\n'}</Text>
+    
       <Button
         title="debug"
         onPress={() => console.log('list position', listPosition)}
@@ -116,8 +126,8 @@ export default Save;
 
 const ParcoursItem = ({title, onPress}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <Text> {title}</Text>
+    <TouchableOpacity onPress={onPress} style={{alignItems:'center'}}>
+      <Text style={{padding:10,fontSize:20}}> {title}</Text>
     </TouchableOpacity>
   );
 };
