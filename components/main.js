@@ -15,16 +15,16 @@ import 'react-native-gesture-handler';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Location from './components/location';
-import Bpm from './components/heartrate';
-import LineChartScreen from './components/LineChartScreen';
-import Save from './components/save';
-import Home from './components/home';
-
-import styles from './components/styles';
+import Location from './location';
+import Bpm from './heartrate';
+import LineChartScreen from './LineChartScreen';
+import Save from './save';
 
 
-const Main = () => {
+import styles from './styles';
+
+
+const Main = ({navigation}) => {
     const [listBpm, setListBpm] = useState([]);
     const [listPosition, setListPosition] = useState([]);
     const [positionTemporaire, setPositionTemporaire] = useState(null);
@@ -133,7 +133,11 @@ const Main = () => {
               <Text style={{color: 'white', textAlign: 'center', fontSize: 30}}>
                 {distance} en metre
               </Text>
-              <Save listBpm={listBpm} listPosition={listPosition} />
+              <Button title="nav" onPress={()=>navigation.navigate('Save',{listBpm:listBpm,listPosition:listPosition})} />
+              <Text style={{color: 'white', textAlign: 'center', fontSize: 30}}>
+                {'\n'}
+              </Text>
+              {/* <Save listBpm={listBpm} listPosition={listPosition} /> */}
               <Location remonterData={(e) => handlePosition(e)} />
             </View>
   
@@ -151,7 +155,7 @@ const Main = () => {
     );
   };
   
-  export default App;
+  export default Main;
   
   //helpers
   function getDistanceFromLatLonInMeter(lat1, lon1, lat2, lon2) {
