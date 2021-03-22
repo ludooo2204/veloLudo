@@ -34,12 +34,13 @@ const Save = ({listBpm, listPosition}) => {
   const getParcoursTest = async () => {
     let data 
     try {
-      data = await AsyncStorage.getItem("position-Fri Mar 19 2021 14:01:39 GMT+0100 (CET)");
+      data = await AsyncStorage.getItem("bpm-Sat Mar 20 2021 18:13:29 GMT+0100 (CET)");
     } catch (e) {
       console.log('error', e);
     }
     console.log('datas');
-    console.log(data);
+    console.log(JSON.parse(data));
+    console.log(data)
   
   };
  
@@ -78,9 +79,9 @@ const Save = ({listBpm, listPosition}) => {
       {/* <Button title="clear keys" onPress={() => effacerKeys()} />
       <Text>{'\n'}</Text> */}
       <Button title="get parcours" onPress={() => getParcours()} />
-      {/* <Text>{'\n'}</Text>
+      <Text>{'\n'}</Text>
       <Button title="get parcoursTest" onPress={() => getParcoursTest()} />
-      <Text>{'\n'}</Text> */}
+      <Text>{'\n'}</Text>
       
     </View>
   );
