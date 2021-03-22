@@ -39,7 +39,7 @@ const Save = ({route, navigation}) => {
     }
     console.log('keys');
     console.log(keys);
-    setChoisingParcours(true);
+
     let parcoursKeys = [];
     for (const iterator of keys) {
       if (iterator.includes('position')) {
@@ -106,7 +106,7 @@ const Save = ({route, navigation}) => {
       <Text>{'\n'}</Text>
       {/* <Button title="clear keys" onPress={() => effacerKeys()} />
       <Text>{'\n'}</Text> */}
-      <Button title="get parcours" onPress={() => getParcours()} />
+      <Button title="get parcours" onPress={() => {getParcours();    setChoisingParcours(true);}} />
       <Text>{'\n'}</Text>
     
       <Button

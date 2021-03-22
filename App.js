@@ -46,7 +46,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
         <Stack.Screen name="Home" component={Home} options={{title: 'Overview'}} />
         <Stack.Screen name="Save" component={Save} options={{title: 'gestion des parcours'}} />
       </Stack.Navigator>
