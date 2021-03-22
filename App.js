@@ -30,6 +30,7 @@ import KeepAwake from 'react-native-keep-awake';
 import 'react-native-gesture-handler';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import Toast from 'react-native-toast-message';
 
 import Location from './components/location';
 import Bpm from './components/heartrate';
@@ -43,14 +44,17 @@ import styles from './components/styles';
 const Stack = createStackNavigator();
 
 const App = () => {
-  return (
+  return (<>
+<Toast ref={(ref) => Toast.setRef(ref)} />
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
+      
         <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
         <Stack.Screen name="Home" component={Home} options={{title: 'Overview'}} />
         <Stack.Screen name="Save" component={Save} options={{title: 'gestion des parcours'}} />
       </Stack.Navigator>
     </NavigationContainer>
+    </>
   );
 };
 

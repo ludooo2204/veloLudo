@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Text, View, FlatList, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'
+import Toast from 'react-native-toast-message';
 
 const Save = ({route, navigation}) => {
   const [listParcours, setListParcours] = useState('');
@@ -65,6 +67,10 @@ const Save = ({route, navigation}) => {
     if (data.length>1) {
     console.log('datas');
     data=(JSON.parse(data));
+    Toast.show({
+      text1: 'Hello',
+      text2: 'This is some something 👋'
+    });
     console.log(data);
 
     console.log('data.length');
@@ -73,6 +79,15 @@ const Save = ({route, navigation}) => {
     }
   };
 
+  const postData = ()=> {
+    axios.post('http://lomano.go.yo.fr/testVelo.php', )
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   const finParcours = async (listBpm, listPosition) => {
     console.log('fin du parcours et sauvegarde en local');
     console.log('list BPM', listBpm);
@@ -99,6 +114,7 @@ const Save = ({route, navigation}) => {
 
   return !choisingParcours ? (
     <View style={{flex: 1, flexDirection: 'column'}}>
+    <Toast ref={(ref) => Toast.setRef(ref)} />
       <Button
         title="Fin du parcours"
         onPress={() => finParcours(listBpm, listPosition)}
@@ -111,15 +127,25 @@ const Save = ({route, navigation}) => {
     
       <Button
         title="debug"
-        onPress={() => console.log('list position', listPosition)}
+        onPress={() =>  {Toast.show({
+      text1: 'Hello',
+      text2: 'This is some something 👋'
+    })}}
+      />
+      <Text>{'\n'}</Text>
+    
+      <Button
+        title="axios"
+        onPress={() => postData()}
       />
     </View>
-  ) : (
+  ) : (<>
+    <Toast ref={(ref) => Toast.setRef(ref)} />
     <FlatList
       data={listParcours}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-    />
+    /></>
   );
 };
 export default Save;
