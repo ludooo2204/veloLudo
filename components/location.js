@@ -27,7 +27,7 @@ const Location = ({remonterData}) => {
       {
         enableHighAccuracy: true,
         distanceFilter: 5,
-        // interval: 5000,
+        interval: 4000,
         // fastestInterval: 4000,
       }, // timeout: 15000, maximumAge: 10000 }
     );
