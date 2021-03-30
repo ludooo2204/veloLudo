@@ -13,13 +13,16 @@ import {
   PermissionsAndroid,
   FlatList,
   TouchableHighlight,
+  LayoutAnimation, 
+  UIManager
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import styles from './styles';
+
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-const Bpm = ({ remonterData }) => {
+const Bpm = ({ remonterData,isVisible }) => {
   const [isScanning, setIsScanning] = useState(false);
   const peripherals = new Map();
   const [list, setList] = useState([]);
@@ -95,6 +98,7 @@ const Bpm = ({ remonterData }) => {
     });
   };
   const collapse = () => {
+
     setConnected(true);
   };
   const handleDiscoverPeripheral = (peripheral) => {
@@ -116,8 +120,8 @@ const Bpm = ({ remonterData }) => {
   };
 
   const testPeripheral = (peripheral) => {
-    // console.log('peripheral');
-    // console.log(peripheral);
+    console.log('peripheral');
+    console.log(peripheral);
     if (peripheral) {
       if (peripheral.connected) {
         BleManager.disconnect(peripheral.id);
@@ -275,8 +279,8 @@ const Bpm = ({ remonterData }) => {
 
   return (
     <>
-    
-      <ScrollView
+
+{isVisible&&<ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.scrollView}>
         {global.HermesInternal == null ? null : (
@@ -315,15 +319,15 @@ const Bpm = ({ remonterData }) => {
             </View>
           )}
         </View>)}
-      </ScrollView>
-      <Text style={{ textAlign: 'center', color: 'white',fontSize:30 }}>bpm = {bpm}</Text>
-      {isConnected ? null : (
-        <FlatList
+      </ScrollView>}
+   
+      {/* {isConnected ? null :  */}
+        {isVisible&&<FlatList
           data={list}
           renderItem={({ item }) => renderItem(item)}
           keyExtractor={(item) => item.id}
-        />
-      )}
+        />}
+      {/* } */}
     </>
   );
 };

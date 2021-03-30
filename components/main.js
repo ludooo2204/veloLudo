@@ -5,8 +5,11 @@ import {
   ScrollView,
   View,
   Text,
+  Platform,
   StatusBar,
   Button,
+  UIManager,
+  LayoutAnimation
 } from 'react-native';
 
 import Orientation from 'react-native-orientation';
@@ -14,6 +17,7 @@ import KeepAwake from 'react-native-keep-awake';
 import 'react-native-gesture-handler';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
 import Location from './location';
 import Bpm from './heartrate';
@@ -23,6 +27,13 @@ import Save from './save';
 
 import styles from './styles';
 
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 
 const Main = ({ navigation }) => {
   const [listBpm, setListBpm] = useState([]);
@@ -30,6 +41,8 @@ const Main = ({ navigation }) => {
   const [positionTemporaire, setPositionTemporaire] = useState(null);
   const [lastPositionLatLong, setLastPositionLatLong] = useState([]);
   const [distance, setDistance] = useState(0);
+  const [isMenuBpmVisible, setIsMenuBpmVisible] = useState(true);
+  const [isMenuLocationVisible, setIsMenuLocationVisible] = useState(true);
   useEffect(() => {
     KeepAwake.activate();
     console.log('ne fait pas dodo!');
@@ -81,6 +94,8 @@ const Main = ({ navigation }) => {
   }, [listPosition]);
 
   const handleBpm = (lastBpm) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setIsMenuBpmVisible(!isMenuBpmVisible)
     const timestamp = new Date();
     let bpm = [];
     bpm[0] = timestamp;
@@ -88,8 +103,14 @@ const Main = ({ navigation }) => {
     console.log(bpm);
     setListBpm((listBpm) => [...listBpm, bpm]);
   };
+  const collapseMenuBpm = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setIsMenuBpmVisible(!isMenuBpmVisible)
+  }
 
   const handlePosition = (lastPosition) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setIsMenuLocationVisible(!isMenuLocationVisible)
     console.log('lastPosition from app');
     console.log('coords', lastPosition.coords);
     let { altitude, speed } = lastPosition.coords;
@@ -133,23 +154,29 @@ const Main = ({ navigation }) => {
         <Text style={{ color: 'white', textAlign: 'center', fontSize: 30 }}>
           {distance} en metre
               </Text>
-        <Button title="nav" onPress={() => navigation.navigate('Save', { listBpm: listBpm, listPosition: listPosition })} />
+        {listBpm.length>1&&<Text style={{ color: 'white', textAlign: 'center', fontSize: 30 }}>
+          BPM ={listBpm[listBpm.length-1][1]} 
+              </Text>}
+        <Button title="Fin du parcours" onPress={() => navigation.navigate('Save', { listBpm: listBpm, listPosition: listPosition })} />
         <Text style={{ color: 'white', textAlign: 'center', fontSize: 30 }}>
           {'\n'}
         </Text>
         {/* <Save listBpm={listBpm} listPosition={listPosition} /> */}
-        <Location remonterData={(e) => handlePosition(e)} />
+        <Location remonterData={(e) => handlePosition(e)} isVisible={isMenuLocationVisible} />
+        <Button title="fermer menu BPM" onPress={collapseMenuBpm}/>
       </View>
 
-      <View style={{ flex: 3 }}>
-        <LineChartScreen data={listBpm} />
-      </View>
+     
       <View style={{ flex: 1, flexDirection: 'column' }}>
         <Bpm
           style={{ backgroundColor: 'black' }}
           remonterData={(e) => handleBpm(e)}
+          isVisible={isMenuBpmVisible}
         />
       </View>
+      {!isMenuBpmVisible &&  <View style={{ flex: 3 }}>
+        <LineChartScreen data={listBpm} />
+      </View>}
     </View>
 
   );
