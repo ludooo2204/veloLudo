@@ -27,8 +27,8 @@ const Location = ({remonterData,isVisible}) => {
       {
         enableHighAccuracy: true,
         distanceFilter: 5,
-        interval: 4000,
-        // fastestInterval: 4000,
+        interval: 2000,
+        fastestInterval: 1900,
       }, // timeout: 15000, maximumAge: 10000 }
     );
   };
