@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {Button, Text, View} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Button, Text, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import styles from './styles';
-const Location = ({remonterData,isVisible}) => {
+const Location = ({ remonterData, isVisible }) => {
   const [position, setPosition] = useState(null);
   const [errors, setErrors] = useState(null);
   const [time, setTime] = useState(null);
@@ -34,8 +34,8 @@ const Location = ({remonterData,isVisible}) => {
   };
 
   return (
-    <View>{console.log("isVisible =",isVisible)}
-    {isVisible&&<Button
+    <View>
+      {isVisible && <Button
         title={gpsRunning ? 'touche pas a ca !' : 'lancer le GPS'}
         onPress={startGps}
       />}
