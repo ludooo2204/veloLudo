@@ -17,7 +17,7 @@ import KeepAwake from 'react-native-keep-awake';
 import 'react-native-gesture-handler';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
+import {getDistanceFromLatLonInMeter,deg2rad} from './helpers'
 import Location from './location';
 import Bpm from './heartrate';
 import LineChartScreen from './LineChartScreen';
@@ -166,11 +166,9 @@ const Main = ({navigation}) => {
 					})
 				}
 				/>
-				<Location
-				remonterData={(e) => handlePosition(e)}
-				// isVisible={isMenuLocationVisible}
-				/>
-				{/* <Button title="fermer menu BPM" onPress={collapseMenuBpm} /> */}
+				{/* <Location
+				remonterData={(e) => handlePosition(e)} */}
+				{/* /> */}
       </View>
 
       <View style={{flex: 2, flexDirection: 'column'}}>
@@ -193,21 +191,21 @@ const Main = ({navigation}) => {
 export default Main;
 
 //helpers
-function getDistanceFromLatLonInMeter(lat1, lon1, lat2, lon2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2 - lat1); // deg2rad below
-  var dLon = deg2rad(lon2 - lon1);
-  var a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c * 1000; // Distance in m
-  return d;
-}
+// function getDistanceFromLatLonInMeter(lat1, lon1, lat2, lon2) {
+//   var R = 6371; // Radius of the earth in km
+//   var dLat = deg2rad(lat2 - lat1); // deg2rad below
+//   var dLon = deg2rad(lon2 - lon1);
+//   var a =
+//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//     Math.cos(deg2rad(lat1)) *
+//       Math.cos(deg2rad(lat2)) *
+//       Math.sin(dLon / 2) *
+//       Math.sin(dLon / 2);
+//   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//   var d = R * c * 1000; // Distance in m
+//   return d;
+// }
 
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
-}
+// function deg2rad(deg) {
+//   return deg * (Math.PI / 180);
+// }

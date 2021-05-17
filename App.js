@@ -47,10 +47,11 @@ const App = () => {
   return (<>
 <Toast ref={(ref) => Toast.setRef(ref)} />
     <NavigationContainer>
+    <StatusBar barStyle="dark-content" hidden />
       <Stack.Navigator initialRouteName="Home">
-      
+  
         <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
-        <Stack.Screen name="Home" component={Home} options={{title: 'Overview'}} />
+        <Stack.Screen options={{headerShown: false}} name="Home" component={Home}  />
         <Stack.Screen name="Save" component={Save} options={{title: 'gestion des parcours'}} />
       </Stack.Navigator>
     </NavigationContainer>

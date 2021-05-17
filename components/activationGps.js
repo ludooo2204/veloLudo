@@ -1,14 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import Location from './location';
-const ActivationGps = () => {
-  const test=(o)=>{
-      console.log("o",o)
-  }
+const ActivationGps = ({gpsReady}) => {
+ 
     return (
-  <View>
-    <Text>ActivationGps</Text>
-    <Location remonterData={test} />
+
+      <View style={{flex:1,borderWidth:3,borderColor:'black',justifyContent: 'center',alignItems: 'center',}}>
+    <Location remonterData={gpsReady} />
   </View>)
 }
 
