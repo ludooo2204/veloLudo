@@ -47,6 +47,14 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     textAlign: 'right',
   },
+  indicationText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 30,
+  },
+  kmhText:{
+    fontSize: 60,
+  }
 });
 
 export default styles;
