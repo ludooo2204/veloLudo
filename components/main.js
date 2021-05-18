@@ -166,17 +166,9 @@ const Main = ({navigation}) => {
 					})
 				}
 				/>
-				{/* <Location
-				remonterData={(e) => handlePosition(e)} */}
-				{/* /> */}
       </View>
 
       <View style={{flex: 2, flexDirection: 'column'}}>
-					{/* <Bpm
-					style={{backgroundColor: 'red'}}
-					remonterData={(e) => handleBpm(e)}
-					isVisible={isMenuBpmVisible}
-					/> */}
       
       {!isMenuBpmVisible && (
         <View style={{flex: 2, backgroundColor: 'grey'}}>

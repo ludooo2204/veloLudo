@@ -5,9 +5,9 @@ const ActivationGps = ({remonterData,isRunning}) => {
  
     return (
 
-      <View style={{flex:1,borderWidth:3,borderColor:'black',justifyContent: 'center',alignItems: 'center',}}>
-    <Location remonterData={remonterData}  isRunning={isRunning}  />
-  </View>)
+      // <View style={{flex:1,borderWidth:3,borderColor:'yellow',justifyContent: 'center',alignItems: 'center',}}>
+    <Location remonterData={remonterData}  isRunning={isRunning}  />)
+  // </View>)
 }
 
 export default ActivationGps;

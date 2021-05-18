@@ -41,12 +41,13 @@ const Location = ({remonterData,isRunning}) => {
   
     
   if (isRunning) {
-    return (<View>
-      <Text>     {position.coords.latitude}</Text>
-      <Text>     {position.coords.longitude}</Text>
-      <Text>     {position.coords.speed}</Text>
-      <Text style={{fontSize:30}}>     {new Date(position.timestamp).toLocaleString('fr-FR')}</Text>
-      </View>
+    return ( null
+    // <View>
+    //   <Text>     {position.coords.latitude}</Text>
+    //   <Text>     {position.coords.longitude}</Text>
+    //   <Text>     {position.coords.speed}</Text>
+    //   <Text style={{fontSize:30}}>     {new Date(position.timestamp).toLocaleString('fr-FR')}</Text>
+    //   </View>
     )
   }
   else {
