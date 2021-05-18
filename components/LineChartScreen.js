@@ -14,7 +14,7 @@ import {LineChart} from 'react-native-charts-wrapper';
 class LineChartScreen extends React.Component {
   constructor() {
     super();
-
+    
     this.state = {
       data: {},
 
@@ -29,16 +29,14 @@ class LineChartScreen extends React.Component {
         granularityEnabled: true,
         granularity: 1,
       },
-      // visibleRange: {x: {min: 1, max: 20}}
+      // visibleRange: {x: {min: 1, max: 20}};
+     
     };
   }
 
   componentDidMount() {
-    console.log('mount');
   }
   componentDidUpdate() {
-    // console.log('test update');
-
     this.onPressLearnMore();
   }
 
@@ -47,9 +45,9 @@ class LineChartScreen extends React.Component {
     let dernieresValues = this.props.data.map((e) => {
       return {y: e[1]};
     });
-    // console.log('dernieresValues');
-    // console.log(dernieresValues);
-    // console.log('update');
+    console.log('dernieresValues');
+    console.log(dernieresValues);
+    console.log('update');
 
     this.refs.chart.setDataAndLockIndex({
       dataSets: [
@@ -96,20 +94,9 @@ class LineChartScreen extends React.Component {
   }
 
   render() {
-    // console.log('this.props');
-    // console.log(this.props);
-    // console.log('this.state');
-    // console.log(this.state);
     return (
       <View style={{flex: 1}}>
-        {/* <Text style={{color: 'white'}}>
-          'nbr de BPM =' {this.props.data.length}
-        </Text> */}
 
-        {/* <View style={{height: 80}}>
-          <Text style={{color: 'white'}}> selected entry</Text>
-          <Text style={{color: 'white'}}> {this.state.selectedEntry}</Text>
-        </View> */}
 
         <View style={styles.container}>
           <LineChart
@@ -152,10 +139,13 @@ class LineChartScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+
+    backgroundColor: 'orange',
+    // backgroundColor: '#F5FCFF',
   },
   chart: {
     flex: 1,
+    backgroundColor:"lightgrey"
   },
 });
 

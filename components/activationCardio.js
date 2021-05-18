@@ -1,22 +1,26 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, Pressable, Modal} from 'react-native';
 import Bpm from './heartrate';
-const ActivationCardio = ({gpsReady}) => {
- const handleBpm=(e)=>{
-     console.log(e)
- }
-    return (
-
-      <View style={{flex:1,borderWidth:3,borderColor:'black',justifyContent: 'center',alignItems: 'center',}}>
-<Text>CARDIO</Text>
-<Bpm
-					style={{backgroundColor: 'red'}}
-					remonterData={(e) => handleBpm(e)}
-                    isVisible
-					/>
+import {useNavigation} from '@react-navigation/native';
+const ActivationCardio = ({cardioReady,isModalVisible}) => {
 
 
-  </View>)
-}
+  return (
+	
+    <View
+      style={{
+        flex: 1,
+        borderWidth: 3,
+        borderColor: 'black',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+		<Bpm remonterData={(e)=>console.log("toto",e)}/>
+      </View>
+    </View>
+  );
+};
 
 export default ActivationCardio;

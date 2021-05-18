@@ -3,7 +3,7 @@ import {Button, Text,PermissionsAndroid, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Bpm from './heartrate';
 import styles from './styles';
-const Location = ({remonterData}) => {
+const Location = ({remonterData,isRunning}) => {
   // const Location = ({ remonterData, isVisible }) => {
   const [position, setPosition] = useState(null);
   // const [errors, setErrors] = useState(null);
@@ -35,12 +35,21 @@ const Location = ({remonterData}) => {
       }, // timeout: 15000, maximumAge: 10000 }
     );
     return () => {
-      Geolocation.stopObserving()
+      // Geolocation.stopObserving()
     }
   }, [])
   
     
-  
+  if (isRunning) {
+    return (<View>
+      <Text>     {position.coords.latitude}</Text>
+      <Text>     {position.coords.longitude}</Text>
+      <Text>     {position.coords.speed}</Text>
+      <Text style={{fontSize:30}}>     {new Date(position.timestamp).toLocaleString('fr-FR')}</Text>
+      </View>
+    )
+  }
+  else {
   if (position) {return (
     // <View style={{borderWidth:3,borderColor:'black', backgroundColor:bg,justifyContent: 'center'}}>
  <Text style={{fontSize:50}}>
@@ -56,5 +65,5 @@ const Location = ({remonterData}) => {
     </Text>
   )
   }
-};
+};}
 export default Location;

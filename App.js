@@ -52,6 +52,7 @@ const App = () => {
   
         <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
         <Stack.Screen options={{headerShown: false}} name="Home" component={Home}  />
+        <Stack.Screen options={{headerShown: false}} name="Bpm" component={Bpm}  />
         <Stack.Screen name="Save" component={Save} options={{title: 'gestion des parcours'}} />
       </Stack.Navigator>
     </NavigationContainer>
