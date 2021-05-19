@@ -25,24 +25,26 @@ const Compteur = ({data}) => {
   const tempsEcoule = new Date(tempsEcouleSecondes * 1000)
     .toISOString()
     .substr(11, 8);
-  const vitesseMoyenne = Math.round(data[7]*10)/10;
+  const vitesseMoyenne = Math.round(data[7] * 10) / 10;
 
   return (
     <View
       style={{
-        flex: 1,
+        flex: 7,
         backgroundColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text style={{fontSize: 30, color: 'white'}}>{speed} km/h</Text>
+      <Text style={{fontSize: 50,fontFamily:'sans-serif-thin',fontStyle:'italic',fontWeight:'bold', color: 'white'}}>{speed} km/h</Text>
+      <Text style={{fontSize: 30, fontFamily: 'Roboto', color: 'white' }}>Custom Font</Text>
+
       <Text style={{fontSize: 30, color: 'white'}}>{altitude} m</Text>
-      <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text>
+      {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
       <Text style={{fontSize: 30, color: 'white'}}>{distanceTotale} m++</Text>
       <Text style={{fontSize: 30, color: 'white'}}>{tempsEcoule} </Text>
       <Text style={{fontSize: 30, color: 'white'}}>{vitesseMoyenne} km/h </Text>
       <Text style={{fontSize: 30, color: 'white'}}>d+ </Text>
-      <Text style={{fontSize: 30, color: 'white'}}>
+      <Text style={{fontSize: 10, color: 'white'}}>
         nbr mesure = {nbrMesure}{' '}
       </Text>
       <Text style={{fontSize: 30, color: 'white'}}>
@@ -100,53 +102,33 @@ const Home = ({navigation}) => {
           ) + distanceTotale,
         ),
       );
+      let vitesseMoyenneValue = 0;
+      setTempsEcoule(new Date().getTime() - topDepart);
+      for (const iterator of listGPS) {
+        vitesseMoyenneValue += Math.round(iterator.coords.speed * 36) / 10;
+      }
+      setVitesseMoyenne(vitesseMoyenneValue / listGPS.length);
     }
   }, [listGPS]);
+
   const handleGPS = (position) => {
     console.log('gpsReady', position);
     setIsGpsReady(true);
-    // setGPS(position);
 
-    // dataGPS.push(position)
     const altitudeValue = Math.round(position.coords.altitude * 100) / 100;
     const speedValue = Math.round(position.coords.speed * 36) / 10;
-
-  
-
-
 
     setAltitude(altitudeValue);
     setSpeed(speedValue);
     setTime(position.timestamp);
-    setTempsEcoule(new Date().getTime() - topDepart);
-    let vitesseMoyenneValue = 0;
-    for (const iterator of listGPS) {
-      vitesseMoyenneValue += (Math.round(iterator.coords.speed * 36) / 10);
-    }
+   
+  
+
     
-    setVitesseMoyenne(vitesseMoyenneValue / listGPS.length);
     setListGPS((listGPS) => [...listGPS, position]);
     // traitementPositionGPS();
   };
-  const traitementPositionGPS = () => {
-    if (listGPS.length > 1) {
-      console.log('traitement Distance');
 
-      const lastLongPosition = listGPS[listGPS.length - 1].coords.longitude;
-      const lastLatPosition = listGPS[listGPS.length - 1].coords.latitude;
-      const beforeLastLongPosition =
-        listGPS[listGPS.length - 2].coords.longitude;
-      const beforeLastLatPosition = listGPS[listGPS.length - 2].coords.latitude;
-      setDistanceParcouru(
-        getDistanceFromLatLonInMeter(
-          beforeLastLatPosition,
-          beforeLastLongPosition,
-          lastLatPosition,
-          lastLongPosition,
-        ),
-      );
-    }
-  };
   const handleBPM = (bpm) => {
     console.log('handleBPM from home');
     setInfoConnexion(false);
@@ -167,7 +149,7 @@ const Home = ({navigation}) => {
         heading: 0,
         latitude: 46 + Math.random() / 1000,
         longitude: Math.random() / 1000 + 0.5,
-        speed: (Math.random() * 10 + 20)/3.6,
+        speed: (Math.random() * 10 + 20) / 3.6,
       },
       mocked: false,
       timestamp: new Date().getTime(),
@@ -180,23 +162,33 @@ const Home = ({navigation}) => {
 
     let vitesseMoyenneValue = 0;
     for (const iterator of listGPS) {
-      vitesseMoyenneValue += (Math.round(iterator.coords.speed * 36) / 10);
+      vitesseMoyenneValue += Math.round(iterator.coords.speed * 36) / 10;
     }
     console.log(
       'la vitesse moyenne est de ',
       vitesseMoyenneValue / listGPS.length,
-      'instant est de ',speedValue
+      'instant est de ',
+      speedValue,
     );
     setVitesseMoyenne(vitesseMoyenneValue / listGPS.length);
     setTempsEcoule(new Date().getTime() - topDepart);
     setListGPS((listGPS) => [...listGPS, position]);
     // traitementPositionGPS();
   };
+
   const startParcours = () => {
     console.log('top départ!', new Date().getTime());
     setRunning(true);
     setTopDepart(new Date().getTime());
   };
+  const stopParcours = () =>{
+    console.log("fin parcours!!!")
+   for (let i = 2; i < listGPS.length; i++) {
+     const element = listGPS[i];
+    console.log(getDistanceFromLatLonInMeter(listGPS[i-1].coords.latitude,listGPS[i-1].coords.longitude,listGPS[i].coords.latitude,listGPS[i].coords.longitude))
+     
+   }
+  }
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" hidden />
@@ -214,7 +206,7 @@ const Home = ({navigation}) => {
         {/* </View> */}
         {/* )} */}
 
-        {listGPS.length > 1 && isRunning && (
+        {(listGPS.length > 1 && isRunning) && (
           <Compteur
             data={[
               speed,
@@ -236,7 +228,7 @@ const Home = ({navigation}) => {
 
         <View
           style={{
-            flex: 1,
+            flex: 6,
             backgroundColor: 'purple',
           }}>
           {!infoConnexion && !isRunning && (
@@ -251,11 +243,12 @@ const Home = ({navigation}) => {
         <View
           style={{
             flex: 1,
-            backgroundColor: '#ffa',
+            backgroundColor: '#000',
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Button title="ajout deplacement" onPress={ajoutDeplacement} />
+          <Button title="fin du Parcours" onPress={stopParcours} />
         </View>
       </View>
       {!isRunning && (
