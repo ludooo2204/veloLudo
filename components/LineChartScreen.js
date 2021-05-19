@@ -45,9 +45,6 @@ class LineChartScreen extends React.Component {
     let dernieresValues = this.props.data.map((e) => {
       return {y: e[1]};
     });
-    console.log('dernieresValues');
-    console.log(dernieresValues);
-    console.log('update');
 
     this.refs.chart.setDataAndLockIndex({
       dataSets: [

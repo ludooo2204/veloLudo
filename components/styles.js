@@ -1,4 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {
+  useState,
+  useEffect
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,7 +11,9 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {
+  Colors
+} from 'react-native/Libraries/NewAppScreen';
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -52,9 +57,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
   },
-  kmhText:{
+  kmhText: {
     fontSize: 60,
-  }
+  },
 });
 
 export default styles;
