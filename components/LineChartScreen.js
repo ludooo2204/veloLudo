@@ -99,8 +99,9 @@ class LineChartScreen extends React.Component {
           <LineChart
             style={styles.chart}
             data={this.state.data}
-            chartDescription={{text: 'BPM de ludo'}}
-            legend={this.state.legend}
+            chartDescription={{text: this.props.data[this.props.data.length-1][1]+" BPM",textSize:120}}
+            
+            // legend={this.state.legend}
             marker={this.state.marker}
             xAxis={this.state.xAxis}
             drawGridBackground={true}

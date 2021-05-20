@@ -35,21 +35,37 @@ const Compteur = ({data}) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text style={{fontSize: 50,fontFamily:'sans-serif-thin',fontStyle:'italic',fontWeight:'bold', color: 'white'}}>{speed} km/h</Text>
-      <Text style={{fontSize: 30, fontFamily: 'Roboto', color: 'white' }}>Custom Font</Text>
+      <Text
+        style={{
+          fontSize: 60,
+          fontFamily: 'sans-serif-thin',
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+          color: 'white',
+        }}>
+        {speed} km/h
+      </Text>
 
       <Text style={{fontSize: 30, color: 'white'}}>{altitude} m</Text>
       {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-      <Text style={{fontSize: 30, color: 'white'}}>{distanceTotale} m++</Text>
-      <Text style={{fontSize: 30, color: 'white'}}>{tempsEcoule} </Text>
+      <Text style={{fontSize: 30, color: 'white'}}>{distanceTotale>1000?distanceTotale/1000+' km':distanceTotale+' m'}</Text>
+
       <Text style={{fontSize: 30, color: 'white'}}>{vitesseMoyenne} km/h </Text>
-      <Text style={{fontSize: 30, color: 'white'}}>d+ </Text>
+      <Text style={{fontSize: 10, color: 'white'}}>d+ </Text>
       <Text style={{fontSize: 10, color: 'white'}}>
         nbr mesure = {nbrMesure}{' '}
       </Text>
-      <Text style={{fontSize: 30, color: 'white'}}>
+      <Text
+        style={{
+          fontSize: 60,
+          fontFamily: 'sans-serif-thin',
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+          color: 'white',
+        }}>
         {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
       </Text>
+      <Text style={{fontSize: 30, color: 'white'}}>{tempsEcoule} </Text>
     </View>
   );
 };
@@ -112,7 +128,6 @@ const Home = ({navigation}) => {
   }, [listGPS]);
 
   const handleGPS = (position) => {
-    console.log('gpsReady', position);
     setIsGpsReady(true);
 
     const altitudeValue = Math.round(position.coords.altitude * 100) / 100;
@@ -121,21 +136,16 @@ const Home = ({navigation}) => {
     setAltitude(altitudeValue);
     setSpeed(speedValue);
     setTime(position.timestamp);
-   
-  
 
-    
     setListGPS((listGPS) => [...listGPS, position]);
     // traitementPositionGPS();
   };
 
   const handleBPM = (bpm) => {
-    console.log('handleBPM from home');
     setInfoConnexion(false);
     const date = new Date();
     let dataBPMtemp = [date, bpm];
     setBPM(BPM);
-    console.log('gcn', dataBPMtemp);
     setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
   };
 
@@ -181,14 +191,43 @@ const Home = ({navigation}) => {
     setRunning(true);
     setTopDepart(new Date().getTime());
   };
-  const stopParcours = () =>{
-    console.log("fin parcours!!!")
-   for (let i = 2; i < listGPS.length; i++) {
-     const element = listGPS[i];
-    console.log(getDistanceFromLatLonInMeter(listGPS[i-1].coords.latitude,listGPS[i-1].coords.longitude,listGPS[i].coords.latitude,listGPS[i].coords.longitude))
-     
-   }
-  }
+  const stopParcours = () => {
+    console.log('fin parcours!!!');
+    let dataToSave = [];
+    for (let i = 2; i < listGPS.length; i++) {
+      const element = listGPS[i];
+      let distanceI =
+        Math.round(
+          getDistanceFromLatLonInMeter(
+            listGPS[i - 1].coords.latitude,
+            listGPS[i - 1].coords.longitude,
+            listGPS[i].coords.latitude,
+            listGPS[i].coords.longitude,
+          ) * 10,
+        ) / 10;
+      let accuracyI = Math.round(element.coords.accuracy);
+      let latitudeI = element.coords.latitude;
+      let longitudeI = element.coords.longitude;
+      let altitudeI = Math.round(element.coords.altitude);
+      let speedI = Math.round(element.coords.speed * 10) / 10;
+      let tempsI = element.timestamp;
+      dataToSave.push([
+        tempsI,
+        distanceI,
+        latitudeI,
+        longitudeI,
+        altitudeI,
+        speedI,
+        accuracyI,
+      ]);
+    }
+    console.log('dataToSave');
+    console.log(dataToSave);
+    navigation.navigate('Save', {
+      listBpm: listBpm,
+      listPosition: dataToSave,
+    });
+  };
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" hidden />
@@ -206,7 +245,7 @@ const Home = ({navigation}) => {
         {/* </View> */}
         {/* )} */}
 
-        {(listGPS.length > 1 && isRunning) && (
+        {listGPS.length > 1 && isRunning && (
           <Compteur
             data={[
               speed,
