@@ -223,6 +223,8 @@ const Home = ({navigation}) => {
     }
     console.log('dataToSave');
     console.log(dataToSave);
+    console.log('listBPm');
+    console.log(listBpm);
     navigation.navigate('Save', {
       listBpm: listBpm,
       listPosition: dataToSave,

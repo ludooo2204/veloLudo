@@ -6,6 +6,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -15,15 +16,17 @@ const Save = ({route, navigation}) => {
   const [listParcours, setListParcours] = useState('');
   const [choisingParcours, setChoisingParcours] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [responseAxios, setResponse] = useState('pas envoyé');
+  const [responseAxiosLocal, setResponseLocal] = useState('pas envoyé');
 
   const {listBpm, listPosition} = route.params;
   useEffect(() => {
     getParcours();
     console.log('useEffect');
-    console.log('listBpm')
-    console.log(listBpm)
-    console.log('listPosition')
-    console.log(listPosition)
+    console.log('listBpm');
+    console.log(listBpm);
+    console.log('listPosition');
+    console.log(listPosition);
   }, []);
   const renderItem = ({item}) => (
     <ParcoursItem
@@ -34,24 +37,21 @@ const Save = ({route, navigation}) => {
         console.log(listParcours.filter((e) => e.id == item.id)[0].key);
         getValeurParcours(listParcours.filter((e) => e.id == item.id)[0].key);
       }}
+      effacerKeys={(keyToErase)=>effacerKeys(keyToErase)}
     />
   );
 
-  const effacerKeys = async () => {
-    let keys = [];
+  const effacerKeys = async (keyToErase) => {
+
+    console.log('keys a effacer');
+    console.log(keyToErase);
     try {
-      keys = await AsyncStorage.getAllKeys();
+      // await AsyncStorage.multiRemove(keys);
+      await AsyncStorage.removeItem(keyToErase);
     } catch (e) {
       console.log('error', e);
     }
-    console.log('keys');
-    console.log(keys);
-    try {
-      await AsyncStorage.multiRemove(keys);
-    } catch (e) {
-      console.log('error', e);
-    }
-    console.log('ca a du marcher');
+    console.log('ca a du marcher effacement ');
   };
   const getParcours = async () => {
     let keys = [];
@@ -80,6 +80,43 @@ const Save = ({route, navigation}) => {
     // console.log('parcoursKeys', parcoursKeys);
     setListParcours(parcoursKeys);
   };
+  const getParcoursBpm = async () => {
+    let keys = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+    } catch (e) {
+      console.log('error', e);
+    }
+    console.log('keys');
+    console.log(keys);
+
+    let parcoursKeys = [];
+    for (const iterator of keys) {
+      if (iterator.includes('bpm')) {
+        let dateParcours = new Date(
+          iterator.split('bpm-')[1],
+        ).toLocaleString('fr-FR');
+        parcoursKeys.push({
+          title: dateParcours,
+          id: keys.indexOf(iterator).toString(),
+          key: iterator,
+        });
+      }
+    }
+
+    // console.log('parcoursKeys', parcoursKeys);
+    setListParcours(parcoursKeys);
+  };
+  const analyseDataParcours = (data) => {
+    let distanceParcourue = 0;
+    for (const position of data) {
+      distanceParcourue += position[1];
+    }
+    distanceParcourue = Math.round(distanceParcourue) / 1000;
+    console.log('distanceParcourue');
+    console.log(distanceParcourue + ' km');
+    return distanceParcourue;
+  };
   const getValeurParcours = async (key) => {
     let data;
     try {
@@ -89,15 +126,18 @@ const Save = ({route, navigation}) => {
     }
     if (data.length > 1) {
       console.log('datas');
+      console.log(data.split('\n'));
       data = JSON.parse(data);
+      console.log('nbr data');
+      console.log(data.length);
+      //  analyseDataParcours(data)
       //  console.log(toastConfig.success())
       Toast.show({
         type: 'customType',
         text1: 'Parcours du ' + new Date(data[1][0]).toLocaleString('fr-FR'),
         text2:
-          'BRAVO !! 👋 distance parcouru de ' +
-          data[data.length - 1][5] / 1000 +
-          ' km',
+          'BRAVO !! 👋 Tu as roulé sur ' + analyseDataParcours(data) + ' km',
+
         props: {
           onPress: () => {
             console.log("toto l'asticot !");
@@ -123,14 +163,16 @@ const Save = ({route, navigation}) => {
   };
   const postData = () => {
     axios
-      .post('http://lomano.go.yo.fr/testVelo.php')
+      .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition])
       .then(function (response) {
         console.log('response');
         console.log(response);
+        setResponse('ca a marché', JSON.stringify([listBpm, listPosition]));
       })
       .catch(function (error) {
         console.log('error');
         console.log(error);
+        setResponse('ca marche pas...', error);
       });
   };
   const finParcours = async (listBpm, listPosition) => {
@@ -153,8 +195,10 @@ const Save = ({route, navigation}) => {
       await AsyncStorage.setItem(`position-${dateDuParcours}`, valuePosition);
     } catch (e) {
       console.log('error', e);
+      setResponseLocal('Erreur ... !' + e);
     }
     console.log('save done !');
+    setResponseLocal('Sauvegarde effectué !');
   };
 
   return !choisingParcours ? (
@@ -164,7 +208,7 @@ const Save = ({route, navigation}) => {
         title="Fin du parcours"
         onPress={() => finParcours(listBpm, listPosition)}
       />
-      <Text>{'\n'}</Text>
+      <Text>{responseAxiosLocal}</Text>
       <Button
         title="get parcours"
         onPress={() => {
@@ -175,21 +219,17 @@ const Save = ({route, navigation}) => {
       <Text>{'\n'}</Text>
 
       <Button
-        title="debug"
+        title="get info bpm"
         onPress={() => {
-          console.log('modalVisible');
-          console.log(modalVisible);
-          setModalVisible(true);
-          console.log('modalVisible');
-          console.log(modalVisible);
+          getParcoursBpm()
+          setChoisingParcours(true);
         }}
-        //     onPress={() =>  {Toast.show({      text1: 'Hello',
-        //   text2: 'This is some something 👋'
-        // })}}
+  
       />
       <Text>{'\n'}</Text>
 
       <Button title="axios" onPress={() => postData()} />
+      <Text>{responseAxios}</Text>
     </View>
   ) : (
     <>
@@ -204,10 +244,13 @@ const Save = ({route, navigation}) => {
 };
 export default Save;
 
-const ParcoursItem = ({title, onPress}) => {
+const ParcoursItem = ({title, onPress,effacerKeys}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{alignItems: 'center'}}>
-      <Text style={{padding: 10, fontSize: 20}}> {title}</Text>
-    </TouchableOpacity>
+    <View style={{flexDirection:"row"}}> 
+    <Pressable onPress={onPress} style={{alignItems: 'center'}}>
+        <Text style={{padding: 10, fontSize: 20}}> {title}</Text>
+    </Pressable>
+    <Button title="effacer?" onPress={()=>effacerKeys(title)}/>
+    </View>
   );
 };
