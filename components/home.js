@@ -35,20 +35,37 @@ const Compteur = ({data}) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text
-        style={{
-          fontSize: 60,
-          fontFamily: 'sans-serif-thin',
-          fontStyle: 'italic',
-          fontWeight: 'bold',
-          color: 'white',
-        }}>
-        {speed} km/h
-      </Text>
-
+      <View style={{flexDirection: 'row'}}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 90,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: 'white',
+          }}>
+          {speed}{' '}
+        </Text>
+      
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 30,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: 'white',
+            alignSelf:'center'
+          }}>km/h</Text>
+      </View>
       <Text style={{fontSize: 30, color: 'white'}}>{altitude} m</Text>
       {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-      <Text style={{fontSize: 30, color: 'white'}}>{distanceTotale>1000?distanceTotale/1000+' km':distanceTotale+' m'}</Text>
+      <Text style={{fontSize: 30, color: 'white'}}>
+        {distanceTotale > 1000
+          ? distanceTotale / 1000 + ' km'
+          : distanceTotale + ' m'}
+      </Text>
 
       <Text style={{fontSize: 30, color: 'white'}}>{vitesseMoyenne} km/h </Text>
       <Text style={{fontSize: 10, color: 'white'}}>d+ </Text>
