@@ -13,9 +13,10 @@ import RunningScreen from './RunningScreen';
 import Main from './main';
 import LineChartScreen from './LineChartScreen';
 import {getDistanceFromLatLonInMeter, deg2rad} from './helpers';
-import Svg, {Path} from 'react-native-svg';
+import Icon from "react-native-vector-icons/FontAwesome5"
 
 const Compteur = ({data}) => {
+  const [nightMode,setNightMode]= useState(false)
   const speed = data[0];
   const altitude = data[1];
   const time = data[2];
@@ -27,12 +28,22 @@ const Compteur = ({data}) => {
     .toISOString()
     .substr(11, 8);
   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
+  let primaryColor="black";
+  let secondaryColor="white"
+  console.log('nightMode')
+  console.log(nightMode)
+  const toggleNightMode = () =>{
+    console.log('toggle')
+    setNightMode(!nightMode)
+  }
+  if (nightMode) {primaryColor="black";secondaryColor="white"}
+  else {primaryColor="white";secondaryColor="black"}
 
   return (
     <View
       style={{
         flex: 7,
-        backgroundColor: 'black',
+        backgroundColor: primaryColor,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
@@ -44,7 +55,7 @@ const Compteur = ({data}) => {
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
-            color: 'white',
+            color: secondaryColor,
           }}>
           {speed}{' '}
         </Text>
@@ -56,23 +67,23 @@ const Compteur = ({data}) => {
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
-            color: 'white',
+            color: secondaryColor,
             alignSelf: 'center',
           }}>
           km/h
         </Text>
       </View>
-      <Text style={{fontSize: 30, color: 'white'}}>{altitude} m</Text>
+      <Text style={{fontSize: 30, color: secondaryColor}}>{altitude} m</Text>
       {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-      <Text style={{fontSize: 30, color: 'white'}}>
+      <Text style={{fontSize: 30, color: secondaryColor}}>
         {distanceTotale > 1000
           ? distanceTotale / 1000 + ' km'
           : distanceTotale + ' m'}
       </Text>
 
-      <Text style={{fontSize: 30, color: 'white'}}>{vitesseMoyenne} km/h </Text>
-      <Text style={{fontSize: 10, color: 'white'}}>d+ </Text>
-      <Text style={{fontSize: 10, color: 'white'}}>
+      <Text style={{fontSize: 10, color: secondaryColor}}>d+ </Text>
+      <Text style={{fontSize: 10, color: secondaryColor}}>
+      <Text style={{fontSize: 30, color: secondaryColor}}>{vitesseMoyenne} km/h </Text>
         nbr mesure = {nbrMesure}{' '}
       </Text>
       <Text
@@ -81,17 +92,13 @@ const Compteur = ({data}) => {
           fontFamily: 'sans-serif-thin',
           fontStyle: 'italic',
           fontWeight: 'bold',
-          color: 'white',
+          color: secondaryColor,
         }}>
         {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
       </Text>
-      <Text style={{fontSize: 30, color: 'white'}}>{tempsEcoule} </Text>
-        <Svg width="100" height="100" fill="white">
-          <Path
-            d="m50.011 0c-2.8839 0-5.7139 0.25936-8.4642 0.7281l-1.3424 14.221c-2.8444 0.79287-5.5365 1.9015-8.0546 3.322l-10.99-9.0785c-4.6419 3.286-8.7054 7.3259-11.991 11.968l9.1012 10.99c-1.4188 2.5151-2.552 5.214-3.3447 8.0546l-14.197 1.35c-0.46893 2.75-0.728 5.58-0.728 8.49 0 2.8897 0.25747 5.7085 0.7281 8.4641l14.198 1.3425c0.79274 2.8406 1.926 5.5395 3.3447 8.0546l-9.0785 10.99c3.2796 4.6294 7.3161 8.6885 11.945 11.968l11.013-9.1013c2.5197 1.4217 5.2082 2.5515 8.0546 3.3447l1.3424 14.221c2.7503 0.4688 5.5803 0.7054 8.4642 0.7054 2.8838 0 5.6911-0.2366 8.4414-0.7054l1.3424-14.221c2.8465-0.7932 5.5349-1.923 8.0546-3.3447l11.013 9.1013c4.6293-3.2797 8.6658-7.3388 11.945-11.968l-9.0785-10.99c1.4188-2.5151 2.552-5.214 3.3447-8.0546l14.198-1.3425c0.47063-2.7556 0.7281-5.5744 0.7281-8.4641 0-2.8848-0.25907-5.7131-0.7281-8.4642l-14.198-1.3424c-0.79274-2.8406-1.926-5.5395-3.3447-8.0546l9.1012-10.99c-3.2855-4.6423-7.349-8.6821-11.991-11.968l-10.99 9.0785c-2.5181-1.4205-5.2102-2.5291-8.0546-3.322l-1.3424-14.221c-2.7503-0.46874-5.5576-0.7281-8.4414-0.7281zm0 30.967c10.516 0 19.022 8.528 19.022 19.044s-8.5053 19.044-19.022 19.044c-10.516 0-19.044-8.528-19.044-19.044s8.528-19.044 19.044-19.044z"
-            stroke="white"
-          />
-        </Svg>
+    <Icon name='adjust'  size={30} color={secondaryColor} onPress={()=>toggleNightMode()}style={{backgroundColor:'transparent'}}/>
+      <Text style={{fontSize: 30, color: secondaryColor}}>{tempsEcoule} </Text>
+      
     </View>
   );
 };
@@ -285,6 +292,7 @@ const Home = ({navigation}) => {
               tempsEcoule,
               vitesseMoyenne,
             ]}
+            nightMode={true}
           />
         )}
         {listGPS.length == 1 && isRunning && (
