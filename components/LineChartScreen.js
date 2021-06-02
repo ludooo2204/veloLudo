@@ -98,19 +98,13 @@ class LineChartScreen extends React.Component {
   }
 
   render() {
-    console.log('this.props')
-    console.log(this.props)
     let affichageBPMReady=false
     if (this.props.data.length>1) {affichageBPMReady=true;
-       console.log("this.props.data[this.props.data.length-1][1]")
-       console.log(this.props.data[this.props.data.length-1][1])
       }
       if (this.props.nightMode) {
-        console.log("nightmode = true")
         this.primaryColor = 'black';
         this.secondaryColor = 'white';
       } else {
-        console.log("nightmode = false")
         this.primaryColor = 'white';
         this.secondaryColor = 'black';
       }

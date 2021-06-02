@@ -29,8 +29,6 @@ const Compteur = ({data,nightMode}) => {
     .substr(11, 8);
   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
   const BPM = data[8]
-  console.log("const BPM = data[8]")
-  console.log(data)
   if (nightMode) {
     primaryColor = 'black';
     secondaryColor = 'white';
@@ -280,8 +278,6 @@ const Home = ({navigation}) => {
   }, [listGPS]);
   let primaryColor = 'black';
   let secondaryColor = 'white';
-  console.log('nightMode');
-  console.log(nightMode);
   if (nightMode) {
     primaryColor = 'black';
     secondaryColor = 'white';
@@ -290,7 +286,6 @@ const Home = ({navigation}) => {
     secondaryColor = 'black';
   }
   const toggleNightMode = () => {
-    console.log('toggle');
     setNightMode(!nightMode);
   };
 
@@ -312,12 +307,20 @@ const Home = ({navigation}) => {
 
   const handleBPM = (bpm) => {
     setInfoConnexion(false);
-    const date = new Date();
+    const date = new Date().getTime();
     let dataBPMtemp = [date, bpm];
     setBPM(bpm);
     setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
   };
 
+  const ajoutBPM = () => {
+let BPMtemp=Math.random()*30+70
+setInfoConnexion(false);
+const date = new Date().getTime();
+let dataBPMtemp = [date, BPMtemp];
+setBPM(BPMtemp);
+setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
+  }
   const ajoutDeplacement = () => {
     console.log('ajout deplacement');
     // {"coords": {"accuracy": 2400, "altitude": 101.2497769490799, "heading": 0, "latitude": 46.8489719, "longitude": 0.5446598, "speed": 0}, "mocked": false, "timestamp": 1621421193993}
@@ -461,6 +464,7 @@ const Home = ({navigation}) => {
             alignItems: 'center',
           }}>
           <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={ajoutDeplacement} ><Text style={{color:primaryColor}}>ajout Deplacement</Text></Pressable>
+          <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={ajoutBPM} ><Text style={{color:primaryColor}}>ajout BPM</Text></Pressable>
           <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={stopParcours} ><Text style={{color:primaryColor}}>fin du Parcours</Text></Pressable>
           <Icon
           name="adjust"
