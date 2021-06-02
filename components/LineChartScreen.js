@@ -26,15 +26,22 @@ class LineChartScreen extends React.Component {
       //   textColor: processColor('white'),
       // },
       xAxis: {
-        granularityEnabled: true,
-        granularity: 1,
+        enabled:false
       },
+    //   yAxis: {
+    //  left:{        enabled:false},
+    //  right:{        textColor: processColor(this.secondaryColor)}
+    // //  right:{        textColor: processColor('#F0C0FF8C')}
+    //   },
+
       // visibleRange: {x: {min: 1, max: 20}};
      
     };
+   
   }
 
   componentDidMount() {
+  
   }
   componentDidUpdate() {
     this.onPressLearnMore();
@@ -91,29 +98,55 @@ class LineChartScreen extends React.Component {
   }
 
   render() {
+    console.log('this.props')
+    console.log(this.props)
+    let affichageBPMReady=false
+    if (this.props.data.length>1) {affichageBPMReady=true;
+       console.log("this.props.data[this.props.data.length-1][1]")
+       console.log(this.props.data[this.props.data.length-1][1])
+      }
+      if (this.props.nightMode) {
+        console.log("nightmode = true")
+        this.primaryColor = 'black';
+        this.secondaryColor = 'white';
+      } else {
+        console.log("nightmode = false")
+        this.primaryColor = 'white';
+        this.secondaryColor = 'black';
+      }
     return (
       <View style={{flex: 1}}>
 
 
-        <View style={styles.container}>
+        <View style={{flex: 1,}}>
           <LineChart
-            style={styles.chart}
+            style={{
+              flex: 1,
+              // backgroundColor:"black",
+              backgroundColor:this.primaryColor,
+            }}
             data={this.state.data}
-            chartDescription={{text: " BPM",textSize:120}}
+            chartDescription={{text: (affichageBPMReady? (this.props.data[this.props.data.length-1][1]):(" ") )+" BPM",textSize:120}}
             // chartDescription={{text: this.props.data[this.props.data.length-1][1]+" BPM",textSize:120}}
             
             // legend={this.state.legend}
+            legend={{enabled:false}}
             marker={this.state.marker}
             xAxis={this.state.xAxis}
+            yAxis={{
+              left:{        enabled:false},
+              right:{        textColor: processColor(this.secondaryColor)}
+             //  right:{        textColor: processColor('#F0C0FF8C')}
+               }}
             drawGridBackground={true}
             borderColor={processColor('black')}
-            borderWidth={1}
-            drawBorders={true}
+            borderWidth={0}
+            drawBorders={false}
             autoScaleMinMaxEnabled={true}
             touchEnabled={true}
             dragEnabled={true}
             scaleEnabled={true}
-            scaleXEnabled={true}
+            scaleXEnabled={false}
             scaleYEnabled={true}
             pinchZoom={true}
             doubleTapToZoomEnabled={true}
@@ -135,17 +168,18 @@ class LineChartScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
 
-    backgroundColor: 'orange',
-    // backgroundColor: '#F5FCFF',
-  },
-  chart: {
-    flex: 1,
-    backgroundColor:"lightgrey"
-  },
-});
+//     // backgroundColor: 'orange',
+//     // backgroundColor: '#F5FCFF',
+//   },
+//   chart: {
+//     flex: 1,
+//     // backgroundColor:"black",
+//     backgroundColor:primaryColor,
+//   },
+// });
 
 export default LineChartScreen;

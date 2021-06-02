@@ -13,10 +13,10 @@ import RunningScreen from './RunningScreen';
 import Main from './main';
 import LineChartScreen from './LineChartScreen';
 import {getDistanceFromLatLonInMeter, deg2rad} from './helpers';
-import Icon from "react-native-vector-icons/FontAwesome5"
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const Compteur = ({data}) => {
-  const [nightMode,setNightMode]= useState(false)
+const Compteur = ({data,nightMode}) => {
+  
   const speed = data[0];
   const altitude = data[1];
   const time = data[2];
@@ -28,25 +28,60 @@ const Compteur = ({data}) => {
     .toISOString()
     .substr(11, 8);
   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
-  let primaryColor="black";
-  let secondaryColor="white"
-  console.log('nightMode')
-  console.log(nightMode)
-  const toggleNightMode = () =>{
-    console.log('toggle')
-    setNightMode(!nightMode)
+  const BPM = data[8]
+  console.log("const BPM = data[8]")
+  console.log(data)
+  if (nightMode) {
+    primaryColor = 'black';
+    secondaryColor = 'white';
+  } else {
+    primaryColor = 'white';
+    secondaryColor = 'black';
   }
-  if (nightMode) {primaryColor="black";secondaryColor="white"}
-  else {primaryColor="white";secondaryColor="black"}
 
   return (
     <View
       style={{
         flex: 7,
         backgroundColor: primaryColor,
-        justifyContent: 'center',
+        justifyContent:'center',
         alignItems: 'center',
       }}>
+      <View style={{flexDirection: 'row'}}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 100,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            // backgroundColor:'green',
+            lineHeight:100,
+            alignSelf: 'center',
+            // textAlignVertical:'bottom',
+            paddingLeft: 20,
+            marginTop:30
+          }}>
+          {speed}
+        </Text>
+
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 30,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            // backgroundColor:'blue',
+            marginBottom: 20,
+            paddingLeft: 20,
+            alignSelf: 'flex-end',
+          }}>
+          km/h
+        </Text>
+      </View>
       <View style={{flexDirection: 'row'}}>
         <Text
           allowFontScaling={false}
@@ -56,8 +91,46 @@ const Compteur = ({data}) => {
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
+            // backgroundColor:'green',
+            lineHeight:90,
+            alignSelf: 'center',
+            // textAlignVertical:'bottom',
+            paddingLeft: 0,
+            // marginStart:0
           }}>
-          {speed}{' '}
+          {BPM}
+        </Text>
+
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 30,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            // backgroundColor:'blue',
+            marginBottom: 20,
+            paddingLeft: 20,
+            alignSelf: 'flex-end',
+          }}>
+          bpm
+        </Text>
+      </View>
+      
+      {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
+      <View style={{flexDirection: 'row',marginBottom:10}}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 40,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            lineHeight:40,
+            color: secondaryColor,
+          }}>
+          {Math.round(distanceTotale/100)/10}
         </Text>
 
         <Text
@@ -69,36 +142,81 @@ const Compteur = ({data}) => {
             fontWeight: 'bold',
             color: secondaryColor,
             alignSelf: 'center',
+            lineHeight:30,
+            paddingLeft:10,
+            paddingRight:30
+          }}>
+          km
+        </Text>
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 40,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,lineHeight:40,
+          }}>
+          {vitesseMoyenne}
+        </Text>
+
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 30,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            alignSelf: 'center',
+            paddingLeft:10,
+            paddingRight:30,
+            lineHeight:30,
           }}>
           km/h
         </Text>
       </View>
-      <Text style={{fontSize: 30, color: secondaryColor}}>{altitude} m</Text>
-      {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-      <Text style={{fontSize: 30, color: secondaryColor}}>
-        {distanceTotale > 1000
-          ? distanceTotale / 1000 + ' km'
-          : distanceTotale + ' m'}
-      </Text>
 
-      <Text style={{fontSize: 10, color: secondaryColor}}>d+ </Text>
-      <Text style={{fontSize: 10, color: secondaryColor}}>
-      <Text style={{fontSize: 30, color: secondaryColor}}>{vitesseMoyenne} km/h </Text>
-        nbr mesure = {nbrMesure}{' '}
-      </Text>
-      <Text
-        style={{
-          fontSize: 60,
-          fontFamily: 'sans-serif-thin',
-          fontStyle: 'italic',
-          fontWeight: 'bold',
-          color: secondaryColor,
-        }}>
-        {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
-      </Text>
-    <Icon name='adjust'  size={30} color={secondaryColor} onPress={()=>toggleNightMode()}style={{backgroundColor:'transparent'}}/>
-      <Text style={{fontSize: 30, color: secondaryColor}}>{tempsEcoule} </Text>
       
+      <View style={{flexDirection: 'row'}}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 40,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            lineHeight:40,
+            paddingLeft:10,
+            paddingRight:40,
+          }}>
+          {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
+        </Text>
+
+       
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 40,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            paddingLeft:10,
+            paddingRight:30,
+            lineHeight:40,
+          }}>
+          {tempsEcoule}
+        </Text>
+
+   
+      </View>
+ 
+      <Text style={{fontSize: 10, color: secondaryColor}}>d+ </Text>
+      <Text style={{fontSize: 10, color: secondaryColor}}>nbr mesure = {nbrMesure} </Text>
+      <Text style={{fontSize: 10, color: secondaryColor}}>{altitude} m</Text>
+     
     </View>
   );
 };
@@ -116,6 +234,7 @@ const Home = ({navigation}) => {
   const [topDepart, setTopDepart] = useState(null);
   const [tempsEcoule, setTempsEcoule] = useState(null);
   const [speed, setSpeed] = useState(null);
+  const [nightMode, setNightMode] = useState(false);
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
   const [isGpsReady, setIsGpsReady] = useState(false);
@@ -159,6 +278,23 @@ const Home = ({navigation}) => {
       setVitesseMoyenne(vitesseMoyenneValue / listGPS.length);
     }
   }, [listGPS]);
+  let primaryColor = 'black';
+  let secondaryColor = 'white';
+  console.log('nightMode');
+  console.log(nightMode);
+  if (nightMode) {
+    primaryColor = 'black';
+    secondaryColor = 'white';
+  } else {
+    primaryColor = 'white';
+    secondaryColor = 'black';
+  }
+  const toggleNightMode = () => {
+    console.log('toggle');
+    setNightMode(!nightMode);
+  };
+
+
 
   const handleGPS = (position) => {
     setIsGpsReady(true);
@@ -178,7 +314,7 @@ const Home = ({navigation}) => {
     setInfoConnexion(false);
     const date = new Date();
     let dataBPMtemp = [date, bpm];
-    setBPM(BPM);
+    setBPM(bpm);
     setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
   };
 
@@ -291,8 +427,10 @@ const Home = ({navigation}) => {
               distanceTotale,
               tempsEcoule,
               vitesseMoyenne,
+              BPM
             ]}
-            nightMode={true}
+            nightMode={nightMode}
+
           />
         )}
         {listGPS.length == 1 && isRunning && (
@@ -309,7 +447,7 @@ const Home = ({navigation}) => {
           {!infoConnexion && !isRunning && (
             <Text style={{fontSize: 30}}>{BPM}</Text>
           )}
-          {isRunning && <LineChartScreen data={listBpm} />}
+          {isRunning && <LineChartScreen data={listBpm} nightMode={nightMode} />}
           <Bpm
             remonterData={(e) => handleBPM(e)}
             isConnexionVisible={infoConnexion}
@@ -318,12 +456,19 @@ const Home = ({navigation}) => {
         <View
           style={{
             flex: 1,
-            backgroundColor: '#000',
+            backgroundColor: primaryColor,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Button title="ajout deplacement" onPress={ajoutDeplacement} />
-          <Button title="fin du Parcours" onPress={stopParcours} />
+          <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={ajoutDeplacement} ><Text style={{color:primaryColor}}>ajout Deplacement</Text></Pressable>
+          <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={stopParcours} ><Text style={{color:primaryColor}}>fin du Parcours</Text></Pressable>
+          <Icon
+          name="adjust"
+          size={30}
+          color={secondaryColor}
+          onPress={() => toggleNightMode()}
+          style={{backgroundColor: 'transparent', padding: 10}}
+        />
         </View>
       </View>
       {!isRunning && (
