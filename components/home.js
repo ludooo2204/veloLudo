@@ -385,14 +385,14 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
       let tempsI = element.timestamp;
       dataToSave.push([
         tempsI,
-        distanceI,
         latitudeI,
         longitudeI,
         altitudeI,
-        speedI,
-        accuracyI,
+        speedI
+        
       ]);
     }
+    dataToSave.push(distanceTotale)
     console.log('dataToSave');
     console.log(dataToSave);
     console.log('listBPm');
