@@ -120,7 +120,6 @@ class LineChartScreen extends React.Component {
               backgroundColor:this.primaryColor,
             }}
             data={this.state.data}
-            chartDescription={{text: (affichageBPMReady? (this.props.data[this.props.data.length-1][1]):(" ") )+" BPM",textSize:120}}
             // chartDescription={{text: this.props.data[this.props.data.length-1][1]+" BPM",textSize:120}}
             
             // legend={this.state.legend}

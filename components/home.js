@@ -29,6 +29,8 @@ const Compteur = ({data,nightMode}) => {
     .substr(11, 8);
   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
   const BPM = data[8]
+  let primaryColor
+  let secondaryColor
   if (nightMode) {
     primaryColor = 'black';
     secondaryColor = 'white';
@@ -314,7 +316,7 @@ const Home = ({navigation}) => {
   };
 
   const ajoutBPM = () => {
-let BPMtemp=Math.random()*30+70
+let BPMtemp=Math.round(Math.random()*30+70)
 setInfoConnexion(false);
 const date = new Date().getTime();
 let dataBPMtemp = [date, BPMtemp];
