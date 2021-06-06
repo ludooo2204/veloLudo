@@ -15,6 +15,19 @@ import LineChartScreen from './LineChartScreen';
 import {getDistanceFromLatLonInMeter, deg2rad} from './helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
+
+
+const mesureDenivelléPositif = (altitude) => {
+  let dPlus = 0;
+  for (let i = 1; i < altitude.length; i++) {
+    let ecart = altitude[i] - altitude[i - 1];
+    if (ecart > 0.5) dPlus += ecart;
+  }
+  return Math.round(dPlus);
+};
+
+
+
 const Compteur = ({data,nightMode}) => {
   
   const speed = data[0];
@@ -29,6 +42,7 @@ const Compteur = ({data,nightMode}) => {
     .substr(11, 8);
   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
   const BPM = data[8]
+  const dPlus = data[9]
   let primaryColor
   let secondaryColor
   if (nightMode) {
@@ -213,9 +227,17 @@ const Compteur = ({data,nightMode}) => {
    
       </View>
  
-      <Text style={{fontSize: 10, color: secondaryColor}}>d+ </Text>
+      <Text  allowFontScaling={false}
+          style={{
+            fontSize: 40,
+            fontFamily: 'sans-serif-thin',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            color: secondaryColor,
+            paddingLeft:10,
+            paddingRight:30,
+            lineHeight:40,}}>d+ {Math.round(dPlus)} m </Text>
       <Text style={{fontSize: 10, color: secondaryColor}}>nbr mesure = {nbrMesure} </Text>
-      <Text style={{fontSize: 10, color: secondaryColor}}>{altitude} m</Text>
      
     </View>
   );
@@ -234,6 +256,7 @@ const Home = ({navigation}) => {
   const [topDepart, setTopDepart] = useState(null);
   const [tempsEcoule, setTempsEcoule] = useState(null);
   const [speed, setSpeed] = useState(null);
+  const [dPlus, setdPlus] = useState(0);
   const [nightMode, setNightMode] = useState(false);
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
@@ -303,26 +326,21 @@ const Home = ({navigation}) => {
     setSpeed(speedValue);
     setTime(position.timestamp);
 
+  
+  
+
+
+
+
+
+
+
+
+
+
     setListGPS((listGPS) => [...listGPS, position]);
     // traitementPositionGPS();
   };
-
-  const handleBPM = (bpm) => {
-    setInfoConnexion(false);
-    const date = new Date().getTime();
-    let dataBPMtemp = [date, bpm];
-    setBPM(bpm);
-    setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
-  };
-
-  const ajoutBPM = () => {
-let BPMtemp=Math.round(Math.random()*30+70)
-setInfoConnexion(false);
-const date = new Date().getTime();
-let dataBPMtemp = [date, BPMtemp];
-setBPM(BPMtemp);
-setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
-  }
   const ajoutDeplacement = () => {
     console.log('ajout deplacement');
     // {"coords": {"accuracy": 2400, "altitude": 101.2497769490799, "heading": 0, "latitude": 46.8489719, "longitude": 0.5446598, "speed": 0}, "mocked": false, "timestamp": 1621421193993}
@@ -343,6 +361,22 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
     setAltitude(altitudeValue);
     setSpeed(speedValue);
     setTime(position.timestamp);
+   
+
+
+
+    if (listGPS.length>5) {
+      let ecart = position.coords.altitude - listGPS[listGPS.length-1].coords.altitude;
+      console.log("ecart",ecart)
+      if ( ecart>0.5) {
+        console.log("increment altitude!!")
+        setdPlus(dPlus+ecart)
+      }
+
+    }
+
+
+
 
     let vitesseMoyenneValue = 0;
     for (const iterator of listGPS) {
@@ -359,6 +393,23 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
     setListGPS((listGPS) => [...listGPS, position]);
     // traitementPositionGPS();
   };
+  const handleBPM = (bpm) => {
+    setInfoConnexion(false);
+    const date = new Date().getTime();
+    let dataBPMtemp = [date, bpm];
+    setBPM(bpm);
+    setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
+  };
+
+  const ajoutBPM = () => {
+let BPMtemp=Math.round(Math.random()*30+70)
+setInfoConnexion(false);
+const date = new Date().getTime();
+let dataBPMtemp = [date, BPMtemp];
+setBPM(BPMtemp);
+setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
+  }
+ 
 
   const startParcours = () => {
     console.log('top départ!', new Date().getTime());
@@ -368,6 +419,8 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
   const stopParcours = () => {
     console.log('fin parcours!!!');
     let dataToSave = [];
+
+
     for (let i = 2; i < listGPS.length; i++) {
       const element = listGPS[i];
       let distanceI =
@@ -432,7 +485,8 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
               distanceTotale,
               tempsEcoule,
               vitesseMoyenne,
-              BPM
+              BPM,
+              dPlus
             ]}
             nightMode={nightMode}
 
