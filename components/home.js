@@ -328,7 +328,15 @@ const Home = ({navigation}) => {
 
   
   
+    if (listGPS.length>5) {
+      let ecart = position.coords.altitude - listGPS[listGPS.length-1].coords.altitude;
+      console.log("ecart",ecart)
+      if ( ecart>0.5) {
+        console.log("increment altitude!!")
+        setdPlus(dPlus+ecart)
+      }
 
+    }
 
 
 
