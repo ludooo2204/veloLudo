@@ -19,7 +19,7 @@ const Save = ({route, navigation}) => {
   const [responseAxios, setResponse] = useState('pas envoyé');
   const [responseAxiosLocal, setResponseLocal] = useState('pas envoyé');
 
-  const {listBpm, listPosition} = route.params;
+  const {listBpm, listPosition,distanceTotale,dPlus} = route.params;
   useEffect(() => {
     getParcours();
     console.log('useEffect');
@@ -27,6 +27,10 @@ const Save = ({route, navigation}) => {
     console.log(listBpm);
     console.log('listPosition');
     console.log(listPosition);
+    console.log('distanceTotale');
+    console.log(distanceTotale);
+    console.log('dPlus');
+    console.log(dPlus);
   }, []);
   const renderItem = ({item}) => (
     <ParcoursItem
@@ -108,6 +112,8 @@ const Save = ({route, navigation}) => {
     setListParcours(parcoursKeys);
   };
   const analyseDataParcours = (data) => {
+    console.log("data")
+    console.log(data)
     let distanceParcourue = 0;
     for (const position of data) {
       distanceParcourue += position[1];
@@ -163,7 +169,7 @@ const Save = ({route, navigation}) => {
   };
   const postData = () => {
     axios
-      .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition])
+      .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition,distanceTotale,dPlus])
       .then(function (response) {
         console.log('response');
         console.log(response);
@@ -175,10 +181,12 @@ const Save = ({route, navigation}) => {
         setResponse('ca marche pas...', error);
       });
   };
-  const finParcours = async (listBpm, listPosition) => {
+  const finParcours = async (listBpm, listPosition,distanceTotale,dPlus) => {
     console.log('fin du parcours et sauvegarde en local');
     console.log('list BPM', listBpm);
     console.log('list position', listPosition);
+    console.log('distanceTotale', distanceTotale, 'm');
+    console.log('dPlus', dPlus, 'm');
     console.log(
       `${listBpm.length} bpm à sauvegarder et ${listPosition.length} positions à sauvegarder `,
     );
@@ -193,6 +201,8 @@ const Save = ({route, navigation}) => {
       await AsyncStorage.setItem(`bpm-${dateDuParcours}`, valueBpm);
       const valuePosition = JSON.stringify(listPosition);
       await AsyncStorage.setItem(`position-${dateDuParcours}`, valuePosition);
+      await AsyncStorage.setItem(`distance-${dateDuParcours}`, distanceTotale.toString());
+      await AsyncStorage.setItem(`dplus-${dateDuParcours}`, dPlus.toString());
     } catch (e) {
       console.log('error', e);
       setResponseLocal('Erreur ... !' + e);
@@ -206,7 +216,7 @@ const Save = ({route, navigation}) => {
       <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
       <Button
         title="Fin du parcours"
-        onPress={() => finParcours(listBpm, listPosition)}
+        onPress={() => finParcours(listBpm, listPosition,distanceTotale,dPlus)}
       />
       <Text>{responseAxiosLocal}</Text>
       <Button

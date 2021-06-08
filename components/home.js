@@ -15,8 +15,6 @@ import LineChartScreen from './LineChartScreen';
 import {getDistanceFromLatLonInMeter, deg2rad} from './helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-
-
 const mesureDenivelléPositif = (altitude) => {
   let dPlus = 0;
   for (let i = 1; i < altitude.length; i++) {
@@ -26,10 +24,35 @@ const mesureDenivelléPositif = (altitude) => {
   return Math.round(dPlus);
 };
 
+const moyenne = (array) => {
+  let somme = 0;
+  for (let i = 0; i < array.length; i++) {
+    const element = array[i];
+    somme += element;
+  }
+  return somme / array.length;
+};
+//Pour le site
+const lissageData = (dataArray, nbrMesureALisser) => {
+  let datasLissées = [];
+  for (let i = 0; i < dataArray.length; i++) {
+    if (i > dataArray.length - nbrMesureALisser - 1) {
+      datasLissées.push(dataArray[i]);
+    } else {
+      datasLissées.push(moyenne(dataArray.slice(i, nbrMesureALisser + i)));
+    }
+  }
+  return datasLissées;
+};
 
+const moyennePourDplus = (dataArray, nbrMesureALisser) => {
+  return moyenne(
+    dataArray.slice(dataArray.length - nbrMesureALisser, dataArray.length),
+  );
+};
 
-const Compteur = ({data,nightMode}) => {
-  
+const Compteur = ({data, nightMode}) => {
+  // console.log('dataCompteur', data);
   const speed = data[0];
   const altitude = data[1];
   const time = data[2];
@@ -41,10 +64,10 @@ const Compteur = ({data,nightMode}) => {
     .toISOString()
     .substr(11, 8);
   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
-  const BPM = data[8]
-  const dPlus = data[9]
-  let primaryColor
-  let secondaryColor
+  const BPM = data[8];
+  const dPlus = data[9];
+  let primaryColor;
+  let secondaryColor;
   if (nightMode) {
     primaryColor = 'black';
     secondaryColor = 'white';
@@ -58,7 +81,7 @@ const Compteur = ({data,nightMode}) => {
       style={{
         flex: 7,
         backgroundColor: primaryColor,
-        justifyContent:'center',
+        justifyContent: 'center',
         alignItems: 'center',
       }}>
       <View style={{flexDirection: 'row'}}>
@@ -71,11 +94,11 @@ const Compteur = ({data,nightMode}) => {
             fontWeight: 'bold',
             color: secondaryColor,
             // backgroundColor:'green',
-            lineHeight:100,
+            lineHeight: 100,
             alignSelf: 'center',
             // textAlignVertical:'bottom',
             paddingLeft: 20,
-            marginTop:30
+            marginTop: 30,
           }}>
           {speed}
         </Text>
@@ -106,7 +129,7 @@ const Compteur = ({data,nightMode}) => {
             fontWeight: 'bold',
             color: secondaryColor,
             // backgroundColor:'green',
-            lineHeight:90,
+            lineHeight: 90,
             alignSelf: 'center',
             // textAlignVertical:'bottom',
             paddingLeft: 0,
@@ -131,9 +154,9 @@ const Compteur = ({data,nightMode}) => {
           bpm
         </Text>
       </View>
-      
+
       {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-      <View style={{flexDirection: 'row',marginBottom:10}}>
+      <View style={{flexDirection: 'row', marginBottom: 10}}>
         <Text
           allowFontScaling={false}
           style={{
@@ -141,10 +164,10 @@ const Compteur = ({data,nightMode}) => {
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
-            lineHeight:40,
+            lineHeight: 40,
             color: secondaryColor,
           }}>
-          {Math.round(distanceTotale/100)/10}
+          {Math.round(distanceTotale / 100) / 10}
         </Text>
 
         <Text
@@ -156,9 +179,9 @@ const Compteur = ({data,nightMode}) => {
             fontWeight: 'bold',
             color: secondaryColor,
             alignSelf: 'center',
-            lineHeight:30,
-            paddingLeft:10,
-            paddingRight:30
+            lineHeight: 30,
+            paddingLeft: 10,
+            paddingRight: 30,
           }}>
           km
         </Text>
@@ -169,7 +192,8 @@ const Compteur = ({data,nightMode}) => {
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
-            color: secondaryColor,lineHeight:40,
+            color: secondaryColor,
+            lineHeight: 40,
           }}>
           {vitesseMoyenne}
         </Text>
@@ -183,15 +207,14 @@ const Compteur = ({data,nightMode}) => {
             fontWeight: 'bold',
             color: secondaryColor,
             alignSelf: 'center',
-            paddingLeft:10,
-            paddingRight:30,
-            lineHeight:30,
+            paddingLeft: 10,
+            paddingRight: 30,
+            lineHeight: 30,
           }}>
           km/h
         </Text>
       </View>
 
-      
       <View style={{flexDirection: 'row'}}>
         <Text
           allowFontScaling={false}
@@ -201,14 +224,13 @@ const Compteur = ({data,nightMode}) => {
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            lineHeight:40,
-            paddingLeft:10,
-            paddingRight:40,
+            lineHeight: 40,
+            paddingLeft: 10,
+            paddingRight: 40,
           }}>
           {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
         </Text>
 
-       
         <Text
           allowFontScaling={false}
           style={{
@@ -217,28 +239,31 @@ const Compteur = ({data,nightMode}) => {
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            paddingLeft:10,
-            paddingRight:30,
-            lineHeight:40,
+            paddingLeft: 10,
+            paddingRight: 30,
+            lineHeight: 40,
           }}>
           {tempsEcoule}
         </Text>
-
-   
       </View>
- 
-      <Text  allowFontScaling={false}
-          style={{
-            fontSize: 40,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            paddingLeft:10,
-            paddingRight:30,
-            lineHeight:40,}}>d+ {Math.round(dPlus)} m </Text>
-      <Text style={{fontSize: 10, color: secondaryColor}}>nbr mesure = {nbrMesure} </Text>
-     
+
+      <Text
+        allowFontScaling={false}
+        style={{
+          fontSize: 40,
+          fontFamily: 'sans-serif-thin',
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+          color: secondaryColor,
+          paddingLeft: 10,
+          paddingRight: 30,
+          lineHeight: 40,
+        }}>
+        d+ {Math.round(dPlus * 10) / 10} m{' '}
+      </Text>
+      <Text style={{fontSize: 10, color: secondaryColor}}>
+        nbr mesure = {nbrMesure}{' '}
+      </Text>
     </View>
   );
 };
@@ -248,6 +273,7 @@ const Home = ({navigation}) => {
   const [BPM, setBPM] = useState(null);
   const [listBpm, setListBpm] = useState([]);
   const [listGPS, setListGPS] = useState([]);
+  const [listAltitude, setListAltitude] = useState([]);
   const [altitude, setAltitude] = useState(null);
   const [vitesseMoyenne, setVitesseMoyenne] = useState(0);
   const [distance, setDistanceParcouru] = useState(null);
@@ -257,6 +283,7 @@ const Home = ({navigation}) => {
   const [tempsEcoule, setTempsEcoule] = useState(null);
   const [speed, setSpeed] = useState(null);
   const [dPlus, setdPlus] = useState(0);
+  const [lastAltitudeMoyen, setLastAltitudeMoyen] = useState(null);
   const [nightMode, setNightMode] = useState(false);
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
@@ -299,6 +326,34 @@ const Home = ({navigation}) => {
         vitesseMoyenneValue += Math.round(iterator.coords.speed * 36) / 10;
       }
       setVitesseMoyenne(vitesseMoyenneValue / listGPS.length);
+
+      setListAltitude((listAltitude) => [
+        ...listAltitude,
+        listGPS[listGPS.length - 1].coords.altitude,
+      ]);
+      if (listAltitude.length > 5) {
+        let altitudeMoyen = moyennePourDplus(listAltitude, 5);
+        if (lastAltitudeMoyen != null) {
+          let ecart = altitudeMoyen - lastAltitudeMoyen;
+          console.log('ecart', ecart);
+          if (ecart > 0.3) {
+            console.log('increment altitude!!');
+            console.log('dPlus');
+            console.log(dPlus + ecart);
+            setdPlus(dPlus + ecart);
+          }
+        }
+
+        setLastAltitudeMoyen(altitudeMoyen);
+      }
+      // let ecart =
+      // listAltitudeLissé[listAltitudeLissé.length - 1] -
+      // listAltitudeLissé[listAltitudeLissé.length - 2];
+      // console.log('ecart', ecart);
+      // if (ecart > 0.4) {
+      //   console.log('increment altitude!!');
+      //   setdPlus(dPlus + ecart);
+      // }
     }
   }, [listGPS]);
   let primaryColor = 'black';
@@ -314,8 +369,6 @@ const Home = ({navigation}) => {
     setNightMode(!nightMode);
   };
 
-
-
   const handleGPS = (position) => {
     setIsGpsReady(true);
 
@@ -325,26 +378,6 @@ const Home = ({navigation}) => {
     setAltitude(altitudeValue);
     setSpeed(speedValue);
     setTime(position.timestamp);
-
-  
-  
-    if (listGPS.length>5) {
-      let ecart = position.coords.altitude - listGPS[listGPS.length-1].coords.altitude;
-      console.log("ecart",ecart)
-      if ( ecart>0.5) {
-        console.log("increment altitude!!")
-        setdPlus(dPlus+ecart)
-      }
-
-    }
-
-
-
-
-
-
-
-
 
     setListGPS((listGPS) => [...listGPS, position]);
     // traitementPositionGPS();
@@ -369,22 +402,18 @@ const Home = ({navigation}) => {
     setAltitude(altitudeValue);
     setSpeed(speedValue);
     setTime(position.timestamp);
-   
 
+    // if (listGPS.length > 5) {
+    // setListAltitudeLissé((listAltitudeLissé) => [...listAltitudeLissé, position]);
 
-
-    if (listGPS.length>5) {
-      let ecart = position.coords.altitude - listGPS[listGPS.length-1].coords.altitude;
-      console.log("ecart",ecart)
-      if ( ecart>0.5) {
-        console.log("increment altitude!!")
-        setdPlus(dPlus+ecart)
-      }
-
-    }
-
-
-
+    //   let ecart =
+    //     position.coords.altitude - listGPS[listGPS.length - 1].coords.altitude;
+    //   console.log('ecart', ecart);
+    //   if (ecart > 0.5) {
+    //     console.log('increment altitude!!');
+    //     setdPlus(dPlus + ecart);
+    //   }
+    // }
 
     let vitesseMoyenneValue = 0;
     for (const iterator of listGPS) {
@@ -410,14 +439,13 @@ const Home = ({navigation}) => {
   };
 
   const ajoutBPM = () => {
-let BPMtemp=Math.round(Math.random()*30+70)
-setInfoConnexion(false);
-const date = new Date().getTime();
-let dataBPMtemp = [date, BPMtemp];
-setBPM(BPMtemp);
-setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
-  }
- 
+    let BPMtemp = Math.round(Math.random() * 30 + 70);
+    setInfoConnexion(false);
+    const date = new Date().getTime();
+    let dataBPMtemp = [date, BPMtemp];
+    setBPM(BPMtemp);
+    setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
+  };
 
   const startParcours = () => {
     console.log('top départ!', new Date().getTime());
@@ -427,7 +455,6 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
   const stopParcours = () => {
     console.log('fin parcours!!!');
     let dataToSave = [];
-
 
     for (let i = 2; i < listGPS.length; i++) {
       const element = listGPS[i];
@@ -446,16 +473,9 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
       let altitudeI = Math.round(element.coords.altitude);
       let speedI = Math.round(element.coords.speed * 10) / 10;
       let tempsI = element.timestamp;
-      dataToSave.push([
-        tempsI,
-        latitudeI,
-        longitudeI,
-        altitudeI,
-        speedI
-        
-      ]);
+      dataToSave.push([tempsI, latitudeI, longitudeI, altitudeI, speedI]);
     }
-    dataToSave.push(distanceTotale)
+    // dataToSave.push(distanceTotale);
     console.log('dataToSave');
     console.log(dataToSave);
     console.log('listBPm');
@@ -463,6 +483,8 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
     navigation.navigate('Save', {
       listBpm: listBpm,
       listPosition: dataToSave,
+      distanceTotale:distanceTotale,
+      dPlus:dPlus
     });
   };
   return (
@@ -494,10 +516,9 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
               tempsEcoule,
               vitesseMoyenne,
               BPM,
-              dPlus
+              dPlus,
             ]}
             nightMode={nightMode}
-
           />
         )}
         {listGPS.length == 1 && isRunning && (
@@ -514,7 +535,9 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
           {!infoConnexion && !isRunning && (
             <Text style={{fontSize: 30}}>{BPM}</Text>
           )}
-          {isRunning && <LineChartScreen data={listBpm} nightMode={nightMode} />}
+          {isRunning && (
+            <LineChartScreen data={listBpm} nightMode={nightMode} />
+          )}
           <Bpm
             remonterData={(e) => handleBPM(e)}
             isConnexionVisible={infoConnexion}
@@ -527,16 +550,28 @@ setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={ajoutDeplacement} ><Text style={{color:primaryColor}}>ajout Deplacement</Text></Pressable>
-          <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={ajoutBPM} ><Text style={{color:primaryColor}}>ajout BPM</Text></Pressable>
-          <Pressable style={{backgroundColor:secondaryColor,padding:10}}  onPress={stopParcours} ><Text style={{color:primaryColor}}>fin du Parcours</Text></Pressable>
+          <Pressable
+            style={{backgroundColor: secondaryColor, padding: 10}}
+            onPress={ajoutDeplacement}>
+            <Text style={{color: primaryColor}}>ajout Deplacement</Text>
+          </Pressable>
+          <Pressable
+            style={{backgroundColor: secondaryColor, padding: 10}}
+            onPress={ajoutBPM}>
+            <Text style={{color: primaryColor}}>ajout BPM</Text>
+          </Pressable>
+          <Pressable
+            style={{backgroundColor: secondaryColor, padding: 10}}
+            onPress={stopParcours}>
+            <Text style={{color: primaryColor}}>fin du Parcours</Text>
+          </Pressable>
           <Icon
-          name="adjust"
-          size={30}
-          color={secondaryColor}
-          onPress={() => toggleNightMode()}
-          style={{backgroundColor: 'transparent', padding: 10}}
-        />
+            name="adjust"
+            size={30}
+            color={secondaryColor}
+            onPress={() => toggleNightMode()}
+            style={{backgroundColor: 'transparent', padding: 10}}
+          />
         </View>
       </View>
       {!isRunning && (
