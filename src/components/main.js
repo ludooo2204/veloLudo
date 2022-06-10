@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
@@ -17,7 +18,7 @@ import KeepAwake from 'react-native-keep-awake';
 import 'react-native-gesture-handler';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {getDistanceFromLatLonInMeter,deg2rad} from './helpers'
+import {getDistanceFromLatLonInMeter, deg2rad} from './helpers';
 import Location from './location';
 import Bpm from './heartrate';
 import LineChartScreen from './LineChartScreen';
@@ -53,14 +54,10 @@ const Main = ({navigation}) => {
     let positionTemporaire2 = JSON.parse(JSON.stringify(positionTemporaire));
 
     if (listPosition.length > 2) {
-      console.log('listPosition');
-      console.log(listPosition);
-      console.log(listPosition.length);
       const actualLat = listPosition[listPosition.length - 1][3];
       const actualLong = listPosition[listPosition.length - 1][2];
       const lastLat = listPosition[listPosition.length - 2][3];
       const lastLong = listPosition[listPosition.length - 2][2];
-
       const distanceFromlastPosition = getDistanceFromLatLonInMeter(
         lastLat,
         lastLong,
@@ -73,22 +70,21 @@ const Main = ({navigation}) => {
         'distance depuis la derniere fois en m =',
         distanceFromlastPosition,
       );
-      console.log('positionTemporaire2 avant distance');
-      console.log(positionTemporaire2);
       positionTemporaire2.push(distance);
-      console.log('positionTemporaire2 apres distance');
-      console.log(positionTemporaire2);
       // setPositionTemporaire(positionTemporaire2);
     }
 
     setListPosition((listPosition) => [...listPosition, positionTemporaire2]);
   }, [positionTemporaire]);
-  useEffect(() => {
-    console.log('distance from effect dist ance en m =', distance);
-  }, [distance]);
-  useEffect(() => {
-    console.log('listPosition from effect', listPosition);
-  }, [listPosition]);
+
+  console.log('coucou');
+  console.log('coucou');
+  console.log('coucou');
+  console.log('coucou');
+  console.log('coucou');
+  console.log('coucou');
+  console.log('coucou');
+  console.log('coucou');
 
   const handleBpm = (lastBpm) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
@@ -116,14 +112,14 @@ const Main = ({navigation}) => {
     altitude = Math.round(altitude * 100) / 100;
     speed = Math.round(speed * 36) / 10;
 
-    let position = [];
-    position[0] = timestamp;
-    position[1] = altitude;
-    position[2] = longitude;
-    position[3] = latitude;
-    position[4] = speed;
+    // let position = [timestamp, altitude, longitude, latitude, speed];
+    // position[0] = timestamp;
+    // position[1] = altitude;
+    // position[2] = longitude;
+    // position[3] = latitude;
+    // position[4] = speed;
 
-    setPositionTemporaire(position);
+    setPositionTemporaire([timestamp, altitude, longitude, latitude, speed]);
   };
 
   return (
@@ -136,49 +132,47 @@ const Main = ({navigation}) => {
       }}>
       <StatusBar barStyle="dark-content" hidden />
       <View style={{flex: 2, flexDirection: 'column'}}>
-				<Text style={styles.indicationText}>
-				nbr de position = {listPosition.length}
-				</Text>
-				<Text style={[styles.indicationText, styles.kmhText]}>
-				{listPosition.length > 3
-					? JSON.stringify(listPosition[listPosition.length - 1][4])
-					: null}{' '}
-				km/h
-				</Text>
-				<Text style={styles.indicationText}>{distance} en metre</Text>
-				<Text style={styles.indicationText}>
-				{listPosition.length > 3
-					? JSON.stringify(listPosition[listPosition.length - 1][1])
-					: null}{' '}
-				m
-				</Text>
-				{listBpm.length > 1 && (
-				<Text style={{color: 'white', textAlign: 'center', fontSize: 30}}>
-					BPM ={listBpm[listBpm.length - 1][1]}
-				</Text>
-				)}
-				<Button
-				title="Fin du parcours"
-				onPress={() =>
-					navigation.navigate('Save', {
-					listBpm: listBpm,
-					listPosition: listPosition,
-					})
-				}
-				/>
+        <Text style={styles.indicationText}>
+          nbr de position = {listPosition.length}
+        </Text>
+        <Text style={[styles.indicationText, styles.kmhText]}>
+          {listPosition.length > 3
+            ? JSON.stringify(listPosition[listPosition.length - 1][4])
+            : null}
+          km/h
+        </Text>
+        <Text style={styles.indicationText}>{distance} en metre</Text>
+        <Text style={styles.indicationText}>
+          {listPosition.length > 3
+            ? JSON.stringify(listPosition[listPosition.length - 1][1])
+            : null}
+          m
+        </Text>
+        {listBpm.length > 1 && (
+          <Text style={{color: 'white', textAlign: 'center', fontSize: 30}}>
+            BPM ={listBpm[listBpm.length - 1][1]}
+          </Text>
+        )}
+        <Button
+          title="Fin du parcouuuuurs"
+          onPress={() =>
+            navigation.navigate('Save', {
+              listBpm: listBpm,
+              listPosition: listPosition,
+            })
+          }
+        />
       </View>
 
       <View style={{flex: 2, flexDirection: 'column'}}>
-      
-      {!isMenuBpmVisible && (
-        <View style={{flex: 2, backgroundColor: 'grey'}}>
-          <LineChartScreen data={listBpm} />
-        </View>
-      )}
-	  </View>
+        {!isMenuBpmVisible && (
+          <View style={{flex: 2, backgroundColor: 'grey'}}>
+            <LineChartScreen data={listBpm} />
+          </View>
+        )}
+      </View>
     </View>
   );
 };
 
 export default Main;
-

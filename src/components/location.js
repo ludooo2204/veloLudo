@@ -42,7 +42,7 @@ const Location = ({remonterData, isRunning}) => {
       <View>
         <Text></Text>
       </View>
-    )
+    );
   } else {
     if (position) {
       return (

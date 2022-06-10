@@ -1,18 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Button, Text, StatusBar, View} from 'react-native';
-import Modal from 'react-native-modal';
+import {Text, StatusBar, View} from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import Location from './location';
-import ActivationCardio from './activationCardio';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+
 import Bpm from './heartrate';
 import Orientation from 'react-native-orientation';
 import KeepAwake from 'react-native-keep-awake';
-import RunningScreen from './RunningScreen';
-import Main from './main';
 import LineChartScreen from './LineChartScreen';
-import {getDistanceFromLatLonInMeter, deg2rad} from './helpers';
+import {getDistanceFromLatLonInMeter} from './helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const mesureDenivelléPositif = (altitude) => {
@@ -23,7 +19,6 @@ const mesureDenivelléPositif = (altitude) => {
   }
   return Math.round(dPlus);
 };
-
 const moyenne = (array) => {
   let somme = 0;
   for (let i = 0; i < array.length; i++) {
@@ -93,10 +88,8 @@ const Compteur = ({data, nightMode}) => {
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            // backgroundColor:'green',
             lineHeight: 100,
             alignSelf: 'center',
-            // textAlignVertical:'bottom',
             paddingLeft: 20,
             marginTop: 30,
           }}>
@@ -290,7 +283,6 @@ const Home = ({navigation}) => {
   const [isGpsReady, setIsGpsReady] = useState(false);
   useEffect(() => {
     KeepAwake.activate();
-    console.log('ne fait pas dodo!');
     Orientation.lockToLandscape();
   }, []);
   useEffect(() => {
@@ -331,6 +323,8 @@ const Home = ({navigation}) => {
         ...listAltitude,
         listGPS[listGPS.length - 1].coords.altitude,
       ]);
+
+      //le calcul de dplus se fait ici
       if (listAltitude.length > 5) {
         let altitudeMoyen = moyennePourDplus(listAltitude, 5);
         if (lastAltitudeMoyen != null) {
@@ -458,16 +452,16 @@ const Home = ({navigation}) => {
 
     for (let i = 2; i < listGPS.length; i++) {
       const element = listGPS[i];
-      let distanceI =
-        Math.round(
-          getDistanceFromLatLonInMeter(
-            listGPS[i - 1].coords.latitude,
-            listGPS[i - 1].coords.longitude,
-            listGPS[i].coords.latitude,
-            listGPS[i].coords.longitude,
-          ) * 10,
-        ) / 10;
-      let accuracyI = Math.round(element.coords.accuracy);
+      // let distanceI =
+      //   Math.round(
+      //     getDistanceFromLatLonInMeter(
+      //       listGPS[i - 1].coords.latitude,
+      //       listGPS[i - 1].coords.longitude,
+      //       listGPS[i].coords.latitude,
+      //       listGPS[i].coords.longitude,
+      //     ) * 10,
+      //   ) / 10;
+      // let accuracyI = Math.round(element.coords.accuracy);
       let latitudeI = element.coords.latitude;
       let longitudeI = element.coords.longitude;
       let altitudeI = Math.round(element.coords.altitude);
@@ -483,8 +477,8 @@ const Home = ({navigation}) => {
     navigation.navigate('Save', {
       listBpm: listBpm,
       listPosition: dataToSave,
-      distanceTotale:distanceTotale,
-      dPlus:dPlus
+      distanceTotale: distanceTotale,
+      dPlus: dPlus,
     });
   };
   return (
@@ -497,13 +491,7 @@ const Home = ({navigation}) => {
         </View>
       )}
       <View style={{flex: 1, flexDirection: 'row'}}>
-        {/* {listGPS.length < 2 && ( */}
-        {/* <View
-            style={{flex: 1, backgroundColor: isGpsReady ? 'green' : 'red'}}> */}
         <Location remonterData={(e) => handleGPS(e)} isRunning={isRunning} />
-        {/* </View> */}
-        {/* )} */}
-
         {listGPS.length > 1 && isRunning && (
           <Compteur
             data={[

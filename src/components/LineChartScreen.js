@@ -14,7 +14,7 @@ import {LineChart} from 'react-native-charts-wrapper';
 class LineChartScreen extends React.Component {
   constructor() {
     super();
-    
+
     this.state = {
       data: {},
 
@@ -26,23 +26,19 @@ class LineChartScreen extends React.Component {
       //   textColor: processColor('white'),
       // },
       xAxis: {
-        enabled:false
+        enabled: false,
       },
-    //   yAxis: {
-    //  left:{        enabled:false},
-    //  right:{        textColor: processColor(this.secondaryColor)}
-    // //  right:{        textColor: processColor('#F0C0FF8C')}
-    //   },
+      //   yAxis: {
+      //  left:{        enabled:false},
+      //  right:{        textColor: processColor(this.secondaryColor)}
+      // //  right:{        textColor: processColor('#F0C0FF8C')}
+      //   },
 
       // visibleRange: {x: {min: 1, max: 20}};
-     
     };
-   
   }
 
-  componentDidMount() {
-  
-  }
+  componentDidMount() {}
   componentDidUpdate() {
     this.onPressLearnMore();
   }
@@ -98,39 +94,38 @@ class LineChartScreen extends React.Component {
   }
 
   render() {
-    let affichageBPMReady=false
-    if (this.props.data.length>1) {affichageBPMReady=true;
-      }
-      if (this.props.nightMode) {
-        this.primaryColor = 'black';
-        this.secondaryColor = 'white';
-      } else {
-        this.primaryColor = 'white';
-        this.secondaryColor = 'black';
-      }
+    let affichageBPMReady = false;
+    if (this.props.data.length > 1) {
+      affichageBPMReady = true;
+    }
+    if (this.props.nightMode) {
+      this.primaryColor = 'black';
+      this.secondaryColor = 'white';
+    } else {
+      this.primaryColor = 'white';
+      this.secondaryColor = 'black';
+    }
     return (
       <View style={{flex: 1}}>
-
-
-        <View style={{flex: 1,}}>
+        <View style={{flex: 1}}>
           <LineChart
             style={{
               flex: 1,
               // backgroundColor:"black",
-              backgroundColor:this.primaryColor,
+              backgroundColor: this.primaryColor,
             }}
             data={this.state.data}
             // chartDescription={{text: this.props.data[this.props.data.length-1][1]+" BPM",textSize:120}}
-            
+
             // legend={this.state.legend}
-            legend={{enabled:false}}
+            legend={{enabled: false}}
             marker={this.state.marker}
             xAxis={this.state.xAxis}
             yAxis={{
-              left:{        enabled:false},
-              right:{        textColor: processColor(this.secondaryColor)}
-             //  right:{        textColor: processColor('#F0C0FF8C')}
-               }}
+              left: {enabled: false},
+              right: {textColor: processColor(this.secondaryColor)},
+              //  right:{        textColor: processColor('#F0C0FF8C')}
+            }}
             drawGridBackground={true}
             borderColor={processColor('black')}
             borderWidth={0}
