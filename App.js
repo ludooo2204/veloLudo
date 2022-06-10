@@ -18,7 +18,7 @@ import Toast from 'react-native-toast-message';
 import Bpm from './src/components/heartrate';
 import Save from './src/components/save';
 import Home from './src/components/home';
-import Main from './src/components/main';
+// import Main from './src/components/main';
 
 const Stack = createStackNavigator();
 const App = () => {
@@ -28,11 +28,6 @@ const App = () => {
       <NavigationContainer>
         <StatusBar barStyle="dark-content" hidden />
         <Stack.Navigator initialRouteName="Home">
-          {/* <Stack.Screen
-            options={{headerShown: false}}
-            name="Main"
-            component={Main}
-          /> */}
           <Stack.Screen
             options={{headerShown: false}}
             name="Home"

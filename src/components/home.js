@@ -8,258 +8,223 @@ import Bpm from './heartrate';
 import Orientation from 'react-native-orientation';
 import KeepAwake from 'react-native-keep-awake';
 import LineChartScreen from './LineChartScreen';
-import {getDistanceFromLatLonInMeter} from './helpers';
+import {getDistanceFromLatLonInMeter, moyennePourDplus} from '../helpers/math';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Compteur} from './Compteur';
 
-const mesureDenivelléPositif = (altitude) => {
-  let dPlus = 0;
-  for (let i = 1; i < altitude.length; i++) {
-    let ecart = altitude[i] - altitude[i - 1];
-    if (ecart > 0.5) dPlus += ecart;
-  }
-  return Math.round(dPlus);
-};
-const moyenne = (array) => {
-  let somme = 0;
-  for (let i = 0; i < array.length; i++) {
-    const element = array[i];
-    somme += element;
-  }
-  return somme / array.length;
-};
-//Pour le site
-const lissageData = (dataArray, nbrMesureALisser) => {
-  let datasLissées = [];
-  for (let i = 0; i < dataArray.length; i++) {
-    if (i > dataArray.length - nbrMesureALisser - 1) {
-      datasLissées.push(dataArray[i]);
-    } else {
-      datasLissées.push(moyenne(dataArray.slice(i, nbrMesureALisser + i)));
-    }
-  }
-  return datasLissées;
-};
+// const Compteur = ({data, nightMode}) => {
+//   const speed = data[0];
+//   const altitude = data[1];
+//   const time = data[2];
+//   const distance = data[3];
+//   const nbrMesure = data[4];
+//   const distanceTotale = data[5];
+//   const tempsEcouleSecondes = Math.round(data[6] / 1000);
+//   const tempsEcoule = new Date(tempsEcouleSecondes * 1000)
+//     .toISOString()
+//     .substr(11, 8);
+//   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
+//   const BPM = data[8];
+//   const dPlus = data[9];
+//   let primaryColor;
+//   let secondaryColor;
+//   if (nightMode) {
+//     primaryColor = 'black';
+//     secondaryColor = 'white';
+//   } else {
+//     primaryColor = 'white';
+//     secondaryColor = 'black';
+//   }
 
-const moyennePourDplus = (dataArray, nbrMesureALisser) => {
-  return moyenne(
-    dataArray.slice(dataArray.length - nbrMesureALisser, dataArray.length),
-  );
-};
+//   return (
+//     <View
+//       style={{
+//         flex: 7,
+//         backgroundColor: primaryColor,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//       }}>
+//       <View style={{flexDirection: 'row'}}>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 100,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             lineHeight: 100,
+//             alignSelf: 'center',
+//             paddingLeft: 20,
+//             marginTop: 30,
+//           }}>
+//           {speed}
+//         </Text>
 
-const Compteur = ({data, nightMode}) => {
-  // console.log('dataCompteur', data);
-  const speed = data[0];
-  const altitude = data[1];
-  const time = data[2];
-  const distance = data[3];
-  const nbrMesure = data[4];
-  const distanceTotale = data[5];
-  const tempsEcouleSecondes = Math.round(data[6] / 1000);
-  const tempsEcoule = new Date(tempsEcouleSecondes * 1000)
-    .toISOString()
-    .substr(11, 8);
-  const vitesseMoyenne = Math.round(data[7] * 10) / 10;
-  const BPM = data[8];
-  const dPlus = data[9];
-  let primaryColor;
-  let secondaryColor;
-  if (nightMode) {
-    primaryColor = 'black';
-    secondaryColor = 'white';
-  } else {
-    primaryColor = 'white';
-    secondaryColor = 'black';
-  }
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 30,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             // backgroundColor:'blue',
+//             marginBottom: 20,
+//             paddingLeft: 20,
+//             alignSelf: 'flex-end',
+//           }}>
+//           km/h
+//         </Text>
+//       </View>
+//       <View style={{flexDirection: 'row'}}>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 90,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             // backgroundColor:'green',
+//             lineHeight: 90,
+//             alignSelf: 'center',
+//             // textAlignVertical:'bottom',
+//             paddingLeft: 0,
+//             // marginStart:0
+//           }}>
+//           {BPM}
+//         </Text>
 
-  return (
-    <View
-      style={{
-        flex: 7,
-        backgroundColor: primaryColor,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <View style={{flexDirection: 'row'}}>
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 100,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            lineHeight: 100,
-            alignSelf: 'center',
-            paddingLeft: 20,
-            marginTop: 30,
-          }}>
-          {speed}
-        </Text>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 30,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             // backgroundColor:'blue',
+//             marginBottom: 20,
+//             paddingLeft: 20,
+//             alignSelf: 'flex-end',
+//           }}>
+//           bpm
+//         </Text>
+//       </View>
 
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 30,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            // backgroundColor:'blue',
-            marginBottom: 20,
-            paddingLeft: 20,
-            alignSelf: 'flex-end',
-          }}>
-          km/h
-        </Text>
-      </View>
-      <View style={{flexDirection: 'row'}}>
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 90,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            // backgroundColor:'green',
-            lineHeight: 90,
-            alignSelf: 'center',
-            // textAlignVertical:'bottom',
-            paddingLeft: 0,
-            // marginStart:0
-          }}>
-          {BPM}
-        </Text>
+//       {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
+//       <View style={{flexDirection: 'row', marginBottom: 10}}>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 40,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             lineHeight: 40,
+//             color: secondaryColor,
+//           }}>
+//           {Math.round(distanceTotale / 100) / 10}
+//         </Text>
 
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 30,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            // backgroundColor:'blue',
-            marginBottom: 20,
-            paddingLeft: 20,
-            alignSelf: 'flex-end',
-          }}>
-          bpm
-        </Text>
-      </View>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 30,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             alignSelf: 'center',
+//             lineHeight: 30,
+//             paddingLeft: 10,
+//             paddingRight: 30,
+//           }}>
+//           km
+//         </Text>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 40,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             lineHeight: 40,
+//           }}>
+//           {vitesseMoyenne}
+//         </Text>
 
-      {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-      <View style={{flexDirection: 'row', marginBottom: 10}}>
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 40,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            lineHeight: 40,
-            color: secondaryColor,
-          }}>
-          {Math.round(distanceTotale / 100) / 10}
-        </Text>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 30,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             alignSelf: 'center',
+//             paddingLeft: 10,
+//             paddingRight: 30,
+//             lineHeight: 30,
+//           }}>
+//           km/h
+//         </Text>
+//       </View>
 
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 30,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            alignSelf: 'center',
-            lineHeight: 30,
-            paddingLeft: 10,
-            paddingRight: 30,
-          }}>
-          km
-        </Text>
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 40,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            lineHeight: 40,
-          }}>
-          {vitesseMoyenne}
-        </Text>
+//       <View style={{flexDirection: 'row'}}>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 40,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             lineHeight: 40,
+//             paddingLeft: 10,
+//             paddingRight: 40,
+//           }}>
+//           {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
+//         </Text>
 
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 30,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            alignSelf: 'center',
-            paddingLeft: 10,
-            paddingRight: 30,
-            lineHeight: 30,
-          }}>
-          km/h
-        </Text>
-      </View>
+//         <Text
+//           allowFontScaling={false}
+//           style={{
+//             fontSize: 40,
+//             fontFamily: 'sans-serif-thin',
+//             fontStyle: 'italic',
+//             fontWeight: 'bold',
+//             color: secondaryColor,
+//             paddingLeft: 10,
+//             paddingRight: 30,
+//             lineHeight: 40,
+//           }}>
+//           {tempsEcoule}
+//         </Text>
+//       </View>
 
-      <View style={{flexDirection: 'row'}}>
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 40,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            lineHeight: 40,
-            paddingLeft: 10,
-            paddingRight: 40,
-          }}>
-          {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
-        </Text>
-
-        <Text
-          allowFontScaling={false}
-          style={{
-            fontSize: 40,
-            fontFamily: 'sans-serif-thin',
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: secondaryColor,
-            paddingLeft: 10,
-            paddingRight: 30,
-            lineHeight: 40,
-          }}>
-          {tempsEcoule}
-        </Text>
-      </View>
-
-      <Text
-        allowFontScaling={false}
-        style={{
-          fontSize: 40,
-          fontFamily: 'sans-serif-thin',
-          fontStyle: 'italic',
-          fontWeight: 'bold',
-          color: secondaryColor,
-          paddingLeft: 10,
-          paddingRight: 30,
-          lineHeight: 40,
-        }}>
-        d+ {Math.round(dPlus * 10) / 10} m{' '}
-      </Text>
-      <Text style={{fontSize: 10, color: secondaryColor}}>
-        nbr mesure = {nbrMesure}{' '}
-      </Text>
-    </View>
-  );
-};
+//       <Text
+//         allowFontScaling={false}
+//         style={{
+//           fontSize: 40,
+//           fontFamily: 'sans-serif-thin',
+//           fontStyle: 'italic',
+//           fontWeight: 'bold',
+//           color: secondaryColor,
+//           paddingLeft: 10,
+//           paddingRight: 30,
+//           lineHeight: 40,
+//         }}>
+//         d+ {Math.round(dPlus * 10) / 10} m{' '}
+//       </Text>
+//       <Text style={{fontSize: 10, color: secondaryColor}}>
+//         nbr mesure = {nbrMesure}{' '}
+//       </Text>
+//     </View>
+//   );
+// };
 
 const Home = ({navigation}) => {
   const [isRunning, setRunning] = useState(false);
@@ -277,7 +242,7 @@ const Home = ({navigation}) => {
   const [speed, setSpeed] = useState(null);
   const [dPlus, setdPlus] = useState(0);
   const [lastAltitudeMoyen, setLastAltitudeMoyen] = useState(null);
-  const [nightMode, setNightMode] = useState(false);
+  const [nightMode, setNightMode] = useState(true);
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
   const [isGpsReady, setIsGpsReady] = useState(false);
@@ -482,12 +447,12 @@ const Home = ({navigation}) => {
     });
   };
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'black'}}>
       <StatusBar barStyle="dark-content" hidden />
 
       {!isRunning && (
-        <View style={{flex: 1}}>
-          <Text>Bienvenue !</Text>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{color: 'white', fontSize: 40}}>VeloLudo</Text>
         </View>
       )}
       <View style={{flex: 1, flexDirection: 'row'}}>
@@ -510,9 +475,18 @@ const Home = ({navigation}) => {
           />
         )}
         {listGPS.length == 1 && isRunning && (
-          <Text>
-            En attente deplacement car nbr de mesure = {listGPS.length}
-          </Text>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: primaryColor,
+              color: secondaryColor,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: secondaryColor, textAlign: 'center'}}>
+              En attente deplacement
+            </Text>
+          </View>
         )}
 
         <View
@@ -539,19 +513,19 @@ const Home = ({navigation}) => {
             alignItems: 'center',
           }}>
           <Pressable
-            style={{backgroundColor: secondaryColor, padding: 10}}
+            style={{backgroundColor: primaryColor, padding: 10}}
             onPress={ajoutDeplacement}>
-            <Text style={{color: primaryColor}}>ajout Deplacement</Text>
+            <Text style={{color: secondaryColor}}>ajout Deplacement</Text>
           </Pressable>
           <Pressable
-            style={{backgroundColor: secondaryColor, padding: 10}}
+            style={{backgroundColor: primaryColor, padding: 10}}
             onPress={ajoutBPM}>
-            <Text style={{color: primaryColor}}>ajout BPM</Text>
+            <Text style={{color: secondaryColor}}>ajout BPM</Text>
           </Pressable>
           <Pressable
-            style={{backgroundColor: secondaryColor, padding: 10}}
+            style={{backgroundColor: primaryColor, padding: 10}}
             onPress={stopParcours}>
-            <Text style={{color: primaryColor}}>fin du Parcours</Text>
+            <Text style={{color: secondaryColor}}>fin du Parcours</Text>
           </Pressable>
           <Icon
             name="adjust"

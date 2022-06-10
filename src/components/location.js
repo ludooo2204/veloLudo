@@ -1,14 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Text, PermissionsAndroid, View} from 'react-native';
+import {Text, PermissionsAndroid, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import Bpm from './heartrate';
-import styles from './styles';
+import {DefaultColorsText} from '../styles/styles';
 const Location = ({remonterData, isRunning}) => {
   // const Location = ({ remonterData, isVisible }) => {
   const [position, setPosition] = useState(null);
-  // const [errors, setErrors] = useState(null);
-  // const [time, setTime] = useState(null);
-  // const [gpsRunning, setGpsRunning] = useState(false);
 
   const granted = PermissionsAndroid.check(
     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -45,23 +41,9 @@ const Location = ({remonterData, isRunning}) => {
     );
   } else {
     if (position) {
-      return (
-        <Text
-          style={{
-            fontSize: 50,
-          }}>
-          GPS ON!!!
-        </Text>
-      );
+      return <DefaultColorsText>GPS ON!!!</DefaultColorsText>;
     } else {
-      return (
-        <Text
-          style={{
-            fontSize: 50,
-          }}>
-          GPS OFF
-        </Text>
-      );
+      return <DefaultColorsText>GPS OFF</DefaultColorsText>;
     }
   }
 };
