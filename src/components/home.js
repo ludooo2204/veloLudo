@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {Text, StatusBar, View} from 'react-native';
@@ -248,7 +249,7 @@ const Home = ({navigation}) => {
   const [isGpsReady, setIsGpsReady] = useState(false);
   useEffect(() => {
     KeepAwake.activate();
-    Orientation.lockToLandscape();
+    Orientation.lockToPortrait();
   }, []);
   useEffect(() => {
     if (listGPS.length > 2) {
@@ -452,10 +453,16 @@ const Home = ({navigation}) => {
 
       {!isRunning && (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: 'white', fontSize: 40}}>VeloLudo</Text>
+          <Text style={{color: 'white', fontSize: 80, fontStyle: 'italic'}}>
+            VeloLudo
+          </Text>
         </View>
       )}
-      <View style={{flex: 1, flexDirection: 'row'}}>
+      <View
+        style={{
+          flex: 1,
+          //  flexDirection: 'row'
+        }}>
         <Location remonterData={(e) => handleGPS(e)} isRunning={isRunning} />
         {listGPS.length > 1 && isRunning && (
           <Compteur
@@ -511,6 +518,7 @@ const Home = ({navigation}) => {
             backgroundColor: primaryColor,
             justifyContent: 'center',
             alignItems: 'center',
+            flexDirection: 'row',
           }}>
           <Pressable
             style={{backgroundColor: primaryColor, padding: 10}}
@@ -529,7 +537,7 @@ const Home = ({navigation}) => {
           </Pressable>
           <Icon
             name="adjust"
-            size={30}
+            size={20}
             color={secondaryColor}
             onPress={() => toggleNightMode()}
             style={{backgroundColor: 'transparent', padding: 10}}

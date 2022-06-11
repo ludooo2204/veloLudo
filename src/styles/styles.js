@@ -3,6 +3,7 @@ import styled from '@emotion/native';
 export const DefaultColorsText = styled.Text`
   background-color: black;
   color: white;
+  text-align: center;
 `;
 export const CompteurText = styled.Text`
   font-family: 'sans-serif-thin';

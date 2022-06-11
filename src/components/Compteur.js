@@ -30,20 +30,20 @@ export const Compteur = ({data, nightMode}) => {
   return (
     <View
       style={{
-        flex: 7,
+        flex: 9,
         backgroundColor: primaryColor,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
       }}>
       <View style={{flexDirection: 'row'}}>
-        <CompteurText allowFontScaling={false} fontSize={'100px'}>
+        <CompteurText allowFontScaling={false} fontSize={'150px'}>
           {speed}
         </CompteurText>
 
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 30,
+            fontSize: 40,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -59,12 +59,12 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 90,
+            fontSize: 150,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            lineHeight: 90,
+            lineHeight: 150,
             alignSelf: 'center',
             paddingLeft: 0,
           }}>
@@ -74,7 +74,7 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 30,
+            fontSize: 40,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -90,11 +90,11 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 40,
+            fontSize: 30,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
-            lineHeight: 40,
+            lineHeight: 30,
             color: secondaryColor,
           }}>
           {Math.round(distanceTotale / 100) / 10}
@@ -103,13 +103,13 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 30,
+            fontSize: 20,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            alignSelf: 'center',
-            lineHeight: 30,
+            // alignSelf: 'center',
+            lineHeight: 32,
             paddingLeft: 10,
             paddingRight: 30,
           }}>
@@ -118,12 +118,12 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 40,
+            fontSize: 30,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            lineHeight: 40,
+            lineHeight: 30,
           }}>
           {vitesseMoyenne}
         </Text>
@@ -131,7 +131,7 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 30,
+            fontSize: 20,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -139,7 +139,7 @@ export const Compteur = ({data, nightMode}) => {
             alignSelf: 'center',
             paddingLeft: 10,
             paddingRight: 30,
-            lineHeight: 30,
+            lineHeight: 20,
           }}>
           km/h
         </Text>
@@ -149,12 +149,12 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 40,
+            fontSize: 30,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
-            lineHeight: 40,
+            lineHeight: 30,
             paddingLeft: 10,
             paddingRight: 40,
           }}>
@@ -164,14 +164,14 @@ export const Compteur = ({data, nightMode}) => {
         <Text
           allowFontScaling={false}
           style={{
-            fontSize: 40,
+            fontSize: 30,
             fontFamily: 'sans-serif-thin',
             fontStyle: 'italic',
             fontWeight: 'bold',
             color: secondaryColor,
             paddingLeft: 10,
             paddingRight: 30,
-            lineHeight: 40,
+            lineHeight: 30,
           }}>
           {tempsEcoule}
         </Text>
@@ -180,20 +180,20 @@ export const Compteur = ({data, nightMode}) => {
       <Text
         allowFontScaling={false}
         style={{
-          fontSize: 40,
+          fontSize: 20,
           fontFamily: 'sans-serif-thin',
           fontStyle: 'italic',
           fontWeight: 'bold',
           color: secondaryColor,
           paddingLeft: 10,
           paddingRight: 30,
-          lineHeight: 40,
+          lineHeight: 20,
         }}>
         d+ {Math.round(dPlus * 10) / 10} m{' '}
       </Text>
-      <Text style={{fontSize: 10, color: secondaryColor}}>
+      {/* <Text style={{fontSize: 10, color: secondaryColor}}>
         nbr mesure = {nbrMesure}{' '}
-      </Text>
+      </Text> */}
     </View>
   );
 };
