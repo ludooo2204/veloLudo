@@ -19,7 +19,7 @@ const Save = ({route, navigation}) => {
   const [responseAxios, setResponse] = useState('pas envoyé');
   const [responseAxiosLocal, setResponseLocal] = useState('pas envoyé');
 
-  const {listBpm, listPosition,distanceTotale,dPlus} = route.params;
+  const {listBpm, listPosition, distanceTotale, dPlus} = route.params;
   useEffect(() => {
     getParcours();
     console.log('useEffect');
@@ -41,12 +41,11 @@ const Save = ({route, navigation}) => {
         console.log(listParcours.filter((e) => e.id == item.id)[0].key);
         getValeurParcours(listParcours.filter((e) => e.id == item.id)[0].key);
       }}
-      effacerKeys={(keyToErase)=>effacerKeys(keyToErase)}
+      effacerKeys={(keyToErase) => effacerKeys(keyToErase)}
     />
   );
 
   const effacerKeys = async (keyToErase) => {
-
     console.log('keys a effacer');
     console.log(keyToErase);
     try {
@@ -97,9 +96,9 @@ const Save = ({route, navigation}) => {
     let parcoursKeys = [];
     for (const iterator of keys) {
       if (iterator.includes('bpm')) {
-        let dateParcours = new Date(
-          iterator.split('bpm-')[1],
-        ).toLocaleString('fr-FR');
+        let dateParcours = new Date(iterator.split('bpm-')[1]).toLocaleString(
+          'fr-FR',
+        );
         parcoursKeys.push({
           title: dateParcours,
           id: keys.indexOf(iterator).toString(),
@@ -112,8 +111,8 @@ const Save = ({route, navigation}) => {
     setListParcours(parcoursKeys);
   };
   const analyseDataParcours = (data) => {
-    console.log("data")
-    console.log(data)
+    console.log('data');
+    console.log(data);
     let distanceParcourue = 0;
     for (const position of data) {
       distanceParcourue += position[1];
@@ -169,7 +168,13 @@ const Save = ({route, navigation}) => {
   };
   const postData = () => {
     axios
-      .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition,distanceTotale,dPlus])
+      // .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition,distanceTotale,dPlus])
+      .post('http://192.168.1.20:7000', [
+        listBpm,
+        listPosition,
+        distanceTotale,
+        dPlus,
+      ])
       .then(function (response) {
         console.log('response');
         console.log(response);
@@ -181,7 +186,7 @@ const Save = ({route, navigation}) => {
         setResponse('ca marche pas...', error);
       });
   };
-  const finParcours = async (listBpm, listPosition,distanceTotale,dPlus) => {
+  const finParcours = async (listBpm, listPosition, distanceTotale, dPlus) => {
     console.log('fin du parcours et sauvegarde en local');
     console.log('list BPM', listBpm);
     console.log('list position', listPosition);
@@ -201,7 +206,10 @@ const Save = ({route, navigation}) => {
       await AsyncStorage.setItem(`bpm-${dateDuParcours}`, valueBpm);
       const valuePosition = JSON.stringify(listPosition);
       await AsyncStorage.setItem(`position-${dateDuParcours}`, valuePosition);
-      await AsyncStorage.setItem(`distance-${dateDuParcours}`, distanceTotale.toString());
+      await AsyncStorage.setItem(
+        `distance-${dateDuParcours}`,
+        distanceTotale.toString(),
+      );
       await AsyncStorage.setItem(`dplus-${dateDuParcours}`, dPlus.toString());
     } catch (e) {
       console.log('error', e);
@@ -216,7 +224,9 @@ const Save = ({route, navigation}) => {
       <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
       <Button
         title="Fin du parcours"
-        onPress={() => finParcours(listBpm, listPosition,distanceTotale,dPlus)}
+        onPress={() =>
+          finParcours(listBpm, listPosition, distanceTotale, dPlus)
+        }
       />
       <Text>{responseAxiosLocal}</Text>
       <Button
@@ -231,10 +241,9 @@ const Save = ({route, navigation}) => {
       <Button
         title="get info bpm"
         onPress={() => {
-          getParcoursBpm()
+          getParcoursBpm();
           setChoisingParcours(true);
         }}
-  
       />
       <Text>{'\n'}</Text>
 
@@ -254,13 +263,13 @@ const Save = ({route, navigation}) => {
 };
 export default Save;
 
-const ParcoursItem = ({title, onPress,effacerKeys}) => {
+const ParcoursItem = ({title, onPress, effacerKeys}) => {
   return (
-    <View style={{flexDirection:"row"}}> 
-    <Pressable onPress={onPress} style={{alignItems: 'center'}}>
+    <View style={{flexDirection: 'row'}}>
+      <Pressable onPress={onPress} style={{alignItems: 'center'}}>
         <Text style={{padding: 10, fontSize: 20}}> {title}</Text>
-    </Pressable>
-    <Button title="effacer?" onPress={()=>effacerKeys(title)}/>
+      </Pressable>
+      <Button title="effacer?" onPress={() => effacerKeys(title)} />
     </View>
   );
 };

@@ -12,6 +12,7 @@ import LineChartScreen from './LineChartScreen';
 import {getDistanceFromLatLonInMeter, moyennePourDplus} from '../helpers/math';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Compteur} from './Compteur';
+import ChoixDuParcours from './ChoixDuParcours';
 
 // const Compteur = ({data, nightMode}) => {
 //   const speed = data[0];
@@ -244,6 +245,7 @@ const Home = ({navigation}) => {
   const [dPlus, setdPlus] = useState(0);
   const [lastAltitudeMoyen, setLastAltitudeMoyen] = useState(null);
   const [nightMode, setNightMode] = useState(true);
+  const [parcoursChoisi, setParcoursChoisi] = useState(null);
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
   const [isGpsReady, setIsGpsReady] = useState(false);
@@ -512,40 +514,49 @@ const Home = ({navigation}) => {
             isConnexionVisible={infoConnexion}
           />
         </View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: primaryColor,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          <Pressable
-            style={{backgroundColor: primaryColor, padding: 10}}
-            onPress={ajoutDeplacement}>
-            <Text style={{color: secondaryColor}}>ajout Deplacement</Text>
-          </Pressable>
-          <Pressable
-            style={{backgroundColor: primaryColor, padding: 10}}
-            onPress={ajoutBPM}>
-            <Text style={{color: secondaryColor}}>ajout BPM</Text>
-          </Pressable>
-          <Pressable
-            style={{backgroundColor: primaryColor, padding: 10}}
-            onPress={stopParcours}>
-            <Text style={{color: secondaryColor}}>fin du Parcours</Text>
-          </Pressable>
-          <Icon
-            name="adjust"
-            size={20}
-            color={secondaryColor}
-            onPress={() => toggleNightMode()}
-            style={{backgroundColor: 'transparent', padding: 10}}
-          />
-        </View>
+        {isRunning ? (
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: primaryColor,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'row',
+            }}>
+            <Pressable
+              style={{backgroundColor: primaryColor, padding: 10}}
+              onPress={ajoutDeplacement}>
+              <Text style={{color: secondaryColor}}>ajout Deplacement</Text>
+            </Pressable>
+            <Pressable
+              style={{backgroundColor: primaryColor, padding: 10}}
+              onPress={ajoutBPM}>
+              <Text style={{color: secondaryColor}}>ajout BPM</Text>
+            </Pressable>
+            <Pressable
+              style={{backgroundColor: primaryColor, padding: 10}}
+              onPress={stopParcours}>
+              <Text style={{color: secondaryColor}}>fin du Parcours</Text>
+            </Pressable>
+            <Icon
+              name="adjust"
+              size={20}
+              color={secondaryColor}
+              onPress={() => toggleNightMode()}
+              style={{backgroundColor: 'transparent', padding: 10}}
+            />
+          </View>
+        ) : (
+          <ChoixDuParcours parcoursChoisi={setParcoursChoisi} />
+        )}
       </View>
       {!isRunning && (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          {parcoursChoisi && (
+            <Text style={{backgroundColor: 'white'}}>
+              {parcoursChoisi.title}
+            </Text>
+          )}
           <Pressable
             style={{
               borderRadius: 15,
