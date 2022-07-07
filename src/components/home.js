@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Text, StatusBar, View} from 'react-native';
+import {Text, StatusBar, View, StyleSheet} from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import Location from './location';
 
@@ -14,219 +14,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Compteur} from './Compteur';
 import ChoixDuParcours from './ChoixDuParcours';
 
-// const Compteur = ({data, nightMode}) => {
-//   const speed = data[0];
-//   const altitude = data[1];
-//   const time = data[2];
-//   const distance = data[3];
-//   const nbrMesure = data[4];
-//   const distanceTotale = data[5];
-//   const tempsEcouleSecondes = Math.round(data[6] / 1000);
-//   const tempsEcoule = new Date(tempsEcouleSecondes * 1000)
-//     .toISOString()
-//     .substr(11, 8);
-//   const vitesseMoyenne = Math.round(data[7] * 10) / 10;
-//   const BPM = data[8];
-//   const dPlus = data[9];
-//   let primaryColor;
-//   let secondaryColor;
-//   if (nightMode) {
-//     primaryColor = 'black';
-//     secondaryColor = 'white';
-//   } else {
-//     primaryColor = 'white';
-//     secondaryColor = 'black';
-//   }
-
-//   return (
-//     <View
-//       style={{
-//         flex: 7,
-//         backgroundColor: primaryColor,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//       }}>
-//       <View style={{flexDirection: 'row'}}>
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 100,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             lineHeight: 100,
-//             alignSelf: 'center',
-//             paddingLeft: 20,
-//             marginTop: 30,
-//           }}>
-//           {speed}
-//         </Text>
-
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 30,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             // backgroundColor:'blue',
-//             marginBottom: 20,
-//             paddingLeft: 20,
-//             alignSelf: 'flex-end',
-//           }}>
-//           km/h
-//         </Text>
-//       </View>
-//       <View style={{flexDirection: 'row'}}>
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 90,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             // backgroundColor:'green',
-//             lineHeight: 90,
-//             alignSelf: 'center',
-//             // textAlignVertical:'bottom',
-//             paddingLeft: 0,
-//             // marginStart:0
-//           }}>
-//           {BPM}
-//         </Text>
-
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 30,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             // backgroundColor:'blue',
-//             marginBottom: 20,
-//             paddingLeft: 20,
-//             alignSelf: 'flex-end',
-//           }}>
-//           bpm
-//         </Text>
-//       </View>
-
-//       {/* <Text style={{fontSize: 30, color: 'white'}}>{distance} m</Text> */}
-//       <View style={{flexDirection: 'row', marginBottom: 10}}>
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 40,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             lineHeight: 40,
-//             color: secondaryColor,
-//           }}>
-//           {Math.round(distanceTotale / 100) / 10}
-//         </Text>
-
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 30,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             alignSelf: 'center',
-//             lineHeight: 30,
-//             paddingLeft: 10,
-//             paddingRight: 30,
-//           }}>
-//           km
-//         </Text>
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 40,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             lineHeight: 40,
-//           }}>
-//           {vitesseMoyenne}
-//         </Text>
-
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 30,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             alignSelf: 'center',
-//             paddingLeft: 10,
-//             paddingRight: 30,
-//             lineHeight: 30,
-//           }}>
-//           km/h
-//         </Text>
-//       </View>
-
-//       <View style={{flexDirection: 'row'}}>
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 40,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             lineHeight: 40,
-//             paddingLeft: 10,
-//             paddingRight: 40,
-//           }}>
-//           {new Date(time).toLocaleTimeString('fr-FR').substr(0, 5)}
-//         </Text>
-
-//         <Text
-//           allowFontScaling={false}
-//           style={{
-//             fontSize: 40,
-//             fontFamily: 'sans-serif-thin',
-//             fontStyle: 'italic',
-//             fontWeight: 'bold',
-//             color: secondaryColor,
-//             paddingLeft: 10,
-//             paddingRight: 30,
-//             lineHeight: 40,
-//           }}>
-//           {tempsEcoule}
-//         </Text>
-//       </View>
-
-//       <Text
-//         allowFontScaling={false}
-//         style={{
-//           fontSize: 40,
-//           fontFamily: 'sans-serif-thin',
-//           fontStyle: 'italic',
-//           fontWeight: 'bold',
-//           color: secondaryColor,
-//           paddingLeft: 10,
-//           paddingRight: 30,
-//           lineHeight: 40,
-//         }}>
-//         d+ {Math.round(dPlus * 10) / 10} m{' '}
-//       </Text>
-//       <Text style={{fontSize: 10, color: secondaryColor}}>
-//         nbr mesure = {nbrMesure}{' '}
-//       </Text>
-//     </View>
-//   );
-// };
+let primaryColor = 'black';
+let secondaryColor = 'white';
 
 const Home = ({navigation}) => {
   const [isRunning, setRunning] = useState(false);
@@ -249,10 +38,12 @@ const Home = ({navigation}) => {
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
   const [isGpsReady, setIsGpsReady] = useState(false);
+
   useEffect(() => {
     KeepAwake.activate();
     Orientation.lockToPortrait();
   }, []);
+
   useEffect(() => {
     if (listGPS.length > 2) {
       const lastLongPosition = listGPS[listGPS.length - 1].coords.longitude;
@@ -308,18 +99,9 @@ const Home = ({navigation}) => {
 
         setLastAltitudeMoyen(altitudeMoyen);
       }
-      // let ecart =
-      // listAltitudeLissé[listAltitudeLissé.length - 1] -
-      // listAltitudeLissé[listAltitudeLissé.length - 2];
-      // console.log('ecart', ecart);
-      // if (ecart > 0.4) {
-      //   console.log('increment altitude!!');
-      //   setdPlus(dPlus + ecart);
-      // }
     }
   }, [listGPS]);
-  let primaryColor = 'black';
-  let secondaryColor = 'white';
+
   if (nightMode) {
     primaryColor = 'black';
     secondaryColor = 'white';
@@ -365,18 +147,6 @@ const Home = ({navigation}) => {
     setSpeed(speedValue);
     setTime(position.timestamp);
 
-    // if (listGPS.length > 5) {
-    // setListAltitudeLissé((listAltitudeLissé) => [...listAltitudeLissé, position]);
-
-    //   let ecart =
-    //     position.coords.altitude - listGPS[listGPS.length - 1].coords.altitude;
-    //   console.log('ecart', ecart);
-    //   if (ecart > 0.5) {
-    //     console.log('increment altitude!!');
-    //     setdPlus(dPlus + ecart);
-    //   }
-    // }
-
     let vitesseMoyenneValue = 0;
     for (const iterator of listGPS) {
       vitesseMoyenneValue += Math.round(iterator.coords.speed * 36) / 10;
@@ -407,6 +177,11 @@ const Home = ({navigation}) => {
     let dataBPMtemp = [date, BPMtemp];
     setBPM(BPMtemp);
     setListBpm((listBpm) => [...listBpm, dataBPMtemp]);
+  };
+
+  const chooseParcours = () => {
+    console.log('naviger vers choix du parcours');
+    navigation.navigate('ChoixDuParcours');
   };
 
   const startParcours = () => {
@@ -454,10 +229,8 @@ const Home = ({navigation}) => {
       <StatusBar barStyle="dark-content" hidden />
 
       {!isRunning && (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: 'white', fontSize: 80, fontStyle: 'italic'}}>
-            VeloLudo
-          </Text>
+        <View style={styles.viewTitreGeneral}>
+          <Text style={styles.textTitreGeneral}>VeloLudo</Text>
         </View>
       )}
       <View
@@ -484,20 +257,12 @@ const Home = ({navigation}) => {
           />
         )}
         {listGPS.length == 1 && isRunning && (
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: primaryColor,
-              color: secondaryColor,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.viewAttenteDeplacement}>
             <Text style={{color: secondaryColor, textAlign: 'center'}}>
               En attente deplacement
             </Text>
           </View>
         )}
-
         <View
           style={{
             flex: 6,
@@ -514,41 +279,34 @@ const Home = ({navigation}) => {
             isConnexionVisible={infoConnexion}
           />
         </View>
-        {isRunning ? (
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: primaryColor,
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}>
-            <Pressable
-              style={{backgroundColor: primaryColor, padding: 10}}
-              onPress={ajoutDeplacement}>
-              <Text style={{color: secondaryColor}}>ajout Deplacement</Text>
-            </Pressable>
-            <Pressable
-              style={{backgroundColor: primaryColor, padding: 10}}
-              onPress={ajoutBPM}>
-              <Text style={{color: secondaryColor}}>ajout BPM</Text>
-            </Pressable>
-            <Pressable
-              style={{backgroundColor: primaryColor, padding: 10}}
-              onPress={stopParcours}>
-              <Text style={{color: secondaryColor}}>fin du Parcours</Text>
-            </Pressable>
-            <Icon
-              name="adjust"
-              size={20}
-              color={secondaryColor}
-              onPress={() => toggleNightMode()}
-              style={{backgroundColor: 'transparent', padding: 10}}
-            />
-          </View>
-        ) : (
-          <ChoixDuParcours parcoursChoisi={setParcoursChoisi} />
-        )}
+        {/* {isRunning ? ( */}
+        <View style={styles.viewBarreLaterale}>
+          <Pressable
+            style={{backgroundColor: primaryColor, padding: 10}}
+            onPress={ajoutDeplacement}>
+            <Text style={{color: secondaryColor}}>ajout Deplacement</Text>
+          </Pressable>
+          <Pressable
+            style={{backgroundColor: primaryColor, padding: 10}}
+            onPress={ajoutBPM}>
+            <Text style={{color: secondaryColor}}>ajout BPM</Text>
+          </Pressable>
+          <Pressable
+            style={{backgroundColor: primaryColor, padding: 10}}
+            onPress={stopParcours}>
+            <Text style={{color: secondaryColor}}>fin du Parcours</Text>
+          </Pressable>
+          <Icon
+            name="adjust"
+            size={20}
+            color={secondaryColor}
+            onPress={() => toggleNightMode()}
+            style={{backgroundColor: 'transparent', padding: 10}}
+          />
+        </View>
+        {/* ) */}
+        {/* : (          <ChoixDuParcours parcoursChoisi={setParcoursChoisi} /> */}
+        {/* )} */}
       </View>
       {!isRunning && (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -557,17 +315,13 @@ const Home = ({navigation}) => {
               {parcoursChoisi.title}
             </Text>
           )}
-          <Pressable
-            style={{
-              borderRadius: 15,
-              backgroundColor: 'yellow',
-              color: '#fff',
-              padding: 10,
-              borderWidth: 2,
-              borderColor: 'grey',
-            }}
-            onPress={startParcours}>
+          <Pressable style={styles.pressableGo} onPress={startParcours}>
             <Text>GO !!!</Text>
+          </Pressable>
+          <Pressable
+            style={styles.pressableChoixParcours}
+            onPress={chooseParcours}>
+            <Text>Choix parcours</Text>
           </Pressable>
         </View>
       )}
@@ -577,3 +331,38 @@ const Home = ({navigation}) => {
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  pressableChoixParcours: {
+    borderRadius: 15,
+    backgroundColor: 'yellow',
+    color: '#fff',
+    padding: 10,
+    borderWidth: 2,
+    borderColor: 'grey',
+  },
+  pressableGo: {
+    borderRadius: 15,
+    backgroundColor: 'yellow',
+    color: '#fff',
+    padding: 10,
+    borderWidth: 2,
+    borderColor: 'grey',
+  },
+  viewBarreLaterale: {
+    flex: 1,
+    backgroundColor: primaryColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  viewAttenteDeplacement: {
+    flex: 1,
+    backgroundColor: primaryColor,
+    color: secondaryColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textTitreGeneral: {color: 'white', fontSize: 80, fontStyle: 'italic'},
+  viewTitreGeneral: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+});

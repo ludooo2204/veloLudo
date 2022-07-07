@@ -18,6 +18,7 @@ import Toast from 'react-native-toast-message';
 import Bpm from './src/components/heartrate';
 import Save from './src/components/save';
 import Home from './src/components/home';
+import ChoixDuParcours from './src/components/ChoixDuParcours';
 // import Main from './src/components/main';
 
 const Stack = createStackNavigator();
@@ -42,6 +43,11 @@ const App = () => {
             name="Save"
             component={Save}
             options={{title: 'gestion des parcours'}}
+          />
+          <Stack.Screen
+            name="ChoixDuParcours"
+            component={ChoixDuParcours}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       </NavigationContainer>
