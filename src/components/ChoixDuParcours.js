@@ -1,35 +1,34 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {FlatList, Text, TextInput, View, StyleSheet} from 'react-native';
-import Modal from 'react-native-modal';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {matchSorter} from 'match-sorter';
 
 const list = [
-  {id: 1, title: ['Sossay', 'orches', 'leugny']},
-  {id: 2, title: 'Paris - Orches - Sérigny - saint Christophe'},
-  {id: 3, title: 'Sossay - Sérigny - saint Christophe'},
-  {id: 4, title: 'Sossay - Orches - Sérigny'},
-  {id: 5, title: 'Lyon - Orches - Sérigny - saint Christophe'},
-  {id: 6, title: 'Sossay - Orches - Sérigny - saint Christophe'},
-  {id: 7, title: 'Tokyo - Orches - Sérigny - saint Christophe'},
-  {id: 8, title: 'Sossay - Orches - Sérigny - saint Christophe'},
-  {id: 9, title: 'Paris - Orches - Sérigny - saint Christophe'},
-  {id: 10, title: 'Sossay - Sérigny - saint Christophe'},
+  {id: '1', title: ['Sossay', 'orches', 'leugny']},
+  {id: '2', title: 'Paris - Orches - Sérigny - saint Christophe'},
+  {id: '3', title: 'Sossay - Sérigny - saint Christophe'},
+  {id: '4', title: 'Sossay - Orches - Sérigny'},
+  {id: '5', title: 'Lyon - Orches - Sérigny - saint Christophe'},
+  {id: '6', title: 'Sossay - Orches - Sérigny - saint Christophe'},
+  {id: '7', title: 'Tokyo - Orches - Sérigny - saint Christophe'},
+  {id: '8', title: 'Sossay - Orches - Sérigny - saint Christophe'},
+  {id: '9', title: 'Paris - Orches - Sérigny - saint Christophe'},
+  {id: '10', title: 'Sossay - Sérigny - saint Christophe'},
 ];
 
 const listVille = [
-  {id: 1, title: 'Sossay'},
-  {id: 2, title: 'Orches'},
-  {id: 3, title: 'Sérigny'},
-  {id: 4, title: 'Saint Christophe'},
-  {id: 5, title: 'Lencloitre'},
-  {id: 6, title: 'Jaulnay'},
-  {id: 7, title: 'Scorbé-clairvaux'},
-  {id: 8, title: 'Naintré'},
-  {id: 9, title: 'Leigné sur usseau'},
-  {id: 10, title: 'Chatellerault'},
+  {id: '1', title: 'Sossay'},
+  {id: '2', title: 'Orches'},
+  {id: '3', title: 'Sérigny'},
+  {id: '4', title: 'Saint Christophe'},
+  {id: '5', title: 'Lencloitre'},
+  {id: '6', title: 'Jaulnay'},
+  {id: '7', title: 'Scorbé-clairvaux'},
+  {id: '8', title: 'Naintré'},
+  {id: '9', title: 'Leigné sur usseau'},
+  {id: '10', title: 'Chatellerault'},
 ];
 
 const ChoixDuParcours = ({parcoursChoisi}) => {
@@ -37,27 +36,21 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
   const [listeDesParcours, setListeDesParcours] = useState(list);
   const [listeDesVilles, setListeDesVilles] = useState(listVille);
   const [ajoutVilleVisible, setAjoutVilleVisible] = useState(false);
+  const [ListeVilleVisible, setListeVilleVisible] = useState(false);
   const [ajoutInputVilleVisible, setAjoutInputVilleVisible] = useState(false);
 
   useEffect(() => {
-    console.log('probleme avec flastlist parcours number strinfg ????');
-    console.log('probleme avec flastlist parcours number strinfg ????');
-    console.log('probleme avec flastlist parcours number strinfg ????');
-    console.log('probleme avec flastlist parcours number strinfg ????');
-    console.log('probleme avec flastlist parcours number strinfg ????');
-    console.log('probleme avec flastlist parcours number strinfg ????');
-    console.log('probleme avec flastlist parcours number strinfg ????');
     retrieveData();
   }, []);
-  const validerNouvelleVille = (e) => {
-    console.log('nouvelle ville');
-    console.log(e.nativeEvent.text);
-    console.log(listeDesVilles);
-    let newId = Math.max(...listeDesVilles.map((e) => e.id)) + 1;
-    listeDesVilles.push({id: newId, title: e.nativeEvent.text});
-    console.log(listeDesVilles);
 
+  const validerNouvelleVille = (e) => {
+    let newId = Math.max(...listeDesVilles.map((e) => e.id)) + 1;
+    listeDesVilles.push({id: newId.toString(), title: e.nativeEvent.text});
     storeDataVille(listeDesVilles);
+  };
+  const ajouterParcours = () => {
+    console.log('ajouter parcours');
+    setListeVilleVisible(true);
   };
   const handleText = (e) => {
     if (e === '') {
@@ -102,28 +95,17 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
       const valueParcours = await AsyncStorage.getItem('listeParcours');
       if (valueParcours !== null) {
         // We have data!!
-        console.log('valueParcours');
-        console.log(valueParcours);
-        console.log(typeof valueParcours);
-        console.log(typeof valueParcours);
-        console.log(typeof valueParcours);
-        console.log(typeof valueParcours);
-        console.log(typeof valueParcours);
+
         setListeDesParcours(JSON.parse(valueParcours));
       } else {
         storeDataParcours(list);
       }
       const valueVille = await AsyncStorage.getItem('listeVille');
-
+      console.log('valueVille');
+      console.log(valueVille);
       if (valueVille !== null) {
         // We have data!!
 
-        console.log(valueVille);
-        console.log(typeof valueVille);
-        console.log(typeof valueVille);
-        console.log(typeof valueVille);
-        console.log(typeof valueVille);
-        console.log(typeof valueVille);
         setListeDesVilles(JSON.parse(valueVille));
       } else {
         storeDataVille(listVille);
@@ -140,7 +122,7 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
       // Error retrieving data
     }
   };
-  //   removeData();
+  // removeData();
   const removeDataVille = async () => {
     try {
       await AsyncStorage.removeItem('listeVille');
@@ -149,29 +131,29 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
       // Error retrieving data
     }
   };
-  //   removeDataVille();
+  // removeDataVille();
   const renderItem = ({item}) => (
     <Pressable
       key={item.id}
       onPress={() => {
         parcoursChoisi(item);
-        setModalVisible(false);
+        // setModalVisible(false);
+      }}>
+      <Text style={styles.textParcours}>{item.title}</Text>
+    </Pressable>
+  );
+  const renderItemVille = ({item}) => (
+    <Pressable
+      key={item.id}
+      style={styles.pressableVille}
+      onPress={() => {
+        parcoursChoisi(item);
+        // setModalVisible(false);
       }}>
       <Text style={styles.textParcours}>{item.title}</Text>
     </Pressable>
   );
 
-  //   const renderItemVille = ({item}) => (
-  //     <Pressable
-  //       style={styles.textVille}
-  //       onPress={() => {
-  //         // parcoursChoisi(item);
-  //         // setModalVisible(false);
-  //       }}>
-  //       <Text style={styles.textVille}>{item.title}</Text>
-  //     </Pressable>
-  //   );
-  //   console.log(ajoutVilleVisible);
   return (
     <View style={styles.viewChoixParcoursGlobal}>
       <View style={styles.viewTitreParcours}>
@@ -181,8 +163,7 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
         {/* AJOUT PARCOURS */}
         <Pressable
           style={styles.pressableAjoutParcours}
-          // onPress={() => setAjoutInputVilleVisible(true)}
-        >
+          onPress={ajouterParcours}>
           <Text style={styles.textAjoutParcours}>Ajouter un parcours</Text>
         </Pressable>
         {/* AJOUT VILLE */}
@@ -192,12 +173,27 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
           <Text style={styles.textAjoutParcours}>Ajouter une ville</Text>
         </Pressable>
       </View>
-      <FlatList
-        style={styles.flatlistParcours}
-        data={listeDesParcours}
-        renderItem={renderItem}
-        // keyExtractor={(item) => item.id}
-      />
+      {console.log(ListeVilleVisible)}
+      {console.log(ListeVilleVisible)}
+      {console.log(ListeVilleVisible)}
+      {console.log(ListeVilleVisible)}
+      {!ListeVilleVisible && (
+        <FlatList
+          style={styles.flatlistParcours}
+          data={listeDesParcours}
+          renderItem={renderItem}
+          // keyExtractor={(item) => item.id}
+        />
+      )}
+      {ListeVilleVisible && (
+        <FlatList
+          style={styles.flatlistParcours}
+          numColumns={3}
+          data={listeDesVilles}
+          renderItem={renderItemVille}
+          // keyExtractor={(item) => item.id}
+        />
+      )}
       {/* <FlatList
 				data={villeDejaSaisie}
 				renderItem={renderItemVille}
@@ -258,6 +254,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 10,
     paddingVertical: 10,
+  },
+  pressableVille: {
+    color: 'white',
+    backgroundColor: 'green',
+    textAlign: 'center',
+    marginVertical: 10,
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
+    // paddingVertical: 10,
+    borderRadius: 5,
+    width: 110,
   },
   viewChoixParcoursGlobal: {
     backgroundColor: 'black',
