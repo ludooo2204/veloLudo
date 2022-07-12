@@ -13,6 +13,7 @@ import {getDistanceFromLatLonInMeter, moyennePourDplus} from '../helpers/math';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Compteur} from './Compteur';
 import ChoixDuParcours from './ChoixDuParcours';
+import ComposantRedux from './ComposantRedux';
 
 let primaryColor = 'black';
 let secondaryColor = 'white';
@@ -318,6 +319,7 @@ const Home = ({navigation}) => {
           <Pressable style={styles.pressableGo} onPress={startParcours}>
             <Text>GO !!!</Text>
           </Pressable>
+          <ComposantRedux />
           <Pressable
             style={styles.pressableChoixParcours}
             onPress={chooseParcours}>

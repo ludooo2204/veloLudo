@@ -4,6 +4,9 @@ import {FlatList, Text, TextInput, View, StyleSheet} from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {matchSorter} from 'match-sorter';
+import {useDispatch, useSelector} from 'react-redux';
+import {addListeParcours, addParcours} from '../redux/action';
+import ListeVilleAChoisir from './ListeVilleAChoisir';
 
 const list = [
   {id: '1', title: ['Sossay', 'orches', 'leugny']},
@@ -33,15 +36,23 @@ const listVille = [
 
 const ChoixDuParcours = ({parcoursChoisi}) => {
   const [villeDejaSaisie, setVilleDejaSaisie] = useState('');
-  const [listeDesParcours, setListeDesParcours] = useState(list);
+  // const [listeDesParcours, setListeDesParcours] = useState(list);
   const [listeDesVilles, setListeDesVilles] = useState(listVille);
   const [ajoutVilleVisible, setAjoutVilleVisible] = useState(false);
   const [ListeVilleVisible, setListeVilleVisible] = useState(false);
   const [ajoutInputVilleVisible, setAjoutInputVilleVisible] = useState(false);
 
+  const listeDesParcours = useSelector((state) => state.parcours);
+  // const listeInitialesDesParcours = useSelector((state) => state.parcours);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     retrieveData();
   }, []);
+
+  console.log('listeDesParcours');
+  console.log(listeDesParcours);
+  console.log(typeof listeDesParcours);
 
   const validerNouvelleVille = (e) => {
     let newId = Math.max(...listeDesVilles.map((e) => e.id)) + 1;
@@ -93,10 +104,12 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
     try {
       console.log('look for value');
       const valueParcours = await AsyncStorage.getItem('listeParcours');
+      console.log(JSON.parse(valueParcours));
       if (valueParcours !== null) {
         // We have data!!
+        dispatch(addListeParcours(JSON.parse(valueParcours)));
 
-        setListeDesParcours(JSON.parse(valueParcours));
+        // setListeDesParcours(JSON.parse(valueParcours));
       } else {
         storeDataParcours(list);
       }
@@ -142,17 +155,17 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
       <Text style={styles.textParcours}>{item.title}</Text>
     </Pressable>
   );
-  const renderItemVille = ({item}) => (
-    <Pressable
-      key={item.id}
-      style={styles.pressableVille}
-      onPress={() => {
-        parcoursChoisi(item);
-        // setModalVisible(false);
-      }}>
-      <Text style={styles.textParcours}>{item.title}</Text>
-    </Pressable>
-  );
+  // const renderItemVille = ({item}) => (
+  //   <Pressable
+  //     key={item.id}
+  //     style={styles.pressableVille}
+  //     onPress={() => {
+  //       parcoursChoisi(item);
+  //       // setModalVisible(false);
+  //     }}>
+  //     <Text style={styles.textParcours}>{item.title}</Text>
+  //   </Pressable>
+  // );
 
   return (
     <View style={styles.viewChoixParcoursGlobal}>
@@ -173,10 +186,7 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
           <Text style={styles.textAjoutParcours}>Ajouter une ville</Text>
         </Pressable>
       </View>
-      {console.log(ListeVilleVisible)}
-      {console.log(ListeVilleVisible)}
-      {console.log(ListeVilleVisible)}
-      {console.log(ListeVilleVisible)}
+
       {!ListeVilleVisible && (
         <FlatList
           style={styles.flatlistParcours}
@@ -186,32 +196,35 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
         />
       )}
       {ListeVilleVisible && (
-        <FlatList
-          style={styles.flatlistParcours}
-          numColumns={3}
-          data={listeDesVilles}
-          renderItem={renderItemVille}
-          // keyExtractor={(item) => item.id}
-        />
+        <ListeVilleAChoisir />
+        // <FlatList
+        //   style={styles.flatlistParcours}
+        //   numColumns={3}
+        //   data={listeDesVilles}
+        //   renderItem={renderItemVille}
+        //   // keyExtractor={(item) => item.id}
+        // />
       )}
       {/* <FlatList
 				data={villeDejaSaisie}
 				renderItem={renderItemVille}
 				keyExtractor={(i) => i.id}
 			/> */}
-      <View style={styles.input}>
-        {ajoutInputVilleVisible ? (
-          <TextInput
-            placeholder="Saisissez ici votre nouvelle ville"
-            onSubmitEditing={validerNouvelleVille}
-          />
-        ) : (
-          <TextInput
-            placeholder="Rechercher un parcours"
-            onChangeText={handleText}
-          />
-        )}
-      </View>
+      {!ListeVilleVisible && (
+        <View style={styles.input}>
+          {ajoutInputVilleVisible ? (
+            <TextInput
+              placeholder="Saisissez ici votre nouvelle ville"
+              onSubmitEditing={validerNouvelleVille}
+            />
+          ) : (
+            <TextInput
+              placeholder="Rechercher un parcours"
+              onChangeText={handleText}
+            />
+          )}
+        </View>
+      )}
     </View>
   );
 };

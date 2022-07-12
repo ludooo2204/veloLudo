@@ -20,11 +20,13 @@ import Save from './src/components/save';
 import Home from './src/components/home';
 import ChoixDuParcours from './src/components/ChoixDuParcours';
 // import Main from './src/components/main';
+import store from './src/store/store';
+import {Provider} from 'react-redux';
 
 const Stack = createStackNavigator();
 const App = () => {
   return (
-    <>
+    <Provider store={store}>
       <Toast ref={(ref) => Toast.setRef(ref)} />
       <NavigationContainer>
         <StatusBar barStyle="dark-content" hidden />
@@ -51,7 +53,7 @@ const App = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </Provider>
   );
 };
 
