@@ -12,8 +12,9 @@ import LineChartScreen from './LineChartScreen';
 import {getDistanceFromLatLonInMeter, moyennePourDplus} from '../helpers/math';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Compteur} from './Compteur';
+import {useDispatch, useSelector} from 'react-redux';
+
 import ChoixDuParcours from './ChoixDuParcours';
-import ComposantRedux from './ComposantRedux';
 
 let primaryColor = 'black';
 let secondaryColor = 'white';
@@ -35,10 +36,11 @@ const Home = ({navigation}) => {
   const [dPlus, setdPlus] = useState(0);
   const [lastAltitudeMoyen, setLastAltitudeMoyen] = useState(null);
   const [nightMode, setNightMode] = useState(true);
-  const [parcoursChoisi, setParcoursChoisi] = useState(null);
   // const [GPS, setGPS] = useState(null);
   const [infoConnexion, setInfoConnexion] = useState(true);
   const [isGpsReady, setIsGpsReady] = useState(false);
+
+  const parcoursChoisi = useSelector((state) => state.parcoursChoisi);
 
   useEffect(() => {
     KeepAwake.activate();
@@ -305,25 +307,28 @@ const Home = ({navigation}) => {
             style={{backgroundColor: 'transparent', padding: 10}}
           />
         </View>
-        {/* ) */}
-        {/* : (          <ChoixDuParcours parcoursChoisi={setParcoursChoisi} /> */}
-        {/* )} */}
       </View>
       {!isRunning && (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          {parcoursChoisi && (
-            <Text style={{backgroundColor: 'white'}}>
-              {parcoursChoisi.title}
-            </Text>
-          )}
           <Pressable style={styles.pressableGo} onPress={startParcours}>
             <Text>GO !!!</Text>
           </Pressable>
-          <ComposantRedux />
           <Pressable
             style={styles.pressableChoixParcours}
             onPress={chooseParcours}>
-            <Text>Choix parcours</Text>
+            <>
+              {!parcoursChoisi && <Text>Choisir un parcours</Text>}
+              {parcoursChoisi && (
+                <Text>
+                  {parcoursChoisi.title.map((parcours, index) => {
+                    let string =
+                      parcours.title +
+                      (index == parcoursChoisi.title.length - 1 ? '' : ' - ');
+                    return string;
+                  })}
+                </Text>
+              )}
+            </>
           </Pressable>
         </View>
       )}
@@ -340,6 +345,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',
     color: '#fff',
     padding: 10,
+    marginTop: 10,
     borderWidth: 2,
     borderColor: 'grey',
   },

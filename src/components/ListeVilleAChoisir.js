@@ -1,26 +1,46 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {addParcours} from '../redux/action';
+import {NavigationContainer} from '@react-navigation/native';
 
 //  REVOIR LE FORMAT DES PARCOURS {id:1,title:[{id:1,title:"Sossay"},{id:2,title:"Lyon"}...]}
 
-const ListeVilleAChoisir = () => {
+const ListeVilleAChoisir = ({navigation}) => {
   const [villesChoisies, setVillesChoisies] = useState([]);
   const listeDesVilles = useSelector((state) => state.villes);
   const listeDesParcours = useSelector((state) => state.parcours);
   const dispatch = useDispatch();
   console.log('listeDesParcours');
+  console.log('listeDesParcours');
   console.log(listeDesParcours);
   console.log('villesChoisies');
+  console.log('villesChoisies');
   console.log(villesChoisies);
+  const storeDataParcours = async (dataToStore) => {
+    try {
+      await AsyncStorage.setItem('listeParcours', JSON.stringify(dataToStore));
+    } catch (error) {
+      // Error saving data
+      console.log('error');
+      console.log(error);
+    }
+  };
 
   const validerNouveauParcours = (e) => {
     let newId = Math.max(...listeDesParcours.map((e) => e.id)) + 1;
     let newParcoursObject = {id: newId.toString(), title: villesChoisies};
     console.log('newParcoursObject');
+
     console.log(newParcoursObject);
-    dispatch(addParcours(newParcoursObject));
+    console.log('listeDesParcours');
+    listeDesParcours.push(newParcoursObject);
+    console.log(listeDesParcours);
+    storeDataParcours(listeDesParcours);
+    navigation.navigate('Home');
+
+    // dispatch(addParcours(newParcoursObject));
   };
   const renderItemVille = ({item}) => (
     <Pressable

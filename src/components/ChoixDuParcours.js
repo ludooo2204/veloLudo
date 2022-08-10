@@ -5,20 +5,19 @@ import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {matchSorter} from 'match-sorter';
 import {useDispatch, useSelector} from 'react-redux';
-import {addListeParcours, addParcours} from '../redux/action';
+import {addCount, addListeParcours, chooseParcours} from '../redux/action';
 import ListeVilleAChoisir from './ListeVilleAChoisir';
+import {NavigationContainer} from '@react-navigation/native';
 
 const list = [
-  {id: '1', title: ['Sossay', 'orches', 'leugny']},
-  {id: '2', title: 'Paris - Orches - Sérigny - saint Christophe'},
-  {id: '3', title: 'Sossay - Sérigny - saint Christophe'},
-  {id: '4', title: 'Sossay - Orches - Sérigny'},
-  {id: '5', title: 'Lyon - Orches - Sérigny - saint Christophe'},
-  {id: '6', title: 'Sossay - Orches - Sérigny - saint Christophe'},
-  {id: '7', title: 'Tokyo - Orches - Sérigny - saint Christophe'},
-  {id: '8', title: 'Sossay - Orches - Sérigny - saint Christophe'},
-  {id: '9', title: 'Paris - Orches - Sérigny - saint Christophe'},
-  {id: '10', title: 'Sossay - Sérigny - saint Christophe'},
+  {
+    id: '1',
+    title: [
+      {id: '1', title: 'Sossay'},
+      {id: '2', title: 'Orches'},
+      {id: '3', title: 'Sérigny'},
+    ],
+  },
 ];
 
 const listVille = [
@@ -34,15 +33,15 @@ const listVille = [
   {id: '10', title: 'Chatellerault'},
 ];
 
-const ChoixDuParcours = ({parcoursChoisi}) => {
+const ChoixDuParcours = ({navigation}) => {
+  const listeDesParcoursRedux = useSelector((state) => state.parcours);
   const [villeDejaSaisie, setVilleDejaSaisie] = useState('');
-  // const [listeDesParcours, setListeDesParcours] = useState(list);
+  const [listeDesParcours, setListeDesParcours] = useState(null);
   const [listeDesVilles, setListeDesVilles] = useState(listVille);
   const [ajoutVilleVisible, setAjoutVilleVisible] = useState(false);
   const [ListeVilleVisible, setListeVilleVisible] = useState(false);
   const [ajoutInputVilleVisible, setAjoutInputVilleVisible] = useState(false);
 
-  const listeDesParcours = useSelector((state) => state.parcours);
   // const listeInitialesDesParcours = useSelector((state) => state.parcours);
   const dispatch = useDispatch();
 
@@ -50,9 +49,14 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
     retrieveData();
   }, []);
 
-  console.log('listeDesParcours');
-  console.log(listeDesParcours);
-  console.log(typeof listeDesParcours);
+  useEffect(() => {
+    if (listeDesParcours) {
+      console.log('listeDesParcours');
+      console.log('listeDesParcours');
+      console.log('listeDesParcours');
+      console.log(listeDesParcours);
+    }
+  }, [listeDesParcours]);
 
   const validerNouvelleVille = (e) => {
     let newId = Math.max(...listeDesVilles.map((e) => e.id)) + 1;
@@ -65,15 +69,23 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
   };
   const handleText = (e) => {
     if (e === '') {
-      setListeDesParcours(list);
+      setListeDesParcours(listeDesParcoursRedux);
       setAjoutVilleVisible(false);
     } else {
-      const resultatDeRecherche = matchSorter(listeDesParcours, e, {
-        keys: ['title'],
+      console.log('listeDesParcoursRedux');
+      console.log(listeDesParcoursRedux);
+      console.log(JSON.stringify(listeDesParcoursRedux));
+      console.log('listeDesParcoursRedux.title');
+      console.log(listeDesParcoursRedux.title);
+      const resultatDeRecherche = matchSorter(listeDesParcoursRedux, e, {
+        threshold: matchSorter.rankings.WORD_STARTS_WITH,
+        keys: ['title.*.title'],
       });
 
       if (resultatDeRecherche.length === 0) setAjoutVilleVisible(true);
       else setAjoutVilleVisible(false);
+      console.log('resultatDeRecherche');
+      console.log(resultatDeRecherche);
       setListeDesParcours(resultatDeRecherche);
     }
   };
@@ -104,18 +116,17 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
     try {
       console.log('look for value');
       const valueParcours = await AsyncStorage.getItem('listeParcours');
-      console.log(JSON.parse(valueParcours));
       if (valueParcours !== null) {
         // We have data!!
+        console.log('We have data!!');
         dispatch(addListeParcours(JSON.parse(valueParcours)));
+        // dispatch(addListeParcours(valueParcours));
 
         // setListeDesParcours(JSON.parse(valueParcours));
       } else {
         storeDataParcours(list);
       }
       const valueVille = await AsyncStorage.getItem('listeVille');
-      console.log('valueVille');
-      console.log(valueVille);
       if (valueVille !== null) {
         // We have data!!
 
@@ -135,6 +146,25 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
       // Error retrieving data
     }
   };
+  const deleteParcours = async (item) => {
+    try {
+      console.log('item from delete');
+      console.log(item);
+      console.log(listeDesParcoursRedux);
+      storeDataParcours(
+        listeDesParcoursRedux.filter((parcours) => parcours.id !== item.id),
+      );
+      console.log('coucou0');
+      retrieveData();
+      console.log('coucou1');
+      // await AsyncStorage.removeItem('listeParcours');
+    } catch (error) {
+      console.log(error);
+      // Error retrieving data
+    } finally {
+      console.log('coucou2');
+    }
+  };
   // removeData();
   const removeDataVille = async () => {
     try {
@@ -149,10 +179,21 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
     <Pressable
       key={item.id}
       onPress={() => {
-        parcoursChoisi(item);
+        // parcoursChoisi(item);
+        console.log('item');
+        console.log(item);
+        dispatch(chooseParcours(item));
+        navigation.navigate('Home');
         // setModalVisible(false);
-      }}>
-      <Text style={styles.textParcours}>{item.title}</Text>
+      }}
+      onLongPress={() => deleteParcours(item)}>
+      <Text style={styles.textParcours}>
+        {item.title.map((parcours, index) => {
+          let string =
+            parcours.title + (index == item.title.length - 1 ? '' : ' - ');
+          return string;
+        })}
+      </Text>
     </Pressable>
   );
   // const renderItemVille = ({item}) => (
@@ -186,11 +227,10 @@ const ChoixDuParcours = ({parcoursChoisi}) => {
           <Text style={styles.textAjoutParcours}>Ajouter une ville</Text>
         </Pressable>
       </View>
-
       {!ListeVilleVisible && (
         <FlatList
           style={styles.flatlistParcours}
-          data={listeDesParcours}
+          data={listeDesParcours || listeDesParcoursRedux}
           renderItem={renderItem}
           // keyExtractor={(item) => item.id}
         />

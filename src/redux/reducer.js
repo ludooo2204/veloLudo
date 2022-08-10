@@ -4,12 +4,14 @@ import {
   ADD_TODO,
   ADD_PARCOURS,
   ADD_LIST_PARCOURS,
+  CHOOSE_PARCOURS,
 } from './type';
 
 //format initial du state global
 const initialState = {
   todos: [],
   parcours: [],
+  parcoursChoisi: null,
   villes: [
     [
       {id: '1', title: 'Sossay'},
@@ -57,6 +59,11 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         parcours: action.payload, //new todos array
+      };
+    case CHOOSE_PARCOURS:
+      return {
+        ...state,
+        parcoursChoisi: action.payload, //new todos array
       };
 
     default:

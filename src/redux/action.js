@@ -6,11 +6,18 @@ import {
   ADD_TODO,
   ADD_PARCOURS,
   ADD_LIST_PARCOURS,
+  CHOOSE_PARCOURS,
 } from './type';
 
 export const addCount = () => {
   return {
     type: ADD_COUNT,
+  };
+};
+export const chooseParcours = (payload) => {
+  return {
+    type: CHOOSE_PARCOURS,
+    payload,
   };
 };
 export const resetCount = () => {
