@@ -3,24 +3,20 @@ import React, {useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {addParcours} from '../redux/action';
-import {NavigationContainer} from '@react-navigation/native';
-
+import {useNavigation} from '@react-navigation/native';
 //  REVOIR LE FORMAT DES PARCOURS {id:1,title:[{id:1,title:"Sossay"},{id:2,title:"Lyon"}...]}
 
-const ListeVilleAChoisir = ({navigation}) => {
+const ListeVilleAChoisir = ({setListeVilleVisible}) => {
   const [villesChoisies, setVillesChoisies] = useState([]);
   const listeDesVilles = useSelector((state) => state.villes);
   const listeDesParcours = useSelector((state) => state.parcours);
   const dispatch = useDispatch();
-  console.log('listeDesParcours');
-  console.log('listeDesParcours');
-  console.log(listeDesParcours);
-  console.log('villesChoisies');
-  console.log('villesChoisies');
-  console.log(villesChoisies);
+
+  const navigation = useNavigation();
   const storeDataParcours = async (dataToStore) => {
     try {
       await AsyncStorage.setItem('listeParcours', JSON.stringify(dataToStore));
+      setListeVilleVisible(false);
     } catch (error) {
       // Error saving data
       console.log('error');
@@ -29,7 +25,15 @@ const ListeVilleAChoisir = ({navigation}) => {
   };
 
   const validerNouveauParcours = (e) => {
-    let newId = Math.max(...listeDesParcours.map((e) => e.id)) + 1;
+    console.log('listeDesParcours');
+    console.log(listeDesParcours);
+    console.log(listeDesParcours.length);
+    let newId =
+      listeDesParcours.length == 0
+        ? 1
+        : Math.max(...listeDesParcours.map((e) => e.id)) + 1;
+    console.log('newId');
+    console.log(newId);
     let newParcoursObject = {id: newId.toString(), title: villesChoisies};
     console.log('newParcoursObject');
 
@@ -38,7 +42,6 @@ const ListeVilleAChoisir = ({navigation}) => {
     listeDesParcours.push(newParcoursObject);
     console.log(listeDesParcours);
     storeDataParcours(listeDesParcours);
-    navigation.navigate('Home');
 
     // dispatch(addParcours(newParcoursObject));
   };

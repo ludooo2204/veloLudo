@@ -11,13 +11,17 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import moment from 'moment';
+import {useSelector} from 'react-redux';
 
 const Save = ({route, navigation}) => {
   const [listParcours, setListParcours] = useState('');
   const [choisingParcours, setChoisingParcours] = useState(false);
+  const [dataDuParcoursChoisi, setDataDuParcoursChoisi] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [responseAxios, setResponse] = useState('pas envoyé');
   const [responseAxiosLocal, setResponseLocal] = useState('pas envoyé');
+  const parcoursChoisi = useSelector((state) => state.parcoursChoisi);
 
   const {listBpm, listPosition, distanceTotale, dPlus} = route.params;
   useEffect(() => {
@@ -32,14 +36,20 @@ const Save = ({route, navigation}) => {
     console.log('dPlus');
     console.log(dPlus);
   }, []);
+  useEffect(() => {
+    console.log('dataDuParcoursChoisi');
+    if (dataDuParcoursChoisi) setModalVisible(true);
+  }, [dataDuParcoursChoisi]);
   const renderItem = ({item}) => (
     <ParcoursItem
-      title={item.title}
+      title={'parcours du ' + item}
       onPress={() => {
-        console.log(item.id);
+        console.log('item');
+        console.log(item);
         console.log('listParcours');
-        console.log(listParcours.filter((e) => e.id == item.id)[0].key);
-        getValeurParcours(listParcours.filter((e) => e.id == item.id)[0].key);
+        console.log(listParcours);
+        console.log(listParcours.filter((e) => e == item)[0]);
+        getValeurParcours(listParcours.filter((e) => e == item)[0]);
       }}
       effacerKeys={(keyToErase) => effacerKeys(keyToErase)}
     />
@@ -48,15 +58,37 @@ const Save = ({route, navigation}) => {
   const effacerKeys = async (keyToErase) => {
     console.log('keys a effacer');
     console.log(keyToErase);
+    const keyTemp = keyToErase.slice(-19);
+    console.log(keyTemp);
     try {
-      // await AsyncStorage.multiRemove(keys);
-      await AsyncStorage.removeItem(keyToErase);
+      //   let keys = await AsyncStorage.getAllKeys();
+      //   console.log('keys');
+      //   console.log(keys);
+      //   await AsyncStorage.multiRemove(keys, (e) => {
+      //     console.log('ca a marché !!', e);
+      //     navigation.navigate('Home');
+      //   });
+      await AsyncStorage.removeItem(keyTemp, (e) => {
+        console.log('ca a marché !!', e);
+        setChoisingParcours(false);
+      });
     } catch (e) {
       console.log('error', e);
     }
-    console.log('ca a du marcher effacement ');
+    // console.log('ca a du marcher effacement ');
   };
   const getParcours = async () => {
+    var date = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+
+    console.log('moment date'); // 2015-09-13 03:39:27
+    console.log(date); // 2015-09-13 03:39:27
+
+    var stillUtc = moment.utc(date).toDate();
+    var local = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+
+    console.log('moment local'); // 2015-09-13 09:39:27
+    console.log(local); // 2015-09-13 09:39:27
+
     let keys = [];
     try {
       keys = await AsyncStorage.getAllKeys();
@@ -64,65 +96,20 @@ const Save = ({route, navigation}) => {
       console.log('error', e);
     }
     console.log('keys');
-    console.log(keys);
-
-    let parcoursKeys = [];
-    for (const iterator of keys) {
-      if (iterator.includes('position')) {
-        let dateParcours = new Date(
-          iterator.split('position-')[1],
-        ).toLocaleString('fr-FR');
-        parcoursKeys.push({
-          title: dateParcours,
-          id: keys.indexOf(iterator).toString(),
-          key: iterator,
-        });
-      }
-    }
-
-    // console.log('parcoursKeys', parcoursKeys);
-    setListParcours(parcoursKeys);
-  };
-  const getParcoursBpm = async () => {
-    let keys = [];
-    try {
-      keys = await AsyncStorage.getAllKeys();
-    } catch (e) {
-      console.log('error', e);
-    }
+    console.log('keys');
+    console.log('keys');
+    console.log('keys');
     console.log('keys');
     console.log(keys);
+    const listeKeyParcours = keys.filter((e) => !e.includes('liste'));
+    console.log(listeKeyParcours);
 
-    let parcoursKeys = [];
-    for (const iterator of keys) {
-      if (iterator.includes('bpm')) {
-        let dateParcours = new Date(iterator.split('bpm-')[1]).toLocaleString(
-          'fr-FR',
-        );
-        parcoursKeys.push({
-          title: dateParcours,
-          id: keys.indexOf(iterator).toString(),
-          key: iterator,
-        });
-      }
-    }
+    setListParcours(listeKeyParcours);
+  };
 
-    // console.log('parcoursKeys', parcoursKeys);
-    setListParcours(parcoursKeys);
-  };
-  const analyseDataParcours = (data) => {
-    console.log('data');
-    console.log(data);
-    let distanceParcourue = 0;
-    for (const position of data) {
-      distanceParcourue += position[1];
-    }
-    distanceParcourue = Math.round(distanceParcourue) / 1000;
-    console.log('distanceParcourue');
-    console.log(distanceParcourue + ' km');
-    return distanceParcourue;
-  };
   const getValeurParcours = async (key) => {
+    console.log('key');
+    console.log(key);
     let data;
     try {
       data = await AsyncStorage.getItem(key);
@@ -130,42 +117,22 @@ const Save = ({route, navigation}) => {
       console.log('error', e);
     }
     if (data.length > 1) {
-      console.log('datas');
-      console.log(data.split('\n'));
       data = JSON.parse(data);
       console.log('nbr data');
       console.log(data.length);
-      //  analyseDataParcours(data)
-      //  console.log(toastConfig.success())
-      Toast.show({
-        type: 'customType',
-        text1: 'Parcours du ' + new Date(data[1][0]).toLocaleString('fr-FR'),
-        text2:
-          'BRAVO !! 👋 Tu as roulé sur ' + analyseDataParcours(data) + ' km',
-
-        props: {
-          onPress: () => {
-            console.log("toto l'asticot !");
-          },
-        },
-      });
+      console.log('datas');
       console.log(data);
-
-      console.log('data.length');
-      console.log(data.length);
-      console.log('distance de ', data[data.length - 1][5] / 1000, ' km');
+      setDataDuParcoursChoisi([key, data]);
+      //   Toast.show({
+      //     type: 'customType',
+      //     text1: 'Parcours du ' + key,
+      //     text2:
+      //       'BRAVO !! 👋 Tu as roulé sur ' +
+      //       Math.round(data[2] / 100) / 10 +
+      //       ' km',
     }
   };
-  const toastConfig = {
-    customType: ({text1, text2, props, ...rest}) => (
-      <View style={{width: '50%', backgroundColor: 'black'}}>
-        <Text style={{padding: 10, fontSize: 20, color: 'white'}}>{text1}</Text>
 
-        <Text style={{padding: 10, fontSize: 20, color: 'white'}}>{text2}</Text>
-        {/* <Text>{props.guid}</Text> */}
-      </View>
-    ),
-  };
   const postData = () => {
     axios
       // .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition,distanceTotale,dPlus])
@@ -192,25 +159,47 @@ const Save = ({route, navigation}) => {
     console.log('list position', listPosition);
     console.log('distanceTotale', distanceTotale, 'm');
     console.log('dPlus', dPlus, 'm');
+    console.log('parcoursChoisi');
+    console.log(parcoursChoisi);
+    let parcoursString = '';
+    for (let i = 0; i < parcoursChoisi.title.length; i++) {
+      parcoursString +=
+        parcoursChoisi.title[i].title +
+        (i == parcoursChoisi.title.length - 1 ? '' : ' - ');
+    }
+    // parcoursChoisi.title.foreach((parcours, index) => {
+    //   console.log(parcours);
+    //   string =
+    //     parcours.title +
+    //     (index == parcoursChoisi.title.length - 1 ? '' : ' - ');
+    // });
+    console.log('parcoursString');
+    console.log(parcoursString);
     console.log(
       `${listBpm.length} bpm à sauvegarder et ${listPosition.length} positions à sauvegarder `,
     );
 
     try {
-      const dateDuParcours = new Date();
-
-      console.log('dateDuParcours');
-      console.log(dateDuParcours);
-
-      const valueBpm = JSON.stringify(listBpm);
-      await AsyncStorage.setItem(`bpm-${dateDuParcours}`, valueBpm);
-      const valuePosition = JSON.stringify(listPosition);
-      await AsyncStorage.setItem(`position-${dateDuParcours}`, valuePosition);
-      await AsyncStorage.setItem(
-        `distance-${dateDuParcours}`,
-        distanceTotale.toString(),
-      );
-      await AsyncStorage.setItem(`dplus-${dateDuParcours}`, dPlus.toString());
+      let dateDuParcours = moment.utc().toDate();
+      dateDuParcours = moment(dateDuParcours)
+        .local()
+        .format('YYYY-MM-DD HH:mm:ss');
+      const dataToStore = [
+        listBpm,
+        listPosition,
+        distanceTotale,
+        dPlus,
+        parcoursString,
+      ];
+      //   const valueBpm = JSON.stringify(listBpm);
+      await AsyncStorage.setItem(dateDuParcours, JSON.stringify(dataToStore));
+      //   const valuePosition = JSON.stringify(listPosition);
+      //   await AsyncStorage.setItem(`position-${dateDuParcours}`, valuePosition);
+      //   await AsyncStorage.setItem(
+      //     `distance-${dateDuParcours}`,
+      //     distanceTotale.toString(),
+      //   );
+      //   await AsyncStorage.setItem(`dplus-${dateDuParcours}`, dPlus.toString());
     } catch (e) {
       console.log('error', e);
       setResponseLocal('Erreur ... !' + e);
@@ -221,7 +210,8 @@ const Save = ({route, navigation}) => {
 
   return !choisingParcours ? (
     <View style={{flex: 1, flexDirection: 'column'}}>
-      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
+      {/* <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} /> */}
+
       <Button
         title="Fin du parcours"
         onPress={() =>
@@ -238,25 +228,66 @@ const Save = ({route, navigation}) => {
       />
       <Text>{'\n'}</Text>
 
-      <Button
-        title="get info bpm"
-        onPress={() => {
-          getParcoursBpm();
-          setChoisingParcours(true);
-        }}
-      />
-      <Text>{'\n'}</Text>
-
       <Button title="axios" onPress={() => postData()} />
       <Text>{responseAxios}</Text>
     </View>
   ) : (
     <>
-      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          //   Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 22,
+          }}>
+          <View style={{width: '80%'}}>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 20,
+                color: 'white',
+                backgroundColor: 'black',
+              }}>
+              {dataDuParcoursChoisi ? dataDuParcoursChoisi[0] : ''}
+            </Text>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 20,
+                color: 'white',
+                backgroundColor: 'black',
+              }}>
+              {dataDuParcoursChoisi
+                ? 'BRAVO !! 👋 Tu as roulé sur ' +
+                  Math.round(dataDuParcoursChoisi[1][2] / 100) / 10 +
+                  ' km'
+                : ''}
+            </Text>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 20,
+                color: 'white',
+                backgroundColor: 'black',
+              }}>
+              {dataDuParcoursChoisi ? dataDuParcoursChoisi[1][4] : ''}
+            </Text>
+          </View>
+        </View>
+      </Modal>
+      {/* <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} /> */}
       <FlatList
         data={listParcours}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => String(index)}
       />
     </>
   );

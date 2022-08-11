@@ -7,7 +7,7 @@ import {matchSorter} from 'match-sorter';
 import {useDispatch, useSelector} from 'react-redux';
 import {addCount, addListeParcours, chooseParcours} from '../redux/action';
 import ListeVilleAChoisir from './ListeVilleAChoisir';
-import {NavigationContainer} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const list = [
   {
@@ -33,7 +33,7 @@ const listVille = [
   {id: '10', title: 'Chatellerault'},
 ];
 
-const ChoixDuParcours = ({navigation}) => {
+const ChoixDuParcours = () => {
   const listeDesParcoursRedux = useSelector((state) => state.parcours);
   const [villeDejaSaisie, setVilleDejaSaisie] = useState('');
   const [listeDesParcours, setListeDesParcours] = useState(null);
@@ -44,6 +44,7 @@ const ChoixDuParcours = ({navigation}) => {
 
   // const listeInitialesDesParcours = useSelector((state) => state.parcours);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
     retrieveData();
@@ -181,6 +182,11 @@ const ChoixDuParcours = ({navigation}) => {
       onPress={() => {
         // parcoursChoisi(item);
         console.log('item');
+        console.log('item');
+        console.log('item');
+        console.log('item');
+        console.log('item');
+        console.log('item');
         console.log(item);
         dispatch(chooseParcours(item));
         navigation.navigate('Home');
@@ -236,7 +242,7 @@ const ChoixDuParcours = ({navigation}) => {
         />
       )}
       {ListeVilleVisible && (
-        <ListeVilleAChoisir />
+        <ListeVilleAChoisir setListeVilleVisible={setListeVilleVisible} />
         // <FlatList
         //   style={styles.flatlistParcours}
         //   numColumns={3}
