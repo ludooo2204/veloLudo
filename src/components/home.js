@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
-import {Text, StatusBar, View, StyleSheet} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, StatusBar, View, StyleSheet } from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import Location from './location';
 
@@ -9,17 +9,17 @@ import Bpm from './heartrate';
 import Orientation from 'react-native-orientation';
 import KeepAwake from 'react-native-keep-awake';
 import LineChartScreen from './LineChartScreen';
-import {getDistanceFromLatLonInMeter, moyennePourDplus} from '../helpers/math';
+import { getDistanceFromLatLonInMeter, moyennePourDplus } from '../helpers/math';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Compteur} from './Compteur';
-import {useDispatch, useSelector} from 'react-redux';
+import { Compteur } from './Compteur';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ChoixDuParcours from './ChoixDuParcours';
 
 let primaryColor = 'black';
 let secondaryColor = 'white';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [isRunning, setRunning] = useState(false);
   const [BPM, setBPM] = useState(null);
   const [listBpm, setListBpm] = useState([]);
@@ -207,7 +207,6 @@ const Home = ({navigation}) => {
       //       listGPS[i].coords.longitude,
       //     ) * 10,
       //   ) / 10;
-      // let accuracyI = Math.round(element.coords.accuracy);
       let latitudeI = element.coords.latitude;
       let longitudeI = element.coords.longitude;
       let altitudeI = Math.round(element.coords.altitude);
@@ -228,7 +227,7 @@ const Home = ({navigation}) => {
     });
   };
   return (
-    <View style={{flex: 1, backgroundColor: 'black'}}>
+    <View style={{ flex: 1, backgroundColor: 'black' }}>
       <StatusBar barStyle="dark-content" hidden />
 
       {!isRunning && (
@@ -261,7 +260,7 @@ const Home = ({navigation}) => {
         )}
         {listGPS.length == 1 && isRunning && (
           <View style={styles.viewAttenteDeplacement}>
-            <Text style={{color: secondaryColor, textAlign: 'center'}}>
+            <Text style={{ color: secondaryColor, textAlign: 'center' }}>
               En attente deplacement
             </Text>
           </View>
@@ -272,7 +271,7 @@ const Home = ({navigation}) => {
             backgroundColor: 'purple',
           }}>
           {!infoConnexion && !isRunning && (
-            <Text style={{fontSize: 30}}>{BPM}</Text>
+            <Text style={{ fontSize: 30 }}>{BPM}</Text>
           )}
           {isRunning && (
             <LineChartScreen data={listBpm} nightMode={nightMode} />
@@ -285,31 +284,31 @@ const Home = ({navigation}) => {
         {/* {isRunning ? ( */}
         <View style={styles.viewBarreLaterale}>
           <Pressable
-            style={{backgroundColor: primaryColor, padding: 10}}
+            style={{ backgroundColor: primaryColor, padding: 10 }}
             onPress={ajoutDeplacement}>
-            <Text style={{color: secondaryColor}}>ajout Deplacement</Text>
+            <Text style={{ color: secondaryColor }}>ajout Deplacement</Text>
           </Pressable>
           <Pressable
-            style={{backgroundColor: primaryColor, padding: 10}}
+            style={{ backgroundColor: primaryColor, padding: 10 }}
             onPress={ajoutBPM}>
-            <Text style={{color: secondaryColor}}>ajout BPM</Text>
+            <Text style={{ color: secondaryColor }}>ajout BPM</Text>
           </Pressable>
           <Pressable
-            style={{backgroundColor: primaryColor, padding: 10}}
+            style={{ backgroundColor: primaryColor, padding: 10 }}
             onPress={stopParcours}>
-            <Text style={{color: secondaryColor}}>fin du Parcours</Text>
+            <Text style={{ color: secondaryColor }}>fin du Parcours</Text>
           </Pressable>
           <Icon
             name="adjust"
             size={20}
             color={secondaryColor}
             onPress={() => toggleNightMode()}
-            style={{backgroundColor: 'transparent', padding: 10}}
+            style={{ backgroundColor: 'transparent', padding: 10 }}
           />
         </View>
       </View>
       {!isRunning && (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Pressable style={styles.pressableGo} onPress={startParcours}>
             <Text>GO !!!</Text>
           </Pressable>
@@ -371,6 +370,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textTitreGeneral: {color: 'white', fontSize: 80, fontStyle: 'italic'},
-  viewTitreGeneral: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  textTitreGeneral: { color: 'white', fontSize: 80, fontStyle: 'italic' },
+  viewTitreGeneral: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
