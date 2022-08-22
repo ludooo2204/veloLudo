@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addCount, addListeParcours, chooseParcours } from '../redux/action';
 import ListeVilleAChoisir from './ListeVilleAChoisir';
 import { useNavigation } from '@react-navigation/native';
+import { convertHMS } from '../helpers/math';
 
 const list = [
     {
@@ -52,6 +53,9 @@ const ChoixDuParcours = () => {
 
     useEffect(() => {
         if (listeDesParcours) {
+            console.log('listeDesParcours');
+            console.log('listeDesParcours');
+            console.log('listeDesParcours');
             console.log('listeDesParcours');
             console.log('listeDesParcours');
             console.log('listeDesParcours');
@@ -120,6 +124,7 @@ const ChoixDuParcours = () => {
             if (valueParcours !== null) {
                 // We have data!!
                 console.log('We have data!!');
+                console.log(JSON.parse(valueParcours));
                 dispatch(addListeParcours(JSON.parse(valueParcours)));
                 // dispatch(addListeParcours(valueParcours));
 
@@ -191,9 +196,11 @@ const ChoixDuParcours = () => {
             <Text style={styles.textParcours}>
                 {item.title.map((parcours, index) => {
                     let string =
-                        parcours.title + (index == item.title.length - 1 ? '' : ' - ');
+                        parcours.title + (index == item.title.length - 1 ? 'record : ' : ' - ')
+
                     return string;
                 })}
+                {convertHMS(item.recordEnSec)}
             </Text>
         </Pressable>
     );

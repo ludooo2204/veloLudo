@@ -224,6 +224,7 @@ const Home = ({ navigation }) => {
       listPosition: dataToSave,
       distanceTotale: distanceTotale,
       dPlus: dPlus,
+      parcoursChoisi
     });
   };
   return (

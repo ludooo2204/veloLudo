@@ -13,6 +13,11 @@ const ListeVilleAChoisir = ({ setListeVilleVisible }) => {
 	const dispatch = useDispatch();
 
 	const navigation = useNavigation();
+
+	//
+
+	//
+
 	const storeDataParcours = async (dataToStore) => {
 		try {
 			await AsyncStorage.setItem(
@@ -29,7 +34,7 @@ const ListeVilleAChoisir = ({ setListeVilleVisible }) => {
 	};
 
 	const validerNouveauParcours = (e) => {
-		console.log('listeDesParcours');
+		console.log('listeDesParcours from listeVilleAChoisir.js');
 		console.log(listeDesParcours);
 		console.log(listeDesParcours.length);
 		let newId =
@@ -38,7 +43,7 @@ const ListeVilleAChoisir = ({ setListeVilleVisible }) => {
 				: Math.max(...listeDesParcours.map((e) => e.id)) + 1;
 		console.log('newId');
 		console.log(newId);
-		let newParcoursObject = { id: newId.toString(), title: villesChoisies };
+		let newParcoursObject = { id: newId.toString(), title: villesChoisies, recordEnSec: 0 };
 		console.log('newParcoursObject');
 
 		console.log(newParcoursObject);

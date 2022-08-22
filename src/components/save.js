@@ -13,6 +13,7 @@ import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import { convertHMS } from '../helpers/math';
 
 const Save = ({ route, navigation }) => {
     const [listParcours, setListParcours] = useState('');
@@ -22,6 +23,7 @@ const Save = ({ route, navigation }) => {
     const [responseAxios, setResponse] = useState('pas envoyé');
     const [responseAxiosLocal, setResponseLocal] = useState('pas envoyé');
     const parcoursChoisi = useSelector((state) => state.parcoursChoisi);
+    const listeDesParcoursRedux = useSelector((state) => state.parcours);
 
     const { listBpm, listPosition, distanceTotale, dPlus } = route.params;
     useEffect(() => {
@@ -35,9 +37,15 @@ const Save = ({ route, navigation }) => {
         console.log(distanceTotale);
         console.log('dPlus');
         console.log(dPlus);
+        console.log('parcoursChoisi');
+        console.log(parcoursChoisi);
     }, []);
     useEffect(() => {
         console.log('dataDuParcoursChoisi');
+        console.log('dataDuParcoursChoisi');
+        console.log('dataDuParcoursChoisi');
+        console.log('dataDuParcoursChoisi');
+        console.log(dataDuParcoursChoisi);
         if (dataDuParcoursChoisi) setModalVisible(true);
     }, [dataDuParcoursChoisi]);
     const renderItem = ({ item }) => (
@@ -46,6 +54,9 @@ const Save = ({ route, navigation }) => {
             onPress={() => {
                 console.log('item');
                 console.log(item);
+                console.log('listParcours');
+                console.log('listParcours');
+                console.log('listParcours');
                 console.log('listParcours');
                 console.log(listParcours);
                 console.log(listParcours.filter((e) => e == item)[0]);
@@ -134,14 +145,24 @@ const Save = ({ route, navigation }) => {
     };
 
     const postData = () => {
+        // let parcoursString = '';
+        // for (let i = 0; i < parcoursChoisi.title.length; i++) {
+        //     parcoursString +=
+        //         parcoursChoisi.title[i].title +
+        //         (i == parcoursChoisi.title.length - 1 ? '' : ' - ');
+        // }
+        // console.log("parcoursString")
+        // console.log(parcoursString)
         axios
-            // .post('http://lomano.go.yo.fr/testVelo.php', [listBpm, listPosition,distanceTotale,dPlus])
-            .post('http://192.168.1.20:7000', [
+            // .post('http://192.168.1.20:7000', [
+            .post('https://lomano.fr//apiLudo/parcoursVelo', {
+                // .post('http://192.168.1.20:3000/apiLudo/parcoursVelo', {
                 listBpm,
                 listPosition,
                 distanceTotale,
                 dPlus,
-            ])
+                parcoursChoisi
+            })
             .then(function (response) {
                 console.log('response');
                 console.log(response);
@@ -153,6 +174,21 @@ const Save = ({ route, navigation }) => {
                 setResponse('ca marche pas...', error);
             });
     };
+
+    const storeDataParcours = async (dataToStore) => {
+        try {
+            await AsyncStorage.setItem(
+                'listeParcours',
+                JSON.stringify(dataToStore),
+            );
+        } catch (error) {
+            // Error saving data
+            console.log('error');
+
+            console.log(error);
+        }
+    };
+
     const finParcours = async (listBpm, listPosition, distanceTotale, dPlus) => {
         console.log('fin du parcours et sauvegarde en local');
         console.log('list BPM', listBpm);
@@ -161,18 +197,43 @@ const Save = ({ route, navigation }) => {
         console.log('dPlus', dPlus, 'm');
         console.log('parcoursChoisi');
         console.log(parcoursChoisi);
+        // const recordSec = listeDesParcoursRedux.filter(e => e == parcoursChoisi).recordEnMin * 60
+        const recordSec = listeDesParcoursRedux.filter(e => e == parcoursChoisi)[0].recordEnSec
+        console.log("recordSec")
+        console.log(recordSec)
+        const dureeParcours = (listPosition[listPosition.length - 1][0] - listPosition[0][0]) / 1000
+        console.log(`le parcours a duré ${dureeParcours} sec`)
+        console.log(`le record du  parcours est de  ${recordSec} sec`)
+        console.log(`le parcours a duré ${dureeParcours / 60} minutes`)
+        //a revoir 
+        //a revoir 
+        //a revoir 
+        //a revoir 
+        console.log("listeDesParcoursRedux.filter(e=>e==parcoursChoisi")
+        console.log(listeDesParcoursRedux.filter(e => e == parcoursChoisi))
+        let listeDesParcoursTemp = [...listeDesParcoursRedux]
+        if (recordSec == 0 || dureeParcours < recordSec) {
+            console.log("nouveau recoordd!!!")
+            listeDesParcoursTemp.filter(e => e == parcoursChoisi)[0].recordEnSec = dureeParcours
+            console.log("listeDesParcoursTemp")
+            console.log(listeDesParcoursTemp)
+
+
+        }
+
+        //
+
+        storeDataParcours(listeDesParcoursTemp)
+        //
+
+
         let parcoursString = '';
         for (let i = 0; i < parcoursChoisi.title.length; i++) {
             parcoursString +=
                 parcoursChoisi.title[i].title +
                 (i == parcoursChoisi.title.length - 1 ? '' : ' - ');
         }
-        // parcoursChoisi.title.foreach((parcours, index) => {
-        //   console.log(parcours);
-        //   string =
-        //     parcours.title +
-        //     (index == parcoursChoisi.title.length - 1 ? '' : ' - ');
-        // });
+
         console.log('parcoursString');
         console.log(parcoursString);
         console.log(
@@ -190,6 +251,7 @@ const Save = ({ route, navigation }) => {
                 distanceTotale,
                 dPlus,
                 parcoursString,
+                dureeParcours
             ];
             //   const valueBpm = JSON.stringify(listBpm);
             await AsyncStorage.setItem(dateDuParcours, JSON.stringify(dataToStore));
@@ -281,7 +343,7 @@ const Save = ({ route, navigation }) => {
                             {dataDuParcoursChoisi
                                 ? 'BRAVO !! 👋 Tu as roulé sur ' +
                                 Math.round(dataDuParcoursChoisi[1][2] / 100) / 10 +
-                                ' km'
+                                ' km en ' + convertHMStHMS(dataDuParcoursChoisi[1][5]) + " minutes"
                                 : ''}
                         </Text>
                         <Text
@@ -311,7 +373,6 @@ const ParcoursItem = ({ title, onPress, effacerKeys }) => {
     return (
         <View style={{ flexDirection: 'row' }}>
             <Pressable onPress={onPress} style={{ alignItems: 'center' }}>
-                <Text style={{ padding: 10, fontSize: 20 }}> {title}</Text>
                 <Text style={{ padding: 10, fontSize: 20 }}> {title}</Text>
             </Pressable>
             <Pressable style={{ alignItems: 'center', justifyContent: "center", borderRadius: 50, padding: 5, backgroundColor: "red" }} onPress={() => effacerKeys(title)} ><Text>Effacer ?</Text></Pressable>

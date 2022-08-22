@@ -6,12 +6,24 @@ export function getDistanceFromLatLonInMeter(lat1, lon1, lat2, lon2) {
   var a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c * 1000; // Distance in m
   return d;
+}
+
+export function convertHMS(value) {
+  const sec = parseInt(value, 10); // convert value to number if it's string
+  let hours = Math.floor(sec / 3600); // get hours
+  let minutes = Math.floor((sec - (hours * 3600)) / 60); // get minutes
+  let seconds = sec - (hours * 3600) - (minutes * 60); //  get seconds
+  // add 0 if value < 10; Example: 2 => 02
+  // if (hours < 10) { hours = "0" + hours; }
+  if (minutes < 10) { minutes = "0" + minutes; }
+  if (seconds < 10) { seconds = "0" + seconds; }
+  return hours + ':' + minutes + ':' + seconds; // Return is HH : MM : SS
 }
 
 export function deg2rad(deg) {
